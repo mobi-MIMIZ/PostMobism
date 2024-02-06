@@ -26,7 +26,7 @@ const FONT_SIZE = {
 }
 
 const FONT_WEIGHT = {
-  thin: 400,
+  thin: 100,
   regular: 500,
   bold: 700,
 }

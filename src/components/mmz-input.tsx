@@ -35,19 +35,19 @@ const Wrapper = styled.div`
   & > label {
     font-size: ${({ theme }) => theme.FONT_SIZE.small};
     display: block;
-    color: ${({ theme }) => theme.COLORS.beige[200]};
+    color: ${({ theme }) => theme.COLORS.beige[500]};
     padding-bottom: 8px;
   }
 `
 const Input = styled.input<{ usage?: "signForm" | "postForm" }>`
   ${({ usage }) => (usage ? usageCSS[usage] : "")}
   color: ${({ theme }) => theme.COLORS.beige[800]};
-  border: 1px solid ${({ theme }) => theme.COLORS.beige[200]};
+  border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 4px;
   padding-left: 16px;
   margin-bottom: 14px;
   &::placeholder {
-    color: ${({ theme }) => theme.COLORS.beige[200]};
+    color: ${({ theme }) => theme.COLORS.beige[500]};
   }
 `
 
