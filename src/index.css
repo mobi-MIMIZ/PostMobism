@@ -1,14 +1,7 @@
-@font-face {
-  font-family: 'S-CoreDream-3Light';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
 :root {
-  font-family: 'NotoSans-Condensed','S-CoreDream-3Light', system-ui, sans-serif;
+  font-family: "Roboto Condensed", sans-serif, system-ui, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 300;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
