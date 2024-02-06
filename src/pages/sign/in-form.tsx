@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import FormHeader from "./components/form-header"
-import { flexCenter } from "@/styles/common.style"
+import { ViewPortSize, flexCenter } from "@/styles/common.style"
 import MMZinput from "@/components/mmz-input"
 import { SignInArr } from "@/consts/form"
 import MMZbutton from "@/components/mmz-button"
@@ -9,14 +9,14 @@ const SignIn = () => {
   return (
     <S.Wrapper>
       <FormHeader />
-      <S.Form>
-        {SignInArr.map(el => {
-          const { id, label, type, placeholder } = el
+      <S.FormContent>
+        {SignInArr.map(input => {
+          const { id, label, type, placeholder } = input
 
           return <MMZinput key={id} id={id} label={label} type={type} placeholder={placeholder} usage={"signForm"} />
         })}
         <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} />
-      </S.Form>
+      </S.FormContent>
     </S.Wrapper>
   )
 }
@@ -24,20 +24,24 @@ const SignIn = () => {
 export default SignIn
 
 const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
+  ${ViewPortSize}
+  position: relative;
+  ${flexCenter}
+  flex-direction: column;
 `
 
-const Form = styled.form`
+const FormContent = styled.form`
+  width: 100%;
+  height: 552px;
   ${flexCenter}
-  display: flex;
   flex-direction: column;
+  margin-top: 80px;
   & > button {
-    margin-top: 200px;
+    margin-top: 158px;
   }
 `
 
 const S = {
   Wrapper,
-  Form,
+  FormContent,
 }
