@@ -5,7 +5,7 @@ import { FC } from "react"
 import styled from "styled-components"
 
 const DetailContent: FC<DetailPageProps> = ({ postList, selectedPost }) => {
-  console.log("onePost", selectedPost)
+  console.log("selectedPost", selectedPost)
   return (
     <S.ContentContainer>
       <S.UserBox>

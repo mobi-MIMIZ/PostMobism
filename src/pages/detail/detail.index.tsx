@@ -1,16 +1,17 @@
 import { PositionXYCenter, ViewPortSize } from "@/styles/common.style"
-import { DetailPageProps, Post } from "@/type/type"
+import { DetailPageProps } from "@/type/type"
 import { FC } from "react"
 import styled from "styled-components"
 import DetailHeader from "./components/header.detail"
 import DetailContent from "./components/content.detail"
+import Comments from "./components/comments.detail"
 
 const DetailPage: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost }) => {
   // 클릭한 포스트를 선택하도록 하는 함수
 
   return (
     <S.Wrapper>
-      <S.Form>
+      <S.OnePost>
         {/* 선택된 포스트가 있을 경우에만 상세 내용을 렌더링 */}
         {selectedPost && (
           <>
@@ -18,9 +19,10 @@ const DetailPage: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost })
             <S.Line />
             <DetailContent selectedPost={selectedPost} />
             <S.Line />
+            <Comments selectedPost={selectedPost} />
           </>
         )}
-      </S.Form>
+      </S.OnePost>
     </S.Wrapper>
   )
 }
@@ -34,7 +36,7 @@ const Wrapper = styled.div`
   z-index: 1000;
 `
 
-const Form = styled.form`
+const OnePost = styled.div`
   ${PositionXYCenter}
   width: 720px;
   height: 950px;
@@ -52,6 +54,6 @@ const Line = styled.div`
 
 const S = {
   Wrapper,
-  Form,
+  OnePost,
   Line,
 }
