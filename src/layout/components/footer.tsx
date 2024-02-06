@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <S.Wrapper>
       <p>POSTMOBISM</p>
-      <p>all rights reserved @ MIMIZ, 2nd-mobi</p>
+      <p>all rights reserved &copy; MIMIZ, 2nd-mobi</p>
     </S.Wrapper>
   )
 }

@@ -17,9 +17,13 @@ export const UseNavigation = () => {
   const toSignUp = () => {
     navigate("/sign-up")
   }
+  const toDetail = () => {
+    navigate("/detail")
+  }
 
   return {
     toMain,
     toSignUp,
+    toDetail,
   }
 }
