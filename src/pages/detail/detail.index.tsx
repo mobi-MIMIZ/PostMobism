@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { PositionXYCenter, ViewPortSize } from "@/styles/common.style"
 import { DetailPageProps, Post } from "@/type/type"
 import { FC } from "react"
@@ -16,6 +15,7 @@ const DetailPage: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost })
         {selectedPost && (
           <>
             <DetailHeader selectedPost={selectedPost} setIsOpenDetailModal={setIsOpenDetailModal} />
+            <S.Line />
             <DetailContent selectedPost={selectedPost} />
             <S.Line />
           </>

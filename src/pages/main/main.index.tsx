@@ -26,10 +26,10 @@ const MainPage = () => {
           selectedPost={selectedPost}
         />
       )}
+      {/* 타이틀 클릭시 디테일 이동. 임시적으로 세팅해 두었습니다. */}
       <S.Wrapper>
         {postList?.map(post => (
           <div key={post.id} onClick={() => onOpenDetailModal(post)}>
-            {/* 클릭시 해당 포스트 전달 */}
             {post.title}
           </div>
         ))}
