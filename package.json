@@ -24,6 +24,7 @@
     "react-router-dom": "^6.22.0",
     "shortid": "^2.2.16",
     "styled-components": "^6.1.8",
+    "styled-reset": "^4.5.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -46,7 +47,6 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "husky": "^9.0.10",
     "lint-staged": "^15.2.1",
-    "msw": "^2.1.6",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vite": "^5.0.8"
