@@ -9,15 +9,15 @@ type OptionProps = {
 
 const MMZdialog = ({ label1, label2, onClick, ...props }: OptionProps) => {
   return (
-    <Wrapper>
-      <Options onClick={onClick} {...props}>
+    <S.Wrapper>
+      <S.Options onClick={onClick} {...props}>
         {label1}
-      </Options>
-      <Line />
-      <Options onClick={onClick} {...props}>
+      </S.Options>
+      <S.Line />
+      <S.Options onClick={onClick} {...props}>
         {label2}
-      </Options>
-    </Wrapper>
+      </S.Options>
+    </S.Wrapper>
   )
 }
 
@@ -49,3 +49,9 @@ const Line = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.COLORS.beige[300]};
 `
+
+const S = {
+  Wrapper,
+  Options,
+  Line,
+}

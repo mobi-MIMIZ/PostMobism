@@ -32,6 +32,13 @@ export const PositionYCenter = css`
   transform: translateY(-50%);
 `
 
+export const PositionXYCenter = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+
 // wrapper size
 export const ViewPortSize = css`
   width: 100vw;

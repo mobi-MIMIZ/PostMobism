@@ -18,8 +18,13 @@ export const UseNavigation = () => {
     navigate("/sign-up")
   }
 
+  const toDetail = () => {
+    navigate("/detail/:id")
+  }
+
   return {
     toMain,
     toSignUp,
+    toDetail,
   }
 }

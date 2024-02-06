@@ -1,20 +1,6 @@
+import { Post, User } from "@/type/type"
 import { faker } from "@faker-js/faker"
 import shortId from "shortid"
-
-type User = {
-  id: string
-  nickName: string
-  profileImg: string
-}
-
-type Post = {
-  id: string
-  title: string
-  content: string
-  User: User
-  Post_img: string[]
-  createdAt: Date
-}
 
 export const MockPostsData = (count: number): Post[] =>
   Array(count)

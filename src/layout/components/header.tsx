@@ -1,10 +1,10 @@
 import { PositionXCenter, flexAlignCenter } from "@/styles/common.style"
-import { FC } from "react"
+import { DetailedHTMLFactory, FC } from "react"
 import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
 
-const Header: FC = () => {
+const Header: FC<DetailedHTMLFactory> = () => {
   const { toMain } = UseNavigation()
 
   return (
