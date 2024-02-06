@@ -40,6 +40,6 @@ export const ViewPortSize = css`
 `
 export const OutletSize = css`
   width: 100vw;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 160px);
   overflow: hidden;
 `

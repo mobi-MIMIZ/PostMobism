@@ -9,7 +9,7 @@ export default MainPage
 const Wrapper = styled.div`
   ${OutletSize}
   ${PositionXCenter}
-  top: 50px;
+  top: 60px;
   background-color: ${({ theme }) => theme.COLORS.white};
 `
 
