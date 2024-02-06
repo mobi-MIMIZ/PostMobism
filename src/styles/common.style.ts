@@ -1,11 +1,11 @@
 import { css } from "styled-components"
 
+// align : flex
 export const flexCenter = css`
   display: flex;
   justify-content: center;
   align-items: center;
 `
-
 export const flexAlignCenter = css`
   display: flex;
   align-items: center;
@@ -14,7 +14,6 @@ export const flexJustifyCenter = css`
   display: flex;
   justify-content: center;
 `
-
 // align : position
 export const PositionCenter = css`
   position: absolute;

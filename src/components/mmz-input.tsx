@@ -12,8 +12,8 @@ const MMZinput = ({ id, label, error, type, usage, ...props }: InputProps) => {
   return (
     <S.Wrapper>
       <label>{label}</label>
-      <S.Input type={type} usage={usage} {...props} />
-      {error ? <S.Message>error message</S.Message> : <S.Message>access message</S.Message>}
+      <S.Input id={id} type={type} usage={usage} {...props} />
+      {error && <S.Message>error message</S.Message>}
     </S.Wrapper>
   )
 }
@@ -39,7 +39,6 @@ const Wrapper = styled.div`
     padding-bottom: 8px;
   }
 `
-
 const Input = styled.input<{ usage?: "signForm" | "postForm" }>`
   ${({ usage }) => (usage ? usageCSS[usage] : "")}
   color: ${({ theme }) => theme.COLORS.beige[800]};
@@ -56,7 +55,7 @@ const Message = styled.p`
   font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
 `
 
-const S = {
+export const S = {
   Wrapper,
   Input,
   Message,
