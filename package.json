@@ -23,7 +23,6 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.22.0",
     "shortid": "^2.2.16",
-    "styled": "^1.0.0",
     "styled-components": "^6.1.8",
     "styled-reset": "^4.5.2",
     "zod": "^3.22.4"
