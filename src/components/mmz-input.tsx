@@ -3,18 +3,18 @@ import styled, { css } from "styled-components"
 
 type InputProps = {
   label: string
-  type: "input" | "file"
+  type: string
   error?: string
   usage?: "signForm" | "postForm"
 } & InputHTMLAttributes<HTMLInputElement>
 
-const MMZinput = ({ label, error, type, usage, ...props }: InputProps) => {
+const MMZinput = ({ id, label, error, type, usage, ...props }: InputProps) => {
   return (
-    <Wrapper>
+    <S.Wrapper>
       <label>{label}</label>
-      <Input type={type} usage={usage} {...props} />
-      {error ? <Message>error message</Message> : <Message>access message</Message>}
-    </Wrapper>
+      <S.Input type={type} usage={usage} {...props} />
+      {error ? <S.Message>error message</S.Message> : <S.Message>access message</S.Message>}
+    </S.Wrapper>
   )
 }
 export default MMZinput
@@ -31,15 +31,33 @@ const usageCSS = {
 }
 
 const Wrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.COLORS.beige[200]};
-  border-radius: 4px;
-  color: ${({ theme }) => theme.COLORS.beige[800]};
+  padding-bottom: 16px;
+  & > label {
+    font-size: ${({ theme }) => theme.FONT_SIZE.small};
+    display: block;
+    color: ${({ theme }) => theme.COLORS.beige[500]};
+    padding-bottom: 8px;
+  }
 `
 
 const Input = styled.input<{ usage?: "signForm" | "postForm" }>`
   ${({ usage }) => (usage ? usageCSS[usage] : "")}
+  color: ${({ theme }) => theme.COLORS.beige[800]};
+  border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
+  border-radius: 4px;
+  padding-left: 16px;
+  margin-bottom: 14px;
+  &::placeholder {
+    color: ${({ theme }) => theme.COLORS.beige[500]};
+  }
 `
 
 const Message = styled.p`
   font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
 `
+
+const S = {
+  Wrapper,
+  Input,
+  Message,
+}

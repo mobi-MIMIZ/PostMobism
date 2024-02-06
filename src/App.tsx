@@ -1,29 +1,19 @@
-<<<<<<< HEAD
-import { RouterProvider } from "react-router-dom";
-import router from "./router/router";
-import AuthProvider from "./context/auth.ctx";
-
-function App() {
-  return <AuthProvider>          
-    <RouterProvider router={router} />
-  </AuthProvider>;
-}
-
-export default App;
-=======
 import { RouterProvider } from "react-router-dom"
 import router from "./router/router"
 import AuthProvider from "./context/auth.ctx"
 import GlobalStyles from "./styles/global.style"
+import { ThemeProvider } from "styled-components"
+import theme from "./styles/theme.style"
 
 function App() {
   return (
-    <AuthProvider>
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <GlobalStyles />
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
 export default App
->>>>>>> main

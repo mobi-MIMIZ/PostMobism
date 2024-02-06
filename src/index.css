@@ -6,14 +6,11 @@
 }
 
 :root {
-  font-family: 'NotoSans-Condensed','S-CoreDream-3Light', system-ui, sans-serif;
+  font-family: "Roboto Condensed", sans-serif, system-ui, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-
+  font-weight: 300;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
