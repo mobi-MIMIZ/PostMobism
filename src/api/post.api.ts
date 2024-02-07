@@ -4,10 +4,6 @@ import { TGetPostRequest } from "@/type/dto/post.dto"
 const POST_PATH = "/data/post"
 
 export const PostApi = {
-  /**
-   * @param param0
-   * @returns
-   */
   async getPost({ id, title }: TGetPostRequest) {
     const res = await axiosInstance.get<{ title: string; content: string }[]>(POST_PATH, {
       params: {
