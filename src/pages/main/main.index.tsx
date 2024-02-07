@@ -4,11 +4,11 @@ import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
 
 const MainPage = () => {
-  interface Writer {
+  type Writer = {
     nickname: string
     profile: string
   }
-  interface Post {
+  type Post = {
     title: string
     content: string
     writer: Writer
