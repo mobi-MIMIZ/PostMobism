@@ -9,10 +9,12 @@ const GlobalStyles = createGlobalStyle`
   }
   body {
     background-color: #FFFFFF;
-    font-family: 'NotoSans-Condensed','SUIT', sans-serif;
+    font-family: "Roboto Condensed", sans-serif, system-ui, sans-serif;
   }
   button {
     border: none;
+    background-color: #FFFFFF;
+    cursor: pointer;
   }
 `
 
