@@ -1,13 +1,20 @@
+import { MockOnePostData } from "@/__mock__/faker-data/faker-data"
+import { SetStateAction } from "jotai"
+import { Dispatch, FC, useState } from "react"
 import { PositionXYCenter, ViewPortSize } from "@/styles/common.style"
-import { DetailPageProps } from "@/type/type"
-import { FC } from "react"
 import styled from "styled-components"
-import DetailHeader from "./components/header.detail"
-import DetailContent from "./components/content.detail"
-import Comments from "./components/comments.detail"
+import PostDetailHeader from "./components/post-detail-header"
+import PostDetailContent from "./components/post-detail-content"
+import Comments from "./components/comment/comments"
+import { Post } from "@/type/type"
 
-const DetailPage: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost }) => {
-  // 클릭한 포스트를 선택하도록 하는 함수
+type Props = {
+  selectedPost: Post
+  onClose: () => void
+}
+
+const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
+  //react-query
 
   return (
     <S.Wrapper>
@@ -15,19 +22,22 @@ const DetailPage: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost })
         {/* 선택된 포스트가 있을 경우에만 상세 내용을 렌더링 */}
         {selectedPost && (
           <>
-            <DetailHeader selectedPost={selectedPost} setIsOpenDetailModal={setIsOpenDetailModal} />
+            <PostDetailHeader title={selectedPost.title} onClose={onClose} />
             <S.Line />
-            <DetailContent selectedPost={selectedPost} />
+            <PostDetailContent
+              content={selectedPost.content}
+              nickName={selectedPost.User.nickName}
+              profileImage={selectedPost.User.profileImg}
+            />
             <S.Line />
-            <Comments selectedPost={selectedPost} />
+            <Comments comments={selectedPost.Comments} />
           </>
         )}
       </S.OnePost>
     </S.Wrapper>
   )
 }
-
-export default DetailPage
+export default PostDetailModal
 
 const Wrapper = styled.div`
   position: fixed;

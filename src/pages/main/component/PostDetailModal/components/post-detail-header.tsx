@@ -1,24 +1,25 @@
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { DetailPageProps } from "@/type/type"
 import { X } from "lucide-react"
 import { FC } from "react"
 import styled from "styled-components"
 
-const DetailHeader: FC<DetailPageProps> = ({ setIsOpenDetailModal, selectedPost }) => {
-  const onCloseModal = () => {
-    setIsOpenDetailModal?.(false)
-  }
+type Props = {
+  title: string
+  onClose: () => void
+}
+
+const PostDetailHeader: FC<Props> = ({ title, onClose }) => {
   return (
     <S.HeaderContainer>
-      <S.Title>{selectedPost?.title}</S.Title>
-      <S.CloseBtn onClick={onCloseModal}>
+      <S.Title>{title}</S.Title>
+      <S.CloseBtn onClick={onClose}>
         <X color="#ECB996" size={24} />
       </S.CloseBtn>
     </S.HeaderContainer>
   )
 }
 
-export default DetailHeader
+export default PostDetailHeader
 
 const HeaderContainer = styled.div`
   padding: 16px;

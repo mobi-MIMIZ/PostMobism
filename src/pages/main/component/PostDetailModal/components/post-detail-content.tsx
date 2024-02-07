@@ -1,26 +1,29 @@
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { DetailPageProps } from "@/type/type"
 import { MoreHorizontal } from "lucide-react"
 import { FC } from "react"
 import styled from "styled-components"
 
-const DetailContent: FC<DetailPageProps> = ({ postList, selectedPost }) => {
-  console.log("selectedPost", selectedPost)
+type Props = {
+  profileImage: string
+  nickName: string
+  content: string
+}
+
+const PostDetailContent: FC<Props> = ({ profileImage, nickName, content }) => {
   return (
     <S.ContentContainer>
       <S.UserBox>
-        <S.ProfileImg src={selectedPost?.User.profileImg} />
-        <S.NickName>{selectedPost?.User.nickName}</S.NickName>
+        <S.ProfileImg src={profileImage} />
+        <S.NickName>{nickName}</S.NickName>
         <S.MoreBtn>
           <MoreHorizontal color="#ECB996" size={22} />
         </S.MoreBtn>
       </S.UserBox>
-      <S.Content>{selectedPost?.content}</S.Content>
+      <S.Content>{content}</S.Content>
     </S.ContentContainer>
   )
 }
-
-export default DetailContent
+export default PostDetailContent
 
 const ContentContainer = styled.div`
   height: 290px;
@@ -59,7 +62,7 @@ const Content = styled.div`
   margin: 0px 30px;
   height: 180px;
   ${flexCenter}
-  ${({ theme }) => theme.FONT_SIZE.small}
+  font-size: ${({ theme }) => theme.FONT_SIZE.large};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
 `
 

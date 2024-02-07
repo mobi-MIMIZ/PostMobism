@@ -1,8 +1,7 @@
-import { Post, User } from "@/type/type"
 import { faker } from "@faker-js/faker"
 import shortId from "shortid"
 
-export const MockPostsData = (count: number): Post[] =>
+export const MockPostsData = (count: number) =>
   Array(count)
     .fill(undefined)
     .map(() => ({
@@ -34,7 +33,7 @@ export const MockPostsData = (count: number): Post[] =>
       createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
     }))
 
-export const MockUserData = (count: number): User[] =>
+export const MockUserData = (count: number) =>
   Array(count)
     .fill(undefined)
     .map(() => ({
@@ -42,3 +41,33 @@ export const MockUserData = (count: number): User[] =>
       nickName: faker.person.firstName(),
       profileImg: faker.image.url(),
     }))
+
+//detail
+export const MockOnePostData = {
+  id: shortId.generate(),
+  title: faker.lorem.sentence(),
+  content: faker.lorem.paragraph(),
+  User: {
+    id: shortId.generate(),
+    nickName: faker.person.firstName(),
+    profileImg: faker.image.url(),
+  },
+  Post_img: Array(Math.floor(Math.random() * 5) + 1)
+    .fill(undefined)
+    .map(() => faker.image.url()),
+  Comments: Array(Math.floor(Math.random() * 40) + 1)
+    .fill(undefined)
+    .map(() => {
+      return {
+        id: shortId.generate(),
+        content: faker.lorem.sentence(),
+        User: {
+          id: shortId.generate(),
+          nickName: faker.person.firstName(),
+          profileImg: faker.image.url(),
+        },
+        createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
+      }
+    }),
+  createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
+}
