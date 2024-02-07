@@ -7,8 +7,8 @@ import CommentForm from "./comment-form"
 type Props = {
   // 객체의 타입을 추론해서 쓴다 ["comments"]
   // (typeof MockOnePostData)["Comments"]
-  comments: Post["Comments"]
   // Posts[number] 배열 하나의 요소의 타입만 가져올수있다
+  comments: Post["Comments"]
 }
 
 const Comments: FC<Props> = ({ comments }) => {
@@ -19,6 +19,7 @@ const Comments: FC<Props> = ({ comments }) => {
           <S.ProfileImg src={comment.User.profileImg} />
           <S.NickName>{comment.User.nickName}</S.NickName>
           <S.Content>{comment.content}</S.Content>
+          <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
         </S.CommentBox>
       ))}
       <CommentForm />
@@ -29,7 +30,7 @@ const Comments: FC<Props> = ({ comments }) => {
 export default Comments
 
 const CommentsContainer = styled.div`
-  height: 426px;
+  height: 444px;
   width: 100%;
   overflow-y: auto;
 `
@@ -61,9 +62,15 @@ const Content = styled.div`
   font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   ${flexAlignCenter};
-  padding: 20px 10px;
+  padding: 26px 10px;
   margin-top: 22px;
   word-wrap: break-word;
+`
+const CreatedAt = styled.div`
+  padding: 20px 0px 0px 10px;
+  font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
+  font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
+  color: ${({ theme }) => theme.COLORS.beige[500]};
 `
 
 const S = {
@@ -72,4 +79,5 @@ const S = {
   NickName,
   Content,
   CommentBox,
+  CreatedAt,
 }

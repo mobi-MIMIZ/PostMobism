@@ -6,28 +6,26 @@ import PostDetailModal from "./component/PostDetailModal/PostDetailModal"
 import { Post } from "@/type/type"
 
 const MainPage = () => {
-  const [postList] = useState(MockPostsData(50));
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [postList] = useState(MockPostsData(50))
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
   const onOpenDetailModal = (post: Post) => {
-    setSelectedPost(post);
-  };
+    setSelectedPost(post)
+  }
 
   return (
     <>
-      {selectedPost && (
-        <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />
-      )}
+      {selectedPost && <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />}
       <S.Wrapper>
-        {postList.map((post) => (
+        {postList.map(post => (
           <div key={post.id} onClick={() => onOpenDetailModal(post)}>
             {post.title}
           </div>
         ))}
       </S.Wrapper>
     </>
-  );
-};
+  )
+}
 export default MainPage
 
 const Wrapper = styled.div`

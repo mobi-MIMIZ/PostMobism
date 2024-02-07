@@ -27,10 +27,10 @@ export const MockPostsData = (count: number) =>
               nickName: faker.person.firstName(),
               profileImg: faker.image.url(),
             },
-            createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
+            createdAt: faker.date.weekday(),
           }
         }),
-      createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
+      createdAt: faker.date.weekday(),
     }))
 
 export const MockUserData = (count: number) =>
@@ -41,33 +41,3 @@ export const MockUserData = (count: number) =>
       nickName: faker.person.firstName(),
       profileImg: faker.image.url(),
     }))
-
-//detail
-export const MockOnePostData = {
-  id: shortId.generate(),
-  title: faker.lorem.sentence(),
-  content: faker.lorem.paragraph(),
-  User: {
-    id: shortId.generate(),
-    nickName: faker.person.firstName(),
-    profileImg: faker.image.url(),
-  },
-  Post_img: Array(Math.floor(Math.random() * 5) + 1)
-    .fill(undefined)
-    .map(() => faker.image.url()),
-  Comments: Array(Math.floor(Math.random() * 40) + 1)
-    .fill(undefined)
-    .map(() => {
-      return {
-        id: shortId.generate(),
-        content: faker.lorem.sentence(),
-        User: {
-          id: shortId.generate(),
-          nickName: faker.person.firstName(),
-          profileImg: faker.image.url(),
-        },
-        createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
-      }
-    }),
-  createdAt: faker.date.between("2023-01-01T00:00:00.000Z", "2023-01-31T00:00:00.000Z"),
-}

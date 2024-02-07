@@ -13,7 +13,7 @@ const PostDetailHeader: FC<Props> = ({ title, onClose }) => {
     <S.HeaderContainer>
       <S.Title>{title}</S.Title>
       <S.CloseBtn onClick={onClose}>
-        <X color="#ECB996" size={24} />
+        <X color="#ECB996" size={24} strokeWidth={4} />
       </S.CloseBtn>
     </S.HeaderContainer>
   )

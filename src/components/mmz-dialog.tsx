@@ -24,9 +24,10 @@ const MMZdialog = ({ label1, label2, onClick, ...props }: OptionProps) => {
 export default MMZdialog
 
 const Wrapper = styled.ul`
-  width: 190px;
-  height: 80px;
+  width: 198px;
+  height: 86px;
   border-radius: 8px;
+  padding: 8px;
   background-color: ${({ theme }) => theme.COLORS.white};
   box-shadow: 0px 0px 15px 0 rgba(236, 185, 150, 0.2);
 `
@@ -34,10 +35,13 @@ const Options = styled.li`
   width: 182px;
   height: 30px;
   border-radius: 6px;
-  color: ${({ theme }) => theme.COLORS.beige[300]};
+  padding: 8px;
+  color: ${({ theme }) => theme.COLORS.beige[500]};
+  font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   transition: all 0.6s ease-in-out;
   cursor: pointer;
 
+  &:active,
   &:hover {
     border-radius: 6px;
     background-color: rgba(251, 205, 179, 0.3);
@@ -47,7 +51,8 @@ const Options = styled.li`
 const Line = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.COLORS.beige[300]};
+  margin: 4px 0px;
+  background-color: ${({ theme }) => theme.COLORS.beige[200]};
 `
 
 const S = {

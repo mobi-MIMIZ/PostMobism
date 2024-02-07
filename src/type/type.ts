@@ -5,14 +5,14 @@ export type Post = {
   User: User
   Post_img: string[]
   Comments: Comment[]
-  createdAt: Date
+  createdAt: string
 }
 
 export type Comment = {
   id: string
   content: string
   User: User
-  createdAt: Date
+  createdAt: string
 }
 
 export type User = {
