@@ -31,14 +31,14 @@ const MainPage = () => {
     <S.Wrapper>
       {selectedPost && <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />}
       <S.Title>Post Your Code</S.Title>
-      {postList.map((list, idx) => (
+      {postList.map((post, idx) => (
         <OneList
           number={idx + 1}
-          title={list.title}
-          nickname={list.User.nickName}
-          image={list.User.profileImg}
-          key={list.id}
-          onClick={() => onOpenDetailModal(list)}
+          title={post.title}
+          nickname={post.User.nickName}
+          image={post.User.profileImg}
+          key={post.id}
+          onOpenDetailModal={() => onOpenDetailModal(post)}
         />
       ))}
       <Pagination />
