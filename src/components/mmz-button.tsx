@@ -10,9 +10,9 @@ type ButtonProps = {
 
 const MMZbutton = ({ usage, type, label, ...props }: ButtonProps) => {
   return (
-    <Button usage={usage} type={type} {...props}>
+    <S.Button usage={usage} type={type} {...props}>
       {label}
-    </Button>
+    </S.Button>
   )
 }
 export default MMZbutton
@@ -24,7 +24,7 @@ const usageCSS = {
     border: 1px solid ${({ theme }) => theme.COLORS.primary["pink"]};
     width: 546px;
     height: 42px;
-    font-size: 18px; // 18px 혹은 medium
+    font-size: 18px;
     border-radius: 4px;
   `,
   PostForm: css`
@@ -48,3 +48,7 @@ const Button = styled.button<{ usage?: "SignForm" | "PostForm" }>`
     background-color: ${({ theme }) => theme.COLORS.primary["pink"]};
   }
 `
+
+const S = {
+  Button,
+}

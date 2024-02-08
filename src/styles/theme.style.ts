@@ -14,7 +14,7 @@ const COLORS = {
     500: "#ECB996",
     800: "#592C0D",
   },
-}
+} as const
 
 const FONT_SIZE = {
   XSmall: "12px",
@@ -23,17 +23,22 @@ const FONT_SIZE = {
   large: "22px",
   XLarge: "24px",
   XXLarge: "28px",
-}
+} as const
 
 const FONT_WEIGHT = {
   thin: 100,
   regular: 400,
   bold: 700,
-}
+} as const
 
 const theme = {
   COLORS,
   FONT_SIZE,
   FONT_WEIGHT,
-}
+} as const
 export default theme
+
+
+/**
+ * theme를 as const로
+ */
