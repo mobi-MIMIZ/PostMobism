@@ -17,6 +17,7 @@ const MainPage = () => {
     setSelectedPost(post)
   }
 
+
   // test redux
   const dispatch = useAppDispatch()
   const post = useAppSelector(state => state.post.data)
@@ -43,6 +44,7 @@ const MainPage = () => {
       ))}
       <Pagination />
     </S.Wrapper>
+
   )
 }
 export default MainPage
