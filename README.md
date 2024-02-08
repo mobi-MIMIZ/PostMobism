@@ -153,14 +153,14 @@ vercel 👉 <a href="#">
     <td>2024-02-07</td>
     <td>ETA 03</td>
     <td>RTK review & setting</td>
-    <td>-</td>
+    <td>Amy health problem(almost refresh day)</td>
   </tr>
   <tr>
     <td>day 06</td>
     <td>2024-02-08</td>
     <td>ETA 04</td>
     <td>developing sign page</td>
-    <td>-</td>
+    <td>Kimi health problem(almost refresh day)</td>
   </tr>
   <tr>
     <td>day 07</td>
@@ -173,6 +173,13 @@ vercel 👉 <a href="#">
     <td>day 08</td>
     <td>2024-02-10</td>
     <td>ETA 06</td>
+    <td>developing</td>
+    <td>holiday</td>
+  </tr>
+  <tr>
+    <td>day 09</td>
+    <td>2024-02-11</td>
+    <td>ETA 07</td>
     <td>developing</td>
     <td>-</td>
   </tr>
@@ -255,9 +262,15 @@ vercel 👉 <a href="#">
   </tr>
   <tr>
     <td>
-      <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=white"> 
+      <img src="https://img.shields.io/badge/reactquery-FF4154?style=flat-square&logo=reactquery&logoColor=white"> 
     </td>
     <td>api call, 백엔드 데이터 연결 및 관리</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=white"> 
+    </td>
+    <td>전역 상태 관리</td>
   </tr>
     <td>
       <img src="https://img.shields.io/badge/reacthookform-EC5990?style=flat-square&logo=reacthookform&logoColor=white"> 

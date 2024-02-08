@@ -1,5 +1,6 @@
 import { Post } from "@/type/type"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { axiosInstance } from "./core.api"
 
 type PostState = {
   data: Post[] | null
@@ -13,11 +14,12 @@ const initialState: PostState = {
   error: "",
 }
 
+const POST_PATH = "/data/post"
+
 export const getPosts = createAsyncThunk<Post[]>("post", async () => {
   try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts")
-    const data = await response.json()
-    return data
+    const response = await axiosInstance.get(POST_PATH)
+    return response.data
   } catch (error) {
     throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")
   }

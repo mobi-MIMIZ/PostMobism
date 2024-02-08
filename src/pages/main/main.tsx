@@ -3,8 +3,8 @@ import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
 import { useEffect } from "react"
-import { getUsers } from "@/api/user-slice"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
+import { getPosts } from "@/api/post-slice"
 
 const MainPage = () => {
   type Writer = {
@@ -26,13 +26,13 @@ const MainPage = () => {
   ]
 
   const dispatch = useAppDispatch()
-  const user = useAppSelector(state => state.user.data)
+  const post = useAppSelector(state => state.post.data)
 
   useEffect(() => {
-    dispatch(getUsers())
+    dispatch(getPosts())
   }, [])
 
-  console.log(user)
+  console.log(post)
 
   return (
     <S.Wrapper>
