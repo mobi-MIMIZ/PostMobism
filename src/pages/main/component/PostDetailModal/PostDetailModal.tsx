@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { PositionXYCenter, ViewPortSize } from "@/styles/common.style"
+import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
@@ -45,7 +45,7 @@ const Wrapper = styled.div`
 `
 
 const OnePost = styled.div`
-  ${PositionXYCenter}
+  ${PositionCenter}
   width: 720px;
   height: 950px;
   box-shadow: 0px 10px 10px 10px rgba(236, 185, 150, 0.2);
