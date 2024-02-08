@@ -1,18 +1,21 @@
 import { InputHTMLAttributes } from "react"
+import { FieldValues, Path, UseFormRegister } from "react-hook-form"
 import styled, { css } from "styled-components"
 
-type InputProps = {
+type InputProps<T extends FieldValues> = {
+  id: Path<T>
   label: string
   type: string
-  error?: string
-  usage?: "signForm" | "postForm"
+  error: string | undefined
+  usage: "signForm" | "postForm"
+  register: UseFormRegister<T>
 } & InputHTMLAttributes<HTMLInputElement>
 
-const MMZinput = ({ id, label, error, type, usage, ...props }: InputProps) => {
+const MMZinput = <T extends FieldValues>({ id, label, error, type, usage, register, ...props }: InputProps<T>) => {
   return (
     <S.Wrapper>
       <label>{label}</label>
-      <S.Input id={id} type={type} usage={usage} {...props} />
+      <S.Input id={id} type={type} usage={usage} {...props} {...register(id, { required: true })} />
       {error && <S.Message>error message</S.Message>}
     </S.Wrapper>
   )

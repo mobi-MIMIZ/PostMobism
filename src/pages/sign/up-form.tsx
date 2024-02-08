@@ -3,18 +3,53 @@ import MMZinput from "@/components/mmz-input"
 import styled from "styled-components"
 import FormHeader from "./components/form-header"
 import { ViewPortSize, flexCenter } from "@/styles/common.style"
-import { SignUpArr } from "@/consts/form"
+import { SignUpArr } from "@/consts/form-fields"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { SignUpSchema, SignUpType } from "@/consts/schema"
+
+export type SignUpFieldName = "userId" | "nickname" | "password" | "passwordConfirm"
 
 const SignUpForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    /* reset, */
+  } = useForm<SignUpType>({
+    resolver: zodResolver(SignUpSchema),
+    mode: "all",
+    defaultValues: {
+      nickname: "",
+      userId: "",
+      password: "",
+      passwordConfirm: "",
+    },
+  })
+
+  const sendSignUpData = () => {}
+
   return (
     <S.Wrapper>
       <FormHeader />
-      <S.FormContent>
+      <S.FormContent onSubmit={handleSubmit(sendSignUpData)}>
         {SignUpArr.map(input => {
           const { id, label, type, placeholder } = input
-          return <MMZinput key={id} id={id} label={label} type={type} placeholder={placeholder} usage={"signForm"} />
+          const fieldName = id as SignUpFieldName
+          return (
+            <MMZinput
+              key={id}
+              id={id}
+              label={label}
+              type={type}
+              placeholder={placeholder}
+              usage={"signForm"}
+              register={register}
+              error={errors[fieldName]?.message}
+            />
+          )
         })}
-        <MMZbutton label={"sign up"} type={"submit"} usage={"SignForm"} />
+        <MMZbutton label={"sign up"} type={"submit"} usage={"SignForm"} disabled={isSubmitting} />
       </S.FormContent>
     </S.Wrapper>
   )

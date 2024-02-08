@@ -6,7 +6,7 @@ export const SignUpArr = [
     placeholder: "e-mail",
   },
   {
-    id: "nickname",
+    id: "nickName",
     label: "nickname",
     type: "text",
     placeholder: "what’s your nick name in MOBI",
@@ -31,7 +31,7 @@ export const SignInArr = [
     type: "text",
     placeholder: "e-mail",
   },
-    {
+  {
     id: "password",
     label: "password",
     type: "password",
