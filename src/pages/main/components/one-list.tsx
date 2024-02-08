@@ -1,4 +1,3 @@
-import { UseNavigation } from "@/hooks/use-navigate"
 import { flexAlignCenter } from "@/styles/common.style"
 import { skipTitleView } from "@/utils/overflow-text-helper"
 import styled from "styled-components"
@@ -8,12 +7,12 @@ type ListProps = {
   title: string
   nickname: string
   image: string
+  onOpenDetailModal: () => void
 }
 
-const OneList = ({ number, title, nickname, image }: ListProps) => {
-  const { toDetail } = UseNavigation()
+const OneList = ({ number, title, nickname, image, onOpenDetailModal }: ListProps) => {
   return (
-    <S.Wrapper onClick={() => toDetail()}>
+    <S.Wrapper onClick={() => onOpenDetailModal()}>
       <S.Number>{number}</S.Number>
       <S.Title>{skipTitleView(title)}</S.Title>
       <S.Writer>{nickname}</S.Writer>

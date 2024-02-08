@@ -3,8 +3,8 @@ export type Post = {
   title: string
   content: string
   User: User
-  Post_img: string[]
-  Comments: Comment[]
+  Post_img?: string[]
+  Comments?: Comment[]
   createdAt: string
 }
 

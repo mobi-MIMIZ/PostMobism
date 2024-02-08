@@ -24,7 +24,7 @@ const usageCSS = {
     border: 1px solid ${({ theme }) => theme.COLORS.primary["pink"]};
     width: 546px;
     height: 42px;
-    font-size: 18px; // 18px 혹은 medium
+    font-size: 18px;
     border-radius: 4px;
   `,
   PostForm: css`

@@ -1,29 +1,48 @@
-import { MockPostsData } from "@/__mock__/faker-data/faker-data"
-import { OutletSize, PositionXCenter } from "@/styles/common.style"
-import { useState } from "react"
+import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
-import PostDetailModal from "./component/PostDetailModal/PostDetailModal"
+import Pagination from "./components/pagination"
+import OneList from "./components/one-list"
+import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
+import { getPosts } from "@/api/post-slice"
+import PostDetailModal from "./components/PostDetailModal/PostDetailModal"
 import { Post } from "@/type/type"
+import { MockPostsData } from "@/__mock__/faker-data/faker-data"
 
 const MainPage = () => {
-  const [postList] = useState(MockPostsData(50))
+  const [postList] = useState(MockPostsData(6))
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
   }
 
+  // test redux
+  const dispatch = useAppDispatch()
+  const post = useAppSelector(state => state.post.data)
+
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [])
+
+  console.log(post)
+
   return (
-    <>
+    <S.Wrapper>
       {selectedPost && <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />}
-      <S.Wrapper>
-        {postList.map(post => (
-          <div key={post.id} onClick={() => onOpenDetailModal(post)}>
-            {post.title}
-          </div>
-        ))}
-      </S.Wrapper>
-    </>
+      <S.Title>Post Your Code</S.Title>
+      {postList.map((post, idx) => (
+        <OneList
+          number={idx + 1}
+          title={post.title}
+          nickname={post.User.nickName}
+          image={post.User.profileImg}
+          key={post.id}
+          onOpenDetailModal={() => onOpenDetailModal(post)}
+        />
+      ))}
+      <Pagination />
+    </S.Wrapper>
   )
 }
 export default MainPage
@@ -31,10 +50,20 @@ export default MainPage
 const Wrapper = styled.div`
   ${OutletSize}
   ${PositionXCenter}
+  ${flexCenter}
+  flex-direction: column;
   top: 60px;
   background-color: ${({ theme }) => theme.COLORS.white};
+  color: ${({ theme }) => theme.COLORS.beige[800]};
+`
+const Title = styled.p`
+  font-size: ${({ theme }) => theme.FONT_SIZE["XLarge"]};
+  margin-bottom: 28px;
+  position: relative;
+  left: -26%;
 `
 
 export const S = {
   Wrapper,
+  Title,
 }
