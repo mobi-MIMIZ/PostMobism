@@ -26,11 +26,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-
-<<<<<<< HEAD
   "include": ["src", "*.common.d.ts"],
-=======
-  "include": ["src", "*.d.ts"],
->>>>>>> 758b2efb8a1659e9e669cbbd9a2aa68521494ac1
   "references": [{ "path": "./tsconfig.node.json" }]
 }
