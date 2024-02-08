@@ -51,6 +51,7 @@ const Text = styled.p`
   margin-top: 10px;
   cursor: pointer;
   transition: all 0.6s ease-in-out;
+  ${flexCenter}
   &:hover {
     background-color: ${({ theme }) => theme.COLORS.primary["pink"]};
     color: ${({ theme }) => theme.COLORS.white};
