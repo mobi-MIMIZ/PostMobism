@@ -31,6 +31,8 @@ const Title = styled.div`
   font-size: 26px;
   text-align: center;
   margin-left: 10px;
+  padding: 0 20px;
+  word-break: keep-all;
   flex-grow: 1; /* 남은 공간을 가득 채우도록 */
 `
 

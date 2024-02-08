@@ -19,7 +19,6 @@ const PostDetailContent: FC<Props> = ({ profileImage, nickName, content, weekday
       <S.UserBox>
         <S.ProfileImg src={profileImage} />
         <S.NickName>{nickName}</S.NickName>
-        <S.WeekDay>{weekday}</S.WeekDay>
       </S.UserBox>
       <S.OptionBtn onClick={() => setOnShowOptions(prev => !prev)}>
         <MoreHorizontal color="#ECB996" size={22} strokeWidth={4} />
@@ -30,6 +29,7 @@ const PostDetailContent: FC<Props> = ({ profileImage, nickName, content, weekday
         </S.Dialog>
       )}
       <S.Content>{content}</S.Content>
+      <S.WeekDay>{weekday}</S.WeekDay>
     </S.ContentContainer>
   )
 }
@@ -58,8 +58,7 @@ const NickName = styled.div`
 
 const WeekDay = styled.div`
   position: absolute;
-  padding-top: 62px;
-  left: 130px;
+  right: 30px;
   font-size: ${({ theme }) => theme.FONT_SIZE.small};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   color: ${({ theme }) => theme.COLORS.beige[500]};
@@ -75,7 +74,6 @@ const OptionBtn = styled.button`
   height: 34px;
   border-radius: 50%;
   ${flexCenter}
-
   &:active,
   &:hover {
     background-color: ${({ theme }) => theme.COLORS.beige[100]};
@@ -83,13 +81,12 @@ const OptionBtn = styled.button`
   }
 `
 const Content = styled.div`
-  margin: 0px 30px;
-  height: 180px;
+  padding: 10px 30px;
+  height: 140px;
   ${flexCenter}
   font-size: ${({ theme }) => theme.FONT_SIZE.large};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
 `
-
 const Dialog = styled.div`
   position: fixed;
   right: 20px;
