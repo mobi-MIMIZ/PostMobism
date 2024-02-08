@@ -8,6 +8,7 @@ type ListProps = {
   title: string
   nickname: string
   image: string
+  onClick?: () => void
 }
 
 const OneList = ({ number, title, nickname, image }: ListProps) => {
