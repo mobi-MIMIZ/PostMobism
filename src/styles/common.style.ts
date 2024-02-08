@@ -17,8 +17,8 @@ export const flexJustifyCenter = css`
 // align : position
 export const PositionCenter = css`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 `
 export const PositionXCenter = css`
@@ -30,13 +30,6 @@ export const PositionYCenter = css`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-`
-
-export const PositionXYCenter = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `
 
 // wrapper size
