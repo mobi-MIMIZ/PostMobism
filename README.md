@@ -18,9 +18,6 @@ post-mobism은 1920px 기준으로 제작되었으며 반응형 적용이 되어
 
 <br />
 
-<p align="center">
-    <img src="#" alt="main banner">
-</p>
 
 <h1>🔗 Links</h1>
 
@@ -147,36 +144,36 @@ vercel 👉 <a href="#">
   <tr>
     <td>day 04</td>
     <td>2024-02-06</td>
-    <td>ETA 02 : publishing</td>
-    <td></td>
+    <td>ETA 02</td>
+    <td>publishing</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 05</td>
     <td>2024-02-07</td>
-    <td>ETA 03 : publishing</td>
-    <td></td>
+    <td>ETA 03</td>
+    <td>RTK review & setting</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 06</td>
     <td>2024-02-08</td>
-    <td>ETA 04 : developing</td>
-    <td>sign page</td>
+    <td>ETA 04</td>
+    <td>developing sign page</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 07</td>
     <td>2024-02-09</td>
-    <td>ETA 05 : developing</td>
-    <td>main & detail page</td>
+    <td>ETA 05</td>
+    <td>developing main & detail page</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 08</td>
     <td>2024-02-10</td>
-    <td>ETA 06 : developing</td>
-    <td>main & detail page</td>
+    <td>ETA 06</td>
+    <td>developing</td>
     <td>-</td>
   </tr>
 </table>
@@ -251,10 +248,6 @@ vercel 👉 <a href="#">
     <td>styled-components</td>
   </tr>
   <tr>
-    <td><img src="https://img.shields.io/badge/mui%20UI-007FFF?style=flat-square&logo=mui&logoColor=white"></td>
-    <td>mui UI</td>
-  </tr>
-  <tr>
     <td>
       <img src="https://img.shields.io/badge/React%20Router-CA4245?style=flat-square&logo=reactrouter&logoColor=white"> 
     </td>
@@ -262,7 +255,7 @@ vercel 👉 <a href="#">
   </tr>
   <tr>
     <td>
-      <img src="https://img.shields.io/badge/React%20Query-FF4154?style=flat-square&logo=reactquery&logoColor=white"> 
+      <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=white"> 
     </td>
     <td>api call, 백엔드 데이터 연결 및 관리</td>
   </tr>
@@ -334,7 +327,7 @@ style을 적용할 때 통일을 위해 적용할 컨벤션
 <br />
 
 <h1>🗂️ Design Token</h1>
-<img width="70%" src="" />
+<img width="70%" src="https://github.com/mobi-MIMIZ/PostMobism/assets/134191817/28b293fa-89cc-400a-bedb-0f0e24cd7d7c" />
 
 <br />
 
