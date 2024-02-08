@@ -2,6 +2,9 @@ import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
+import { useEffect } from "react"
+import { getUsers } from "@/api/user-slice"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 
 const MainPage = () => {
   type Writer = {
@@ -21,6 +24,15 @@ const MainPage = () => {
     { title: "test", content: "testing testing", writer: { nickname: "kimi", profile: "" } },
     { title: "test", content: "testing testing", writer: { nickname: "levi", profile: "" } },
   ]
+
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(state => state.user.data)
+
+  useEffect(() => {
+    dispatch(getUsers())
+  }, [])
+
+  console.log(user)
 
   return (
     <S.Wrapper>
