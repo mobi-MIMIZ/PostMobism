@@ -1,5 +1,5 @@
 import { axiosInstance } from "../core.api"
-import { TGetPostRequest } from "@/type/dto/post.dto"
+import { TGetPostRequest, Post } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
 
@@ -18,15 +18,20 @@ export const PostApi = {
     const res = await axiosInstance.post(POST_PATH)
     return res.data
   },
-  async deletePost({ ...postData }) {
-    const res = await axiosInstance.delete(POST_PATH, {
-      ...postData,
-    })
+  async deletePost(id: string) {
+    const res = await axiosInstance.delete(POST_PATH + `/${id}`)
     return res.data
   },
-  async editPost({ ...postData }) {
+  async editPost({ title, content }: Post, id: string) {
+    const req = { title, content }
+    const res = await axiosInstance.patch(POST_PATH + `/${id}`, req)
+    return res.data
+  },
+  async getDetailPost(postId: string) {
     const res = await axiosInstance.patch(POST_PATH, {
-      ...postData,
+      params: {
+        dataId: postId,
+      },
     })
     return res.data
   },
