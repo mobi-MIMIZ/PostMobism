@@ -4,10 +4,10 @@ import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
-import { getPosts } from "@/api/post-slice"
 import PostDetailModal from "./components/PostDetailModal/PostDetailModal"
 import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
+import { getPosts } from "@/features/post/post.slice"
 
 const MainPage = () => {
   const [postList] = useState(MockPostsData(6))

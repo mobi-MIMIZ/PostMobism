@@ -4,30 +4,46 @@ import styled from "styled-components"
 import FormHeader from "./components/form-header"
 import { ViewPortSize, flexCenter } from "@/styles/common.style"
 import { SignUpArr } from "@/consts/form-fields"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SignUpSchema, SignUpType } from "@/consts/schema"
+import { SignUpSchema } from "@/consts/schema"
+import { z } from "zod"
+import { AuthApi } from "@/features/user/auth.api"
+import { UseNavigation } from "@/hooks/use-navigate"
 
-export type SignUpFieldName = "userId" | "nickname" | "password" | "passwordConfirm"
+export type SignUpFieldName = "userId" | "nickName" | "password" | "passwordConfirm"
+export type SignUpType = z.infer<typeof SignUpSchema>
 
 const SignUpForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    /* reset, */
+    formState: { errors, isValid },
+    reset,
   } = useForm<SignUpType>({
     resolver: zodResolver(SignUpSchema),
     mode: "all",
     defaultValues: {
-      nickname: "",
       userId: "",
+      nickName: "",
       password: "",
       passwordConfirm: "",
     },
   })
 
-  const sendSignUpData = () => {}
+  const { toSignIn } = UseNavigation()
+
+  const sendSignUpData: SubmitHandler<SignUpType> = async (data: FieldValues) => {
+    /* window.confirm("You Sure? \n Can't change your information. ") */
+    try {
+      await AuthApi.SignUp(data)
+      alert("Welcome, plz enjoy your time :)")
+      reset()
+      toSignIn()
+    } catch (error) {
+      alert("Oops! Error Occur! Plz try again later")
+    }
+  }
 
   return (
     <S.Wrapper>
@@ -49,7 +65,7 @@ const SignUpForm = () => {
             />
           )
         })}
-        <MMZbutton label={"sign up"} type={"submit"} usage={"SignForm"} disabled={isSubmitting} />
+        <MMZbutton label={"sign up"} type={"submit"} usage={"SignForm"} disabled={isValid} />
       </S.FormContent>
     </S.Wrapper>
   )

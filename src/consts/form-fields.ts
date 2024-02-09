@@ -1,6 +1,6 @@
 export const SignUpArr = [
   {
-    id: "e-mail",
+    id: "userId",
     label: "ID",
     type: "text",
     placeholder: "e-mail",
@@ -23,7 +23,8 @@ export const SignUpArr = [
     type: "password",
     placeholder: "plz write above password again for confirm",
   },
-]
+] as const
+
 export const SignInArr = [
   {
     id: "e-mail",

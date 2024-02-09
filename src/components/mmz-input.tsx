@@ -16,7 +16,7 @@ const MMZinput = <T extends FieldValues>({ id, label, error, type, usage, regist
     <S.Wrapper>
       <label>{label}</label>
       <S.Input id={id} type={type} usage={usage} {...props} {...register(id, { required: true })} />
-      {error && <S.Message>error message</S.Message>}
+      {error && <S.Message>{error}</S.Message>}
     </S.Wrapper>
   )
 }
@@ -56,6 +56,7 @@ const Input = styled.input<{ usage?: "signForm" | "postForm" }>`
 
 const Message = styled.p`
   font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
+  color: ${({ theme }) => theme.COLORS.error};
 `
 
 export const S = {

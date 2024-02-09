@@ -1,4 +1,4 @@
-import { axiosInstance } from "./core.api"
+import { axiosInstance } from "../core.api"
 import { TGetPostRequest } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
@@ -13,7 +13,7 @@ export const PostApi = {
     })
     return res.data
   },
-  
+
   async postPost() {
     const res = await axiosInstance.post(POST_PATH)
     return res.data
@@ -31,6 +31,8 @@ export const PostApi = {
     return res.data
   },
 }
+
+// example
 ;(async () => {
   const Posts = await PostApi.getPost({
     id: "",

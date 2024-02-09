@@ -10,7 +10,7 @@ type ButtonProps = {
 
 const MMZbutton = ({ usage, type, label, disabled, ...props }: ButtonProps) => {
   return (
-    <S.Button className={disabled ? "isHidden" : ""} usage={usage} type={type} {...props}>
+    <S.Button className={disabled === true ? "isHidden" : ""} usage={usage} type={type} {...props}>
       {label}
     </S.Button>
   )
@@ -39,15 +39,16 @@ const usageCSS = {
 
 const Button = styled.button<{ usage?: "SignForm" | "PostForm" }>`
   ${({ usage }) => (usage ? usageCSS[usage] : "")}
-  transition: all 0.6s ease-in-out;
   cursor: pointer;
+  visibility: visible;
+  transition: all 0.6s ease-in-out;
   &:hover,
   &:focus {
     color: ${({ theme }) => theme.COLORS.white};
     background-color: ${({ theme }) => theme.COLORS.primary["pink"]};
   }
   &.isHidden {
-    visibility: hidden;
+    opacity: hidden;
   }
 `
 
