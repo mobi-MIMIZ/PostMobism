@@ -166,21 +166,28 @@ vercel 👉 <a href="#">
     <td>day 07</td>
     <td>2024-02-09</td>
     <td>ETA 05</td>
-    <td>developing main & detail page</td>
+    <td>developing sign page</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 08</td>
     <td>2024-02-10</td>
     <td>ETA 06</td>
-    <td>developing</td>
+    <td>developing main & detail page</td>
     <td>holiday</td>
   </tr>
   <tr>
     <td>day 09</td>
     <td>2024-02-11</td>
     <td>ETA 07</td>
-    <td>developing</td>
+    <td>developing main & detail page</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>day 09</td>
+    <td>2024-02-12</td>
+    <td>ETA 08</td>
+    <td>check</td>
     <td>-</td>
   </tr>
 </table>
