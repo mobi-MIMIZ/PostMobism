@@ -4,7 +4,7 @@ import styled from "styled-components"
 import FormHeader from "./components/form-header"
 import { ViewPortSize, flexCenter } from "@/styles/common.style"
 import { SignUpArr } from "@/consts/form-fields"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SignUpSchema } from "@/consts/schema"
 import { z } from "zod"
@@ -16,7 +16,7 @@ export type SignUpType = z.infer<typeof SignUpSchema>
 
 const SignUpForm = () => {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors, isValid },
     reset,
@@ -34,6 +34,7 @@ const SignUpForm = () => {
   const { toSignIn } = UseNavigation()
 
   const sendSignUpData: SubmitHandler<SignUpType> = async (data: FieldValues) => {
+    // 이건 이번에도 적용을 할까요?
     /* window.confirm("You Sure? \n Can't change your information. ") */
     try {
       await AuthApi.SignUp(data)
@@ -53,15 +54,21 @@ const SignUpForm = () => {
           const { id, label, type, placeholder } = input
           const fieldName = id as SignUpFieldName
           return (
-            <MMZinput
+            <Controller
               key={id}
-              id={id}
-              label={label}
-              type={type}
-              placeholder={placeholder}
-              usage={"signForm"}
-              register={register}
-              error={errors[fieldName]?.message}
+              control={control}
+              name={fieldName}
+              render={({ field }) => (
+                <MMZinput
+                  id={id}
+                  label={label}
+                  type={type}
+                  placeholder={placeholder}
+                  usage={"signForm"}
+                  {...field}
+                  error={errors[fieldName]?.message}
+                />
+              )}
             />
           )
         })}

@@ -1,5 +1,5 @@
-import { InputHTMLAttributes } from "react"
-import { FieldValues, Path, UseFormRegister } from "react-hook-form"
+import { InputHTMLAttributes, forwardRef } from "react"
+import { FieldValues, Path } from "react-hook-form"
 import styled, { css } from "styled-components"
 
 type InputProps<T extends FieldValues> = {
@@ -8,18 +8,20 @@ type InputProps<T extends FieldValues> = {
   type: string
   error: string | undefined
   usage: "signForm" | "postForm"
-  register: UseFormRegister<T>
 } & InputHTMLAttributes<HTMLInputElement>
 
-const MMZinput = <T extends FieldValues>({ id, label, error, type, usage, register, ...props }: InputProps<T>) => {
-  return (
-    <S.Wrapper>
-      <label>{label}</label>
-      <S.Input id={id} type={type} usage={usage} {...props} {...register(id, { required: true })} />
-      {error && <S.Message>{error}</S.Message>}
-    </S.Wrapper>
-  )
-}
+const MMZinput = forwardRef<HTMLInputElement, InputProps<FieldValues>>(
+  ({ id, label, error, type, usage, ...props }, ref) => {
+    return (
+      <S.Wrapper>
+        <label>{label}</label>
+        {/* ref를 input 요소에 연결 */}
+        <S.Input id={id} type={type} usage={usage} {...props} ref={ref} />
+        {error && <S.Message>{error}</S.Message>}
+      </S.Wrapper>
+    )
+  },
+)
 export default MMZinput
 
 const usageCSS = {
