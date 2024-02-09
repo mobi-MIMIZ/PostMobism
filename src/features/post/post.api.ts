@@ -22,11 +22,14 @@ export const PostApi = {
   /**
    * @function postPost
    * @method POST
+   * @body parentId: string
+   * @formData {images: [File, File, File], parentId: string}
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost() {
-    const res = await axiosInstance.post(POST_PATH)
+  async postPost({ title, content }: Post) {
+    const postData = { title, content }
+    const res = await axiosInstance.post(POST_PATH, postData)
     return res.data
   },
   /**
@@ -35,8 +38,12 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async deletePost(id: string) {
-    const res = await axiosInstance.delete(POST_PATH + `/${id}`)
+  async deletePost(dataId: string) {
+    const res = await axiosInstance.delete(POST_PATH, {
+      params: {
+        dataId,
+      },
+    })
     return res.data
   },
   /**
@@ -47,9 +54,14 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async editPost({ title, content }: Post, id: string) {
+  async editPost({ title, content }: Post, dataId: string) {
     const req = { title, content }
-    const res = await axiosInstance.patch(POST_PATH + `/${id}`, req)
+    const res = await axiosInstance.patch(POST_PATH, {
+      params: {
+        dataId,
+      },
+      req,
+    })
     return res.data
   },
   /**
