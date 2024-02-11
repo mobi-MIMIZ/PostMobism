@@ -172,22 +172,43 @@ vercel 👉 <a href="#">
   <tr>
     <td>day 08</td>
     <td>2024-02-10</td>
-    <td>ETA 06</td>
-    <td>developing main & detail page</td>
+    <td>refreshday</td>
+    <td>-</td>
     <td>holiday</td>
   </tr>
   <tr>
     <td>day 09</td>
     <td>2024-02-11</td>
-    <td>ETA 07</td>
+    <td>ETA 06</td>
     <td>developing main & detail page</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 09</td>
     <td>2024-02-12</td>
-    <td>ETA 08</td>
+    <td>ETA 07</td>
     <td>check</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>day 10</td>
+    <td>2024-02-12</td>
+    <td>ETA 08</td>
+    <td>(delay)</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>day 11</td>
+    <td>2024-02-13</td>
+    <td>ETA 09</td>
+    <td>(delay)</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>day 12</td>
+    <td>2024-02-14</td>
+    <td>ETA 10</td>
+    <td>(delay)</td>
     <td>-</td>
   </tr>
 </table>
