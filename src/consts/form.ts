@@ -1,6 +1,6 @@
 export const SignUpArr = [
   {
-    id: "e-mail",
+    id: "userId",
     label: "ID",
     type: "text",
     placeholder: "e-mail",
@@ -26,7 +26,7 @@ export const SignUpArr = [
 ]
 export const SignInArr = [
   {
-    id: "e-mail",
+    id: "userId",
     label: "ID",
     type: "text",
     placeholder: "e-mail",
@@ -37,4 +37,4 @@ export const SignInArr = [
     type: "password",
     placeholder: "must be over 8 letters and should include special characters",
   },
-]
+]as const

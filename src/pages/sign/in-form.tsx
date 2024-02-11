@@ -5,16 +5,52 @@ import MMZinput from "@/components/mmz-input"
 import { SignInArr } from "@/consts/form"
 import MMZbutton from "@/components/mmz-button"
 import { UseNavigation } from "@/hooks/use-navigate"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { SignInSchema } from "@/consts/form-schema"
 
 const SignIn = () => {
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(SignInSchema),
+    mode: "all",
+    defaultValues: {
+      userId: "",
+      password: "",
+    },
+  })
   const { toSignUp } = UseNavigation()
+
+  //아직 미적용
+  const onSubmitSignIn = data => console.log(data)
+
   return (
     <S.Wrapper>
       <FormHeader />
-      <S.FormContent>
+      <S.FormContent onSubmit={handleSubmit(onSubmitSignIn)}>
         {SignInArr.map(input => {
           const { id, label, type, placeholder } = input
-          return <MMZinput key={id} id={id} label={label} type={type} placeholder={placeholder} usage={"signForm"} />
+          return (
+            <Controller
+              control={control}
+              name={id}
+              rules={{
+                required: true,
+              }}
+              render={({ field, fieldState }) => (
+                <MMZinput
+                  key={id}
+                  id={id}
+                  label={label}
+                  type={type}
+                  placeholder={placeholder}
+                  usage={"signForm"}
+                  value={field.value}
+                  error={fieldState.error?.message}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          )
         })}
         <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} />
         <S.Text onClick={() => toSignUp()}>not a member?</S.Text>
