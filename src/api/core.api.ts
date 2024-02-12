@@ -1,3 +1,4 @@
+import { TokenRepository } from "@/repository/token-repository"
 import axios from "axios"
 
 export const axiosInstance = axios.create({
@@ -7,4 +8,10 @@ export const axiosInstance = axios.create({
     pair: import.meta.env.VITE_PAIR,
   },
   withCredentials: true,
+})
+
+axiosInstance.interceptors.request.use(function (config) {
+  const token = String(TokenRepository.getToken())
+  config.headers.Authorization = token ? `Bearer ${token}` : ""
+  return config
 })

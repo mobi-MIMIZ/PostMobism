@@ -6,4 +6,8 @@ export const SignInSchema = z.object({
   password: z.string().regex(REGEXP.password, { message: "special characters should be included" }),
 })
 
-export type SignInType = z.infer<typeof SignInSchema>
+export type _SignInType = z.infer<typeof SignInSchema>
+
+export type SignInType = _SignInType & {
+  token?: string
+}

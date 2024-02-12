@@ -7,7 +7,9 @@ import MMZbutton from "@/components/mmz-button"
 import { UseNavigation } from "@/hooks/use-navigate"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SignInSchema } from "@/consts/form-schema"
+import { SignInSchema, SignInType } from "@/consts/form-schema"
+import { AuthApi } from "@/api/auth.api"
+import { useAuth } from "@/context/auth.ctx"
 
 const SignIn = () => {
   const { control, handleSubmit } = useForm({
@@ -18,10 +20,19 @@ const SignIn = () => {
       password: "",
     },
   })
-  const { toSignUp } = UseNavigation()
+  const { toMain, toSignUp } = UseNavigation()
+  const { signIn } = useAuth()
 
   //아직 미적용
-  const onSubmitSignIn = data => console.log(data)
+  const onSubmitSignIn = async (data: SignInType) => {
+    try {
+      const res = await AuthApi.SignIn(data);
+      signIn(res.token)
+      toMain()
+    } catch {
+      alert("아이디와 비밀번호를 확인해주세요")
+    }
+  }
 
   return (
     <S.Wrapper>

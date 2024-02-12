@@ -1,4 +1,5 @@
 import { axiosInstance } from "./core.api"
+import { SignInType } from "@/consts/form-schema"
 
 const PATH = "/user"
 
@@ -14,11 +15,10 @@ export const AuthApi = {
     })
     return res.data
   },
-  async SignIn({ ...formData }) {
-    const { userId, password } = formData
+  async SignIn(data: SignInType) {
     const res = await axiosInstance.post(PATH + "/sign-in", {
-      userId,
-      password,
+      userId: data.userId,
+      password: data.password
     })
     return res.data
   },
