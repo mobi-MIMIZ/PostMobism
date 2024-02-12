@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const OnePost = () => {
     return <S.Wrapper>
-        <S.Container></S.Container>
+        <S.Container>one post</S.Container>
     </S.Wrapper>
 }
 export default OnePost

@@ -4,17 +4,32 @@ import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
 import MMZdialog from "@/components/mmz-dialog"
+import { signOut } from "@/api/user-slice"
 
 const Header: FC = () => {
   const [reveal, setReveal] = useState<boolean>(false)
 
   const { toMain } = UseNavigation()
 
+  const onCreatePost = () => {}
+
+  const onLogout = async () => {
+    try {
+      await signOut()
+      setTimeout(() => {
+        window.location.replace("/")
+      }, 1000)
+      alert("see you again :)")
+    } catch(error){
+      alert("Oops! plz try again later")
+    }
+  }
+
   return (
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
       <S.User onClick={() => setReveal(prev => !prev)} />
-      {reveal && <MMZdialog label1={'create post'} label2={'logout'} />}
+      {reveal && <MMZdialog label1={'create post'} label2={'logout'} onClick1={() => onCreatePost()} onClick2={onLogout} />}
     </S.Wrapper>
   )
 }

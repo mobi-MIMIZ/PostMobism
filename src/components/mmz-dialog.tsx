@@ -5,17 +5,18 @@ import styled from "styled-components"
 type OptionProps = {
   label1: string
   label2: string
-  onClick?: (e: MouseEvent<HTMLLIElement>) => void
+  onClick1?: (e: MouseEvent<HTMLLIElement>) => void
+  onClick2?: (e: MouseEvent<HTMLLIElement>) => void
 } & LiHTMLAttributes<HTMLLIElement>
 
-const MMZdialog = ({ label1, label2, onClick, ...props }: OptionProps) => {
+const MMZdialog = ({ label1, label2, onClick1, onClick2, ...props }: OptionProps) => {
   return (
     <S.Wrapper>
-      <S.Options onClick={onClick} {...props}>
+      <S.Options onClick={onClick1} {...props}>
         {label1}
       </S.Options>
       <S.Line />
-      <S.Options onClick={onClick} {...props}>
+      <S.Options onClick={onClick2} {...props}>
         {label2}
       </S.Options>
     </S.Wrapper>
