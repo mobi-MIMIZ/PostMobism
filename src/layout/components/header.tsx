@@ -3,7 +3,7 @@ import { FC, useState } from "react"
 import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
-import MyDialog from "@/pages/my/my-dialog"
+import MMZdialog from "@/components/mmz-dialog"
 
 const Header: FC = () => {
   const [reveal, setReveal] = useState<boolean>(false)
@@ -14,7 +14,7 @@ const Header: FC = () => {
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
       <S.User onClick={() => setReveal(prev => !prev)} />
-      {reveal && <MyDialog />}
+      {reveal && <MMZdialog label1={'create post'} label2={'logout'} />}
     </S.Wrapper>
   )
 }
