@@ -2,8 +2,8 @@ import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
-import { useState } from "react"
-import PostDetailModal from "./components/PostDetailModal/PostDetailModal"
+import {  useState } from "react"
+import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
 
@@ -16,12 +16,14 @@ const MainPage = () => {
     setSelectedPost(post)
   }
 
-  // test redux
+
   // const dispatch = useAppDispatch()
   // const post = useAppSelector(state => state.post.data)
 
-  // useEffect(() => {dispatch(getPosts())}, [])
-  // console.log(post)
+  // useEffect(() => {
+  //   dispatch(getPosts())
+  // }, [])
+
 
   return (
     <S.Wrapper>
@@ -51,6 +53,7 @@ const Wrapper = styled.div`
   top: 60px;
   background-color: ${({ theme }) => theme.COLORS.white};
   color: ${({ theme }) => theme.COLORS.beige[800]};
+  z-index: -1;
 `
 const Title = styled.p`
   font-size: ${({ theme }) => theme.FONT_SIZE["XLarge"]};

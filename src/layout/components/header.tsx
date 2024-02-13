@@ -1,16 +1,20 @@
 import { PositionXCenter, flexAlignCenter } from "@/styles/common.style"
-import { FC } from "react"
+import { FC, useState } from "react"
 import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
+import MMZdialog from "@/components/mmz-dialog"
 
 const Header: FC = () => {
+  const [reveal, setReveal] = useState<boolean>(false)
+
   const { toMain } = UseNavigation()
 
   return (
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
-      <S.User />
+      <S.User onClick={() => setReveal(prev => !prev)} />
+      {reveal && <MMZdialog label1={'create post'} label2={'logout'} />}
     </S.Wrapper>
   )
 }
