@@ -192,21 +192,21 @@ vercel 👉 <a href="#">
   </tr>
   <tr>
     <td>day 10</td>
-    <td>2024-02-12</td>
+    <td>2024-02-13</td>
     <td>ETA 08</td>
     <td>(delay)</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 11</td>
-    <td>2024-02-13</td>
+    <td>2024-02-14</td>
     <td>ETA 09</td>
     <td>(delay)</td>
     <td>-</td>
   </tr>
   <tr>
     <td>day 12</td>
-    <td>2024-02-14</td>
+    <td>2024-02-15</td>
     <td>ETA 10</td>
     <td>(delay)</td>
     <td>-</td>

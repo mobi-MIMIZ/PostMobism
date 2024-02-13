@@ -8,13 +8,38 @@ import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
 
 const MainPage = () => {
-  const [postList] = useState(MockPostsData(12))
+  const [postList] = useState(MockPostsData(70))
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const listLength = postList.length
+
+  const perPage = 6
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
   }
+
+  const onPageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const renderPostsForPage = () => {
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = startIndex + perPage;
+
+    return postList
+      .slice(startIndex, endIndex)
+      .map((post, idx) => (
+        <OneList
+          number={idx + 1}
+          title={post.title}
+          nickname={post.User.nickName}
+          image={post.User.profileImg}
+          key={post.id}
+          onOpenDetailModal={() => onOpenDetailModal(post)}
+        />
+      ));
+  };
 
 
   // const dispatch = useAppDispatch()
@@ -24,22 +49,14 @@ const MainPage = () => {
   //   dispatch(getPosts())
   // }, [])
 
+  // console.log(post)
 
   return (
     <S.Wrapper>
       {selectedPost && <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />}
       <S.Title>Post Your Code</S.Title>
-      {postList.map((post, idx) => (
-        <OneList
-          number={idx + 1}
-          title={post.title}
-          nickname={post.User.nickName}
-          image={post.User.profileImg}
-          key={post.id}
-          onOpenDetailModal={() => onOpenDetailModal(post)}
-        />
-      ))}
-      <Pagination listLength={listLength} />
+      {renderPostsForPage()}
+      <Pagination listLength={listLength} currentPage={currentPage} perPage={perPage} onPageChange={onPageChange} />
     </S.Wrapper>
   )
 }
