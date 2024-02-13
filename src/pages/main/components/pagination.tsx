@@ -4,56 +4,57 @@ import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 
 export type PaginationProps = {
-  listLength: number
-}
+  listLength: number;
+  currentPage: number;
+  perPage: number;
+  onPageChange: (pageNumber: number) => void; 
+};
 
-const Pagination = ({ listLength }: PaginationProps) => {
-  const [searchParams, setSearchParams] = useSearchParams()
+const Pagination = ({ listLength, currentPage, perPage, onPageChange }: PaginationProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  // constants about pages :
-  // const page = Number(searchParams.get("page")) || "1"
-  const page = (searchParams.get("page") as string) || "1"
-  const perPage = 6 // posts per page
-  const totalPage = Math.ceil(listLength / perPage)
-  const pagesPerGroup = 10 // pages per numberButtons
-  const initialPage = parseInt(page as string, 10) || 1
-  const [currentPage, setCurrentPage] = useState<number>(initialPage)
+  // constants about pages:
+  const page = parseInt(searchParams.get("page") || "1", 10); 
+  const totalPage = Math.ceil(listLength / perPage);
+  const pagesPerGroup = 10;
+  const [, setCurrentGroup] = useState(1);
 
-  const startPage = Math.max(1, Math.ceil(currentPage / pagesPerGroup) * pagesPerGroup - pagesPerGroup + 1)
-  // const endPage = Math.min(startPage + pagesPerGroup - 1, totalPage)
+  const startPage = Math.max(1, Math.ceil(currentPage / pagesPerGroup) * pagesPerGroup - pagesPerGroup + 1);
 
-  // const NumberButtons: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   const NumberButtons: number[] = Array.from(
     { length: Math.min(pagesPerGroup, totalPage) },
     (_, index) => startPage + index,
-  )
+  ).filter(pageNumber => pageNumber <= totalPage);
 
   // functions : handle pages
-  const jumpFirst = () => setCurrentPage(1)
-  const jumpLast = () => setCurrentPage(totalPage)
-  const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPage))
-  const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1))
-  const handleTarget = (pageNumber: number) => setCurrentPage(pageNumber)
+  const jumpFirst = () => onPageChange(1);
+  const jumpLast = () => onPageChange(totalPage);
+  const handleNext = () => onPageChange(Math.min(currentPage + 1, totalPage));
+  const handlePrev = () => onPageChange(Math.max(currentPage - 1, 1));
+  const handleTarget = (pageNumber: number) => onPageChange(pageNumber);
 
+  // 페이지 그룹을 바꿔주는 함수 => 현재 페이지가 바뀔 때마다 실행
   // Update URL when currentPage changes
   useEffect(() => {
-    setSearchParams({ page: currentPage.toString() })
-  }, [currentPage, setSearchParams])
+    const newCurrentGroup = Math.ceil(currentPage / pagesPerGroup);
+    setCurrentGroup(newCurrentGroup);
+    setSearchParams({ page: currentPage.toString() });
+  }, [currentPage, setSearchParams]);
 
   return (
     <S.Wrapper>
       <S.JumpFirst onClick={jumpFirst}>&lt;&lt;</S.JumpFirst>
       <S.Prev onClick={handlePrev}>&lt;</S.Prev>
       {NumberButtons.map((pageNumber, idx) => (
-        <S.Number key={idx + 1} onClick={() => handleTarget(pageNumber)}>
+        <S.Number key={idx + 1} onClick={() => handleTarget(pageNumber)} className={pageNumber === currentPage ? 'active' : ''}>
           {pageNumber}
         </S.Number>
       ))}
       <S.Next onClick={handleNext}>&gt;</S.Next>
       <S.JumpLast onClick={jumpLast}>&gt;&gt;</S.JumpLast>
     </S.Wrapper>
-  )
-}
+  );
+};
 export default Pagination
 
 const Wrapper = styled.div`
