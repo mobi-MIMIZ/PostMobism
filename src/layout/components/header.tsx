@@ -5,13 +5,18 @@ import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
 import MMZdialog from "@/components/mmz-dialog"
 import { signOut } from "@/api/user-slice"
+import OnePost from "@/pages/main/components/one-post/one-post"
 
 const Header: FC = () => {
   const [reveal, setReveal] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
   const { toMain } = UseNavigation()
 
-  const onCreatePost = () => {}
+  const onCreatePost = () => {
+    setOpenModal(true)
+    setReveal(false)
+  }
 
   const onLogout = async () => {
     try {
@@ -29,7 +34,8 @@ const Header: FC = () => {
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
       <S.User onClick={() => setReveal(prev => !prev)} />
-      {reveal && <MMZdialog label1={'create post'} label2={'logout'} onClick1={() => onCreatePost()} onClick2={onLogout} />}
+      {reveal && <MMZdialog label1={'create post'} label2={'logout'} onClick1={onCreatePost} onClick2={onLogout} />}
+      {openModal && <OnePost setOpenModal={setOpenModal} />}
     </S.Wrapper>
   )
 }
