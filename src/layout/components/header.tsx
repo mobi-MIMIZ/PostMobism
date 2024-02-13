@@ -4,8 +4,8 @@ import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
 import MMZdialog from "@/components/mmz-dialog"
-import { signOut } from "@/api/user-slice"
 import OnePost from "@/pages/main/components/one-post/one-post"
+import { signOut } from "@/features/user/user.slice"
 
 const Header: FC = () => {
   const [reveal, setReveal] = useState<boolean>(false)
@@ -25,7 +25,7 @@ const Header: FC = () => {
         window.location.replace("/")
       }, 1000)
       alert("see you again :)")
-    } catch(error){
+    } catch (error) {
       alert("Oops! plz try again later")
     }
   }
@@ -34,7 +34,7 @@ const Header: FC = () => {
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
       <S.User onClick={() => setReveal(prev => !prev)} />
-      {reveal && <MMZdialog label1={'create post'} label2={'logout'} onClick1={onCreatePost} onClick2={onLogout} />}
+      {reveal && <MMZdialog label1={"create post"} label2={"logout"} onClick1={onCreatePost} onClick2={onLogout} />}
       {openModal && <OnePost setOpenModal={setOpenModal} />}
     </S.Wrapper>
   )

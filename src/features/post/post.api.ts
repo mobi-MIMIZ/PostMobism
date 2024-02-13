@@ -79,13 +79,3 @@ export const PostApi = {
     return res.data
   },
 }
-
-// peanut 님이 이건 예시라던데 지워도 되는 걸까요? 아니면 필요해서 남겨두신 걸까요??
-;(async () => {
-  const Posts = await PostApi.getPost({
-    id: "",
-    title: "",
-  })
-
-  Posts.map(post => post.content)
-})()
