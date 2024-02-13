@@ -1,4 +1,4 @@
-import { AuthApi } from "@/api/auth.api"
+import { AuthApi } from "@/features/user/auth.api"
 import { TokenRepository } from "@/repository/token-repository"
 import { FC, ReactNode, createContext, useContext } from "react"
 

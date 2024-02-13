@@ -1,6 +1,6 @@
 import { User } from "@/type/type"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { axiosInstance } from "./core.api"
+import { axiosInstance } from "../core.api"
 import { SignUpUser } from "@/type/dto/form"
 
 // test

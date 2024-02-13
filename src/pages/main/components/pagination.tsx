@@ -1,21 +1,60 @@
 import { flexAlignCenter } from "@/styles/common.style"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 
-const Pagination = () => {
-  const NumberButtons: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+export type PaginationProps = {
+  listLength: number;
+  currentPage: number;
+  perPage: number;
+  onPageChange: (pageNumber: number) => void; 
+};
+
+const Pagination = ({ listLength, currentPage, perPage, onPageChange }: PaginationProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // constants about pages:
+  const page = parseInt(searchParams.get("page") || "1", 10); 
+  const totalPage = Math.ceil(listLength / perPage);
+  const pagesPerGroup = 10;
+  const [, setCurrentGroup] = useState(1);
+
+  const startPage = Math.max(1, Math.ceil(currentPage / pagesPerGroup) * pagesPerGroup - pagesPerGroup + 1);
+
+  const NumberButtons: number[] = Array.from(
+    { length: Math.min(pagesPerGroup, totalPage) },
+    (_, index) => startPage + index,
+  ).filter(pageNumber => pageNumber <= totalPage);
+
+  // functions : handle pages
+  const jumpFirst = () => onPageChange(1);
+  const jumpLast = () => onPageChange(totalPage);
+  const handleNext = () => onPageChange(Math.min(currentPage + 1, totalPage));
+  const handlePrev = () => onPageChange(Math.max(currentPage - 1, 1));
+  const handleTarget = (pageNumber: number) => onPageChange(pageNumber);
+
+  // 페이지 그룹을 바꿔주는 함수 => 현재 페이지가 바뀔 때마다 실행
+  // Update URL when currentPage changes
+  useEffect(() => {
+    const newCurrentGroup = Math.ceil(currentPage / pagesPerGroup);
+    setCurrentGroup(newCurrentGroup);
+    setSearchParams({ page: currentPage.toString() });
+  }, [currentPage, setSearchParams]);
 
   return (
     <S.Wrapper>
-      <JumpFirst>&lt;&lt;</JumpFirst>
-      <Prev>&lt;</Prev>
-      {NumberButtons.map((pageNum, idx) => (
-        <S.Number key={idx + 1}>{pageNum}</S.Number>
+      <S.JumpFirst onClick={jumpFirst}>&lt;&lt;</S.JumpFirst>
+      <S.Prev onClick={handlePrev}>&lt;</S.Prev>
+      {NumberButtons.map((pageNumber, idx) => (
+        <S.Number key={idx + 1} onClick={() => handleTarget(pageNumber)} className={pageNumber === currentPage ? 'active' : ''}>
+          {pageNumber}
+        </S.Number>
       ))}
-      <Prev>&gt;</Prev>
-      <JumpFirst>&gt;&gt;</JumpFirst>
+      <S.Next onClick={handleNext}>&gt;</S.Next>
+      <S.JumpLast onClick={jumpLast}>&gt;&gt;</S.JumpLast>
     </S.Wrapper>
-  )
-}
+  );
+};
 export default Pagination
 
 const Wrapper = styled.div`
