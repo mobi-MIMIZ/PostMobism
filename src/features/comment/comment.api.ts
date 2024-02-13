@@ -1,4 +1,4 @@
-import { axiosInstance } from "./core.api"
+import { axiosInstance } from "../core.api"
 
 const COMMENT_PATH = "/data/comment"
 
