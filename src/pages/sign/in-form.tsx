@@ -2,7 +2,7 @@ import styled from "styled-components"
 import FormHeader from "./components/form-header"
 import { ViewPortSize, flexCenter } from "@/styles/common.style"
 import MMZinput from "@/components/mmz-input"
-import { SignInArr } from "@/consts/form"
+import { SignInArr } from "@/consts/form-fields"
 import MMZbutton from "@/components/mmz-button"
 import { UseNavigation } from "@/hooks/use-navigate"
 

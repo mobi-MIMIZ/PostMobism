@@ -16,6 +16,9 @@ export const UseNavigation = () => {
   const toSignUp = () => {
     navigate("/sign-up")
   }
+  const toSignIn = () => {
+    navigate("/")
+  }
   const toDetail = () => {
     navigate("/detail")
   }
@@ -23,6 +26,7 @@ export const UseNavigation = () => {
   return {
     toMain,
     toSignUp,
+    toSignIn,
     toDetail,
   }
 }

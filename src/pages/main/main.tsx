@@ -8,8 +8,9 @@ import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
 
 const MainPage = () => {
-  const [postList] = useState(MockPostsData(6))
+  const [postList] = useState(MockPostsData(12))
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+  const listLength = postList.length
 
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
@@ -23,7 +24,6 @@ const MainPage = () => {
   //   dispatch(getPosts())
   // }, [])
 
-  // console.log(post)
 
   return (
     <S.Wrapper>
@@ -39,7 +39,7 @@ const MainPage = () => {
           onOpenDetailModal={() => onOpenDetailModal(post)}
         />
       ))}
-      <Pagination />
+      <Pagination listLength={listLength} />
     </S.Wrapper>
   )
 }
