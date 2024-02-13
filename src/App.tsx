@@ -6,6 +6,9 @@ import { ThemeProvider } from "styled-components"
 import theme from "./styles/theme.style"
 import { Provider } from "react-redux"
 import { store } from "./features/store"
+import { QueryClient, QueryClientProvider } from "react-query"
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
@@ -13,7 +16,9 @@ function App() {
       <Provider store={store}>
         <AuthProvider>
           <GlobalStyles />
-          <RouterProvider router={router} />
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
         </AuthProvider>
       </Provider>
     </ThemeProvider>

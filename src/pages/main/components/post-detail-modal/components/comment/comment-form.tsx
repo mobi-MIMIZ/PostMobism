@@ -1,9 +1,45 @@
+import { QUERY_KEY } from "@/consts/query-key"
+import { CommentApi } from "@/features/comment/comment.api"
 import { Send } from "lucide-react"
+import { useQuery, useQueryClient } from "react-query"
 import styled from "styled-components"
 
+export type CommentDataType = {
+  nickName: string
+  profileUrl: string
+  userId: string
+}
+
 const CommentForm = () => {
+  const queryClient = useQueryClient()
+
+  const { data: CommentList } = useQuery({
+    queryKey: [QUERY_KEY.COMMENT_LIST],
+    queryFn: () => CommentApi.getComment()
+  })
+
+  const onSubmitComment = async (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      const getItemUserInfo = localStorage.getItem("userInfo")!
+      const userInfo = JSON.parse(getItemUserInfo)
+      const CommentData: CommentDataType = {
+        nickName: userInfo.nickName,
+        profileUrl: userInfo.profileUrl,
+        userId: userInfo.userId,
+      }
+      try {
+        await CommentApi.postComment(CommentData)
+        await queryClient.invalidateQueries({
+          queryKey: [BATTLE_QUERY_KEY.COMMENT_LIST],
+        })
+      } catch {
+        alert("댓글 작성에 실패하였습니다")
+      }
+    }
+  }
   return (
-    <S.Form>
+    <S.Form onKeyDown={onSubmitComment}>
       <S.MyProfileImg />
       <S.TextArea placeholder="write your comments...." />
       <S.SendBtn type="submit">
