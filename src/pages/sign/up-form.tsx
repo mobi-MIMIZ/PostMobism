@@ -34,7 +34,6 @@ const SignUpForm = () => {
   const { toSignIn } = UseNavigation()
 
   const sendSignUpData: SubmitHandler<SignUpType> = async (data: FieldValues) => {
-    // 이건 이번에도 적용을 할까요?
     /* window.confirm("You Sure? \n Can't change your information. ") */
     try {
       await AuthApi.SignUp(data)
