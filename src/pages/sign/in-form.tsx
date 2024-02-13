@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInType } from "@/consts/form-schema"
 import { AuthApi } from "@/features/user/auth.api"
 import { useAuth } from "@/context/auth.ctx"
+import { useState } from "react"
 
 const SignIn = () => {
   const {
@@ -24,13 +25,29 @@ const SignIn = () => {
       password: "",
     },
   })
+
+  const initialUserInfo = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")!) : null
+  const [, setUserInfo] = useState(initialUserInfo)
   const { toMain, toSignUp } = UseNavigation()
   const { signIn } = useAuth()
+  /**
+   * 왜 안되는가?
+   * localStorage에 setItem이 제대로되지 않아서?
+   */
 
-  //아직 미적용
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
+      const userInfo = {
+        userId: res.userId,
+        nickName: res.info.nickname,
+        profileUrl: res.info.profileUrl,
+      }
+
+      localStorage.setItem("userInfo", JSON.stringify(userInfo))
+      setUserInfo(userInfo)
+
+      console.log("userInfo", userInfo)
       signIn(res.token)
       toMain()
     } catch {
