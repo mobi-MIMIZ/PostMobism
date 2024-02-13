@@ -1,20 +1,22 @@
+import { flexAlignCenter, flexCenter } from "@/styles/common.style"
 import { LiHTMLAttributes, MouseEvent } from "react"
 import styled from "styled-components"
 
 type OptionProps = {
   label1: string
   label2: string
-  onClick?: (e: MouseEvent<HTMLLIElement>) => void
+  onClick1?: (e: MouseEvent<HTMLLIElement>) => void
+  onClick2?: (e: MouseEvent<HTMLLIElement>) => void
 } & LiHTMLAttributes<HTMLLIElement>
 
-const MMZdialog = ({ label1, label2, onClick, ...props }: OptionProps) => {
+const MMZdialog = ({ label1, label2, onClick1, onClick2, ...props }: OptionProps) => {
   return (
     <S.Wrapper>
-      <S.Options onClick={onClick} {...props}>
+      <S.Options onClick={onClick1} {...props}>
         {label1}
       </S.Options>
       <S.Line />
-      <S.Options onClick={onClick} {...props}>
+      <S.Options onClick={onClick2} {...props}>
         {label2}
       </S.Options>
     </S.Wrapper>
@@ -24,18 +26,23 @@ const MMZdialog = ({ label1, label2, onClick, ...props }: OptionProps) => {
 export default MMZdialog
 
 const Wrapper = styled.ul`
-  width: 198px;
-  height: 86px;
+  position: absolute;
+  top: 120%;
+  right: 2%;
+  width: 190px;
+  height: 77px;
   border-radius: 8px;
-  padding: 8px;
   background-color: ${({ theme }) => theme.COLORS.white};
   box-shadow: 0px 0px 15px 0 rgba(236, 185, 150, 0.2);
+  ${flexCenter}
+  flex-direction: column;
 `
 const Options = styled.li`
   width: 182px;
   height: 30px;
   border-radius: 6px;
-  padding: 8px;
+  padding-left: 16px;
+  ${flexAlignCenter}
   color: ${({ theme }) => theme.COLORS.beige[500]};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   transition: all 0.6s ease-in-out;

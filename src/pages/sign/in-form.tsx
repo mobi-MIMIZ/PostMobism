@@ -5,18 +5,69 @@ import MMZinput from "@/components/mmz-input"
 import { SignInArr } from "@/consts/form-fields"
 import MMZbutton from "@/components/mmz-button"
 import { UseNavigation } from "@/hooks/use-navigate"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { SignInSchema, SignInType } from "@/consts/form-schema"
+import { AuthApi } from "@/features/user/auth.api"
+import { useAuth } from "@/context/auth.ctx"
 
 const SignIn = () => {
-  const { toSignUp } = UseNavigation()
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm({
+    resolver: zodResolver(SignInSchema),
+    mode: "all",
+    defaultValues: {
+      userId: "",
+      password: "",
+    },
+  })
+  const { toMain, toSignUp } = UseNavigation()
+  const { signIn } = useAuth()
+
+  //아직 미적용
+  const onSubmitSignIn = async (data: SignInType) => {
+    try {
+      const res = await AuthApi.SignIn(data)
+      signIn(res.token)
+      toMain()
+    } catch {
+      alert("아이디와 비밀번호를 확인해주세요")
+    }
+  }
+
   return (
     <S.Wrapper>
       <FormHeader />
-      <S.FormContent>
+      <S.FormContent onSubmit={handleSubmit(onSubmitSignIn)}>
         {SignInArr.map(input => {
           const { id, label, type, placeholder } = input
-          return <MMZinput key={id} id={id} label={label} type={type} placeholder={placeholder} usage={"signForm"} />
+          return (
+            <Controller
+              control={control}
+              name={id}
+              rules={{
+                required: true,
+              }}
+              render={({ field, fieldState }) => (
+                <MMZinput
+                  key={id}
+                  id={id}
+                  label={label}
+                  type={type}
+                  placeholder={placeholder}
+                  usage={"signForm"}
+                  value={field.value}
+                  error={fieldState.error?.message}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          )
         })}
-        <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} />
+        <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} disabled={!isValid} />
         <S.Text onClick={() => toSignUp()}>not a member?</S.Text>
       </S.FormContent>
     </S.Wrapper>
@@ -51,6 +102,7 @@ const Text = styled.p`
   margin-top: 10px;
   cursor: pointer;
   transition: all 0.6s ease-in-out;
+  ${flexCenter}
   &:hover {
     background-color: ${({ theme }) => theme.COLORS.primary["pink"]};
     color: ${({ theme }) => theme.COLORS.white};

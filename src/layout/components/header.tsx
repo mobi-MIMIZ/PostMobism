@@ -1,16 +1,41 @@
 import { PositionXCenter, flexAlignCenter } from "@/styles/common.style"
-import { FC } from "react"
+import { FC, useState } from "react"
 import styled from "styled-components"
 import LOGO from "../../assets/Logo.svg"
 import { UseNavigation } from "@/hooks/use-navigate"
+import MMZdialog from "@/components/mmz-dialog"
+import OnePost from "@/pages/main/components/one-post/one-post"
+import { signOut } from "@/features/user/user.slice"
 
 const Header: FC = () => {
+  const [reveal, setReveal] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+
   const { toMain } = UseNavigation()
+
+  const onCreatePost = () => {
+    setOpenModal(true)
+    setReveal(false)
+  }
+
+  const onLogout = async () => {
+    try {
+      await signOut()
+      setTimeout(() => {
+        window.location.replace("/")
+      }, 1000)
+      alert("see you again :)")
+    } catch (error) {
+      alert("Oops! plz try again later")
+    }
+  }
 
   return (
     <S.Wrapper>
       <S.Logo src={LOGO} onClick={() => toMain()} />
-      <S.User />
+      <S.User onClick={() => setReveal(prev => !prev)} />
+      {reveal && <MMZdialog label1={"create post"} label2={"logout"} onClick1={onCreatePost} onClick2={onLogout} />}
+      {openModal && <OnePost setOpenModal={setOpenModal} />}
     </S.Wrapper>
   )
 }
