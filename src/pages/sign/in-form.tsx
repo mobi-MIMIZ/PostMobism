@@ -38,17 +38,15 @@ const SignIn = () => {
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
+      console.log(res.data)
       const userInfo = {
-        userId: res.userId,
-        nickName: res.info.nickname,
-        profileUrl: res.info.profileUrl,
+        userId: res.data.userId,
+        nickName: res.data.info.nickname,
+        profileUrl: res.data.info.profileUrl,
       }
-
       localStorage.setItem("userInfo", JSON.stringify(userInfo))
       setUserInfo(userInfo)
-
-      console.log("userInfo", userInfo)
-      signIn(res.token)
+      signIn(res.data.token)
       toMain()
     } catch {
       alert("아이디와 비밀번호를 확인해주세요")
