@@ -1,12 +1,10 @@
-import { AppDispatch, RootState } from "@/store/store"
+import { AppDispatch, RootState } from "@/features/store"
 import { useDispatch, useSelector } from "react-redux"
 import type { TypedUseSelectorHook } from "react-redux"
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-
-
 
 /*
 Redux의 useDispatch와 useSelector를 사용할 때 타입 지정을 편리하게 하기 위한 hook

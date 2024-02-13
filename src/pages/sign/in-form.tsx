@@ -8,7 +8,7 @@ import { UseNavigation } from "@/hooks/use-navigate"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInType } from "@/consts/form-schema"
-import { AuthApi } from "@/api/auth.api"
+import { AuthApi } from "@/features/user/auth.api"
 import { useAuth } from "@/context/auth.ctx"
 
 const SignIn = () => {
