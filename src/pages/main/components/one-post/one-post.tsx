@@ -1,16 +1,27 @@
-import { PositionCenter, ViewPortSize } from "@/styles/common.style"
+import { PositionCenter, ViewPortSize  } from "@/styles/common.style"
 import styled from "styled-components"
+import PostHeader from "./components/post-header"
+import { Dispatch, FC, SetStateAction } from "react"
+import PostContent from "./components/post-content"
 
-const OnePost = () => {
+export type OnePostProps = {
+  setOpenModal: Dispatch<SetStateAction<boolean>>
+}
+
+const OnePost:FC<OnePostProps> = ({setOpenModal}) => {
     return <S.Wrapper>
-        <S.Container></S.Container>
+        <S.Container>
+          <PostHeader onClose={(prev) => setOpenModal(!prev)} />
+          <PostContent />
+        </S.Container>
     </S.Wrapper>
 }
 export default OnePost
 
 const Wrapper = styled.div`
-  position: fixed;
-  ${ViewPortSize};
+  position: absolute;
+  ${ViewPortSize}
+  top: 0%;
   background-color: rgba(253, 249, 242, 0.5);
   z-index: 1000;
 `
