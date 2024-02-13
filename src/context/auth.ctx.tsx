@@ -14,7 +14,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  // 변수가 있는지 확인하는 간단한 런타임 검사. null 이나 undefined일 경우 오류 발생
+  
   if (!context) {
     throw new Error("useAuth는 반드시 AuthProvider와 함께 사용되어야 합니다")
   }

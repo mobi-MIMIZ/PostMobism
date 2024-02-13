@@ -12,7 +12,11 @@ import { AuthApi } from "@/api/auth.api"
 import { useAuth } from "@/context/auth.ctx"
 
 const SignIn = () => {
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm({
     resolver: zodResolver(SignInSchema),
     mode: "all",
     defaultValues: {
@@ -26,7 +30,7 @@ const SignIn = () => {
   //아직 미적용
   const onSubmitSignIn = async (data: SignInType) => {
     try {
-      const res = await AuthApi.SignIn(data);
+      const res = await AuthApi.SignIn(data)
       signIn(res.token)
       toMain()
     } catch {
@@ -63,7 +67,7 @@ const SignIn = () => {
             />
           )
         })}
-        <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} />
+        <MMZbutton usage={"SignForm"} type="submit" label={"sign in"} disabled={!isValid} />
         <S.Text onClick={() => toSignUp()}>not a member?</S.Text>
       </S.FormContent>
     </S.Wrapper>
