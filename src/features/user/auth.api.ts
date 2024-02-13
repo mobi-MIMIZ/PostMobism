@@ -17,14 +17,12 @@ export const AuthApi = {
   },
   async SignIn(data: SignInType) {
     const res = await axiosInstance.post(PATH + "/sign-in", data)
-    localStorage.setItem(
-      "userInfo",
-      JSON.stringify({
-        userId: res.data.userId,
-        nickName: res.data.info.nickName,
-        profileUrl: res.data?.info?.profileUrl,
-      }),
-    )
+    const userInfo = {
+      userId: res.data.userId,
+      nickName: res.data.info?.nickName,
+      profileUrl: res.data.info?.profileUrl,
+    }
+    localStorage.setItem("userInfo", JSON.stringify(userInfo))
     return res
   },
   async SignOut() {

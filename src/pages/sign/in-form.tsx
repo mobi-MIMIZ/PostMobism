@@ -30,15 +30,10 @@ const SignIn = () => {
   const [, setUserInfo] = useState(initialUserInfo)
   const { toMain, toSignUp } = UseNavigation()
   const { signIn } = useAuth()
-  /**
-   * 왜 안되는가?
-   * localStorage에 setItem이 제대로되지 않아서?
-   */
 
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
-      console.log(res.data)
       const userInfo = {
         userId: res.data.userId,
         nickName: res.data.info.nickname,
