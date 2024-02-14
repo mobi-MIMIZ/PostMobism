@@ -12,8 +12,6 @@ type Props = {
 }
 
 const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
-  //react-query
-
   return (
     <S.Wrapper>
       <S.OnePost>
@@ -22,6 +20,7 @@ const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
             <PostDetailHeader title={selectedPost.title} onClose={onClose} />
             <S.Line />
             <PostDetailContent
+              postId={selectedPost.id}
               content={selectedPost.content}
               nickName={selectedPost.User.nickName}
               profileImage={selectedPost.User.profileImg}

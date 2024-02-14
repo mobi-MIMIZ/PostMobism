@@ -2,7 +2,7 @@ import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
-import {  useState } from "react"
+import { useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
@@ -13,19 +13,19 @@ const MainPage = () => {
   const listLength = postList.length
 
   const perPage = 6
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
 
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
   }
 
   const onPageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   const renderPostsForPage = () => {
-    const startIndex = (currentPage - 1) * perPage;
-    const endIndex = startIndex + perPage;
+    const startIndex = (currentPage - 1) * perPage
+    const endIndex = startIndex + perPage
 
     return postList
       .slice(startIndex, endIndex)
@@ -38,9 +38,8 @@ const MainPage = () => {
           key={post.id}
           onOpenDetailModal={() => onOpenDetailModal(post)}
         />
-      ));
-  };
-
+      ))
+  }
 
   // const dispatch = useAppDispatch()
   // const post = useAppSelector(state => state.post.data)

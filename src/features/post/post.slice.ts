@@ -1,15 +1,15 @@
 import { Post } from "@/type/type"
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
 
 type PostState = {
-  data: Post[] | null
+  data: Post[]
   loading: boolean
   error: string | null
 }
 
 const initialState: PostState = {
-  data: null,
+  data: [],
   loading: false,
   error: "",
 }
@@ -59,7 +59,24 @@ export const editPost = createAsyncThunk<Post, { post: Post; postId: string }>(
 export const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {},
+  reducers: {
+    postPostFulfilled: (state, action: PayloadAction<Post>) => {
+      // postPost 액션이 성공했을 때의 로직
+      state.data = [action.payload]
+    },
+    clearPostData: state => {
+      // data를 초기화하는 액션
+      state.data = []
+    },
+    setError: (state, action: PayloadAction<string>) => {
+      // 에러를 설정하는 액션
+      state.error = action.payload
+    },
+    clearError: state => {
+      // 에러를 초기화하는 액션
+      state.error = null
+    },
+  },
   extraReducers(builder) {
     builder
       // getPost : read
@@ -74,7 +91,7 @@ export const postSlice = createSlice({
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
-        state.data = null
+        state.data = []
       })
       // postPost : create
       .addCase(postPost.pending, state => {
@@ -94,7 +111,7 @@ export const postSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.loading = false
-        state.data = state.data ? state.data.filter(post => post.id !== action.meta.arg) : null
+        state.data = state.data ? state.data.filter(post => post.id !== action.meta.arg) : []
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.loading = false
@@ -105,10 +122,10 @@ export const postSlice = createSlice({
         state.loading = true
       })
       .addCase(editPost.fulfilled, (state, action) => {
-        state.loading = false
-        state.data = state.data
-          ? state.data.map(post => (post.id === action.meta.arg.postId ? action.payload : post))
-          : null
+        if (state.data === null) {
+          state.data = [] // null이면 빈 배열로 초기화
+        }
+        state.data.unshift(action.payload)
       })
       .addCase(editPost.rejected, (state, action) => {
         state.loading = false
