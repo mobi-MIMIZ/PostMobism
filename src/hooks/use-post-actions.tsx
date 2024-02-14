@@ -18,14 +18,9 @@ export const usePostActions = () => {
     content: string,
     hasImage: boolean,
     showImages: string[],
+    currentUser: { id: string; nickName: string; profileImg: string },
   ) => {
     e.preventDefault()
-
-    const currentUser = {
-      id: "003",
-      nickName: "John Doe",
-      profileImg: "",
-    }
 
     const newPostData: Post = {
       id: Math.floor(Math.random() * 100000).toString(), // random id number
@@ -42,7 +37,6 @@ export const usePostActions = () => {
     try {
       const resultAction = await dispatch(postPost(newPostData))
       const updatedPost = postPost.fulfilled.match(resultAction) ? resultAction.payload : null
-
       if (updatedPost) {
         const updatedPostList = [updatedPost, ...posts]
         localStorage.setItem("postList", JSON.stringify(updatedPostList))

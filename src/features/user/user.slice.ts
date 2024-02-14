@@ -3,6 +3,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { axiosInstance } from "../core.api"
 import { SignUpUser } from "@/type/dto/form"
 
+interface UserState {
+  userId(userId: string): unknown
+  id: string
+  nickName: string
+  profileImg: string
+}
+
+const initialState: UserState[] = []
+
+const PATH = "/user"
+
 // test
 // 원하는 페이지에 useEffect 사용해 console.log에 찍으면 잘 찍힙니다 :)
 export const getUsers = createAsyncThunk<User[]>("user", async () => {
@@ -15,8 +26,6 @@ export const getUsers = createAsyncThunk<User[]>("user", async () => {
   }
 })
 
-const PATH = "/user"
-
 export const SignUp = createAsyncThunk("user", async ({ ...formData }: SignUpUser) => {
   const { userId, password, nickname } = formData
   try {
@@ -27,28 +36,29 @@ export const SignUp = createAsyncThunk("user", async ({ ...formData }: SignUpUse
         nickname,
       },
     })
-    return response.data
+    return [response.data]
   } catch (error) {
     throw new Error("사용자 데이터를 불러오는 데 실패했습니다!")
   }
 })
 
-const initialStateValue = { userId: "", nickName: "" }
-
 export const userSlice = createSlice({
   name: "user",
-  initialState: { value: initialStateValue },
+  initialState,
   reducers: {
-    // signIn: (state, action: PayloadAction<SignInUser[]>) => {
-    //   state.data = action.payload
-    // },
+    setCurrentUser: (state, action) => {
+      // 여기서 action.payload는 로그인 후 서버에서 받아온 유저 정보
+      return { ...state, ...action.payload }
+    },
     signUp: (state, action) => {
-      state.value = action.payload
+      state[0] = action.payload
     },
     signOut: state => {
-      state.value = initialStateValue
+      state.length = 0 // 배열을 비운 뒤
+      state.push(...initialState) // 초기 상태를 다시 추가
     },
   },
 })
+
 export const { signUp, signOut } = userSlice.actions
 export default userSlice.reducer
