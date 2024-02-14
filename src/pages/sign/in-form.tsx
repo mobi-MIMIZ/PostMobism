@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInType } from "@/consts/form-schema"
 import { AuthApi } from "@/features/user/auth.api"
 import { useAuth } from "@/context/auth.ctx"
+import { useState } from "react"
 
 const SignIn = () => {
   const {
@@ -24,14 +25,23 @@ const SignIn = () => {
       password: "",
     },
   })
+
+  const initialUserInfo = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")!) : null
+  const [, setUserInfo] = useState(initialUserInfo)
   const { toMain, toSignUp } = UseNavigation()
   const { signIn } = useAuth()
 
-  //아직 미적용
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
-      signIn(res.token)
+      const userInfo = {
+        userId: res.data.userId,
+        nickName: res.data.info.nickname,
+        profileUrl: res.data.info.profileUrl,
+      }
+      localStorage.setItem("userInfo", JSON.stringify(userInfo))
+      setUserInfo(userInfo)
+      signIn(res.data.token)
       toMain()
     } catch {
       alert("아이디와 비밀번호를 확인해주세요")

@@ -16,11 +16,14 @@ export const AuthApi = {
     return res.data
   },
   async SignIn(data: SignInType) {
-    const res = await axiosInstance.post(PATH + "/sign-in", {
-      userId: data.userId,
-      password: data.password,
-    })
-    return res.data
+    const res = await axiosInstance.post(PATH + "/sign-in", data)
+    const userInfo = {
+      userId: res.data.userId,
+      nickName: res.data.info?.nickName,
+      profileUrl: res.data.info?.profileUrl,
+    }
+    localStorage.setItem("userInfo", JSON.stringify(userInfo))
+    return res
   },
   async SignOut() {
     const res = await axiosInstance.post(PATH + "/sign-out")
