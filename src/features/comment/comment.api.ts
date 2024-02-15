@@ -11,7 +11,7 @@ export const CommentApi = {
    */
   async getComment({ pageParam, parentId }: { pageParam: number; parentId: string }) {
     const res = await axiosInstance.get(COMMENT_PATH + `?page=${pageParam}&parentId=${parentId}`)
-    console.log("댓글 불러오기", res)
+    console.log("comment res", res)
     return res.data
   },
   /**

@@ -2,7 +2,7 @@ import { QUERY_KEY } from "@/consts/query-key"
 import { CommentApi } from "@/features/comment/comment.api"
 import { useInfiniteQuery } from "react-query"
 
-export function useGetCommentQuery() {
+export function useGetCommentQuery(postId: string) {
   const {
     data: commentList,
     fetchNextPage,

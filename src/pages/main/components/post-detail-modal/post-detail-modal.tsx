@@ -6,21 +6,34 @@ import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
 import { Post } from "@/type/type"
 import { useGetCommentQuery } from "@/hooks/use-comment-query"
+import { useParams } from "react-router-dom"
 
 type Props = {
   selectedPost: Post
   onClose: () => void
 }
 
+type CommentListType = {
+  id: string
+  content: string
+  userId: string
+  createdAt: string 
+}
+
 const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
-  /**
-   * @todo post comment 후 진행해야함!
-   */
-  const { commentList, fetchNextPage, isSuccess } = useGetCommentQuery()
+  const { id: postId = "" } = useParams<{ id: string }>()
 
-  console.log("commeentList", commentList)
+  const { commentList, fetchNextPage, isSuccess } = useGetCommentQuery(postId)
 
-  const DetailCommentList = commentList?.pages.map
+  console.log("commentList", commentList)
+
+  //댓글 데이터를 가져와서 가공후 한번에 댓글 배열(commentListArr)에 합침
+  const commentListArr: CommentListType[] = []
+  commentList?.pages.map(page => {
+    console.log(page)
+    const pageResult = Object.values(page).slice(0, -1) as CommentListType[]
+    commentListArr.push(...pageResult)
+  })
 
   // 스크롤 최하단 시 fetchNextPage실행
   const handleScroll = () => {

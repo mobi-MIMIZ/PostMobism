@@ -62,6 +62,7 @@ export const editPost = createAsyncThunk<Post, { post: Post; postId: string }>(
   },
 )
 
+//Reducer와 action 정의
 export const postSlice = createSlice({
   name: "post",
   initialState,
@@ -83,6 +84,7 @@ export const postSlice = createSlice({
       state.error = null
     },
   },
+  //extraReducers를 사용하여 비동기 액션(getPosts)의 성공, 실패 및 보류 상태에 따라 상태를 업데이트
   extraReducers(builder) {
     builder
       // getPost : read
@@ -144,15 +146,3 @@ export const postSlice = createSlice({
 export const { setPostList } = postSlice.actions
 
 export default postSlice.reducer
-
-/**
- * 주석
- * createAsyncThunk을 사용하여 비동기 작업을 수행하는 getPosts 액션을 만들었습니다. 
- * 이 액션은 서버에서 게시글 데이터를 가져와 Redux store의 상태를 업데이트합니다.
-postSlice에서는 createSlice 함수를 사용하여 리듀서와 액션을 정의했습니다. 
-extraReducers를 사용하여 비동기 액션(getPosts)의 성공, 실패 및 보류 상태에 따라 상태를 업데이트합니다.
-비동기 액션의 결과가 성공하면 상태의 loading을 false로 설정하고, 
-data에 가져온 게시글 데이터를 저장합니다. 실패하면 에러 메시지를 저장합니다.
-setPostList 리듀서는 동기적으로 상태를 업데이트하는 역할을 합니다. 
-이 액션은 필요에 따라 사용할 수 있지만, 비동기 작업을 위한 getPosts 액션을 사용할 때는 굳이 필요하지 않을 수 있습니다.
- */

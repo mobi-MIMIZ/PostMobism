@@ -2,10 +2,12 @@ import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { Post } from "@/type/type"
 import { MockPostsData } from "@/__mock__/faker-data/faker-data"
+import { getPosts } from "@/features/post/post.slice"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 
 const MainPage = () => {
   const [postList] = useState(MockPostsData(70))
@@ -41,14 +43,14 @@ const MainPage = () => {
       ))
   }
 
-  // const dispatch = useAppDispatch()
-  // const post = useAppSelector(state => state.post.data)
+  const dispatch = useAppDispatch()
+  const post = useAppSelector(state => state.post.data)
 
-  // useEffect(() => {
-  //   dispatch(getPosts())
-  // }, [])
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [])
 
-  // console.log(post)
+  console.log("post", post)
 
   return (
     <S.Wrapper>

@@ -1,5 +1,6 @@
 import { QUERY_KEY } from "@/consts/query-key"
 import { CommentApi } from "@/features/comment/comment.api"
+import useInput from "@/hooks/use-input"
 import { Send } from "lucide-react"
 import { useState } from "react"
 import { useQueryClient } from "react-query"
@@ -9,11 +10,18 @@ export type CommentDataType = {
   nickName: string
   profileUrl: string
   userId: string
+  content: string
+  parentId: string
 }
 
-const CommentForm = () => {
+const CommentForm = post => {
   const queryClient = useQueryClient()
   const [content, setContent] = useState("")
+
+  //댓글을 작성하는 함수
+  const [values, onChange] = useInput({
+    content: "",
+  })
 
   const onSubmitComment = async (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter") {
@@ -24,7 +32,7 @@ const CommentForm = () => {
         nickName: userInfo.nickName,
         profileUrl: userInfo.profileUrl,
         userId: userInfo.userId,
-        content: content,
+        content: values.content,
         parentId: post.data.id,
       }
       try {
@@ -40,7 +48,7 @@ const CommentForm = () => {
   return (
     <S.Form onKeyDown={onSubmitComment}>
       <S.MyProfileImg />
-      <S.TextArea placeholder="write your comments...." />
+      <S.TextArea placeholder="write your comments...." onChange={onChange} />
       <S.SendBtn type="submit">
         <Send color="#ECB996" size={22} strokeWidth={3} />
       </S.SendBtn>
