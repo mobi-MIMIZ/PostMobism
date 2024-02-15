@@ -3,17 +3,30 @@ import { Comment, Post } from "@/type/type"
 import { FC } from "react"
 import styled from "styled-components"
 import CommentForm from "./comment-form"
+import { CommentListType } from "../../post-detail-modal"
 
 type Props = {
   // 객체의 타입을 추론해서 쓴다 ["comments"]
   // (typeof MockOnePostData)["Comments"]
   // Posts[number] 배열 하나의 요소의 타입만 가져올수있다
   comments: Post["Comments"]
+  commentListArr: CommentListType[]
+  postId: string
 }
 
-const Comments: FC<Props> = ({ comments }) => {
+const Comments: FC<Props> = ({ comments, commentListArr, postId }) => {
+  console.log("commnetListArr", commentListArr)
+  console.log("postId", postId)
   return (
     <S.CommentsContainer>
+      {commentListArr?.map((comment: CommentListType) => (
+        <S.CommentBox key={comment.id}>
+          <S.ProfileImg src={comment.data.profileUrl} />
+          <S.NickName>{comment.data.nickName}</S.NickName>
+          <S.Content>{comment.data.content}</S.Content>
+          <S.CreatedAt>{comment.createdAt}</S.CreatedAt>
+        </S.CommentBox>
+      ))}
       {comments?.map((comment: Comment) => (
         <S.CommentBox key={comment.id}>
           <S.ProfileImg src={comment.User.profileImg} />

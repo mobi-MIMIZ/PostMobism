@@ -1,8 +1,10 @@
 import { QUERY_KEY } from "@/consts/query-key"
 import { CommentApi } from "@/features/comment/comment.api"
+import { getPosts } from "@/features/post/post.slice"
 import useInput from "@/hooks/use-input"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useQueryClient } from "react-query"
 import styled from "styled-components"
 
@@ -14,7 +16,16 @@ export type CommentDataType = {
   parentId: string
 }
 
-const CommentForm = post => {
+const CommentForm = () => {
+  const dispatch = useAppDispatch()
+  const post = useAppSelector(state => state.post.data)
+
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [])
+
+  // console.log("post", post[0])
+
   const queryClient = useQueryClient()
   const [content, setContent] = useState("")
 
@@ -33,7 +44,7 @@ const CommentForm = post => {
         profileUrl: userInfo.profileUrl,
         userId: userInfo.userId,
         content: values.content,
-        parentId: post.data.id,
+        parentId: post[0].id,
       }
       try {
         await CommentApi.postComment(CommentData)

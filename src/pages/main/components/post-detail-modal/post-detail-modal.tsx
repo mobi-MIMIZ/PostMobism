@@ -13,11 +13,18 @@ type Props = {
   onClose: () => void
 }
 
-type CommentListType = {
+export type CommentListType = {
+  createdAt: string
+  data: {
+    content: string
+    nickName: string
+    parentId: string
+    profileUrl: string | undefined
+    userId: string
+  }
+  dataImage: any[]
+  dataUser: any
   id: string
-  content: string
-  userId: string
-  createdAt: string 
 }
 
 const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
@@ -26,14 +33,17 @@ const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
   const { commentList, fetchNextPage, isSuccess } = useGetCommentQuery(postId)
 
   console.log("commentList", commentList)
+  console.log("postId", postId)
 
   //댓글 데이터를 가져와서 가공후 한번에 댓글 배열(commentListArr)에 합침
   const commentListArr: CommentListType[] = []
   commentList?.pages.map(page => {
-    console.log(page)
+    // console.log("page", page)
     const pageResult = Object.values(page).slice(0, -1) as CommentListType[]
     commentListArr.push(...pageResult)
   })
+
+  // console.log("commentListArr", commentListArr)
 
   // 스크롤 최하단 시 fetchNextPage실행
   const handleScroll = () => {
@@ -65,7 +75,9 @@ const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
               weekday={selectedPost.createdAt}
             />
             <S.Line />
-            <Comments comments={selectedPost.Comments} />
+            {commentListArr && isSuccess && (
+              <Comments comments={selectedPost.Comments} commentListArr={commentListArr} postId={postId} />
+            )}
           </>
         )}
       </S.OnePost>
