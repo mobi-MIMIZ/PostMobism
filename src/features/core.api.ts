@@ -17,13 +17,6 @@ export const axiosInstance = axios.create({
   withCredentials: true, // 요청 시에 쿠키를 포함하도록 설정
 })
 
-// 아래는 변경 전 코드
-// axiosInstance.interceptors.request.use(function (config) {
-//   const token = String(TokenRepository.getToken())
-//   config.headers.Authorization = token ? `Bearer ${token}` : ""
-//   return config
-// })
-
 /**
  * 응답 인터셉터 (interceptors.response) : 응답을 보내기전 intercept하여 해당 로직을 실행
  *
@@ -62,39 +55,29 @@ axiosInstance.interceptors.response.use(
         try {
           // 리프레시 요청 성공: 토큰 재요청
           const response = await AuthApi.RefreshToken()
-          console.log("Refresh Token Response:", response)
           const token = response.data?.token
-          if (token) {
-            console.log("Refreshed Token:", token)
-          } else {
-            console.error("Token not found in the response data.")
-          }
+
           cookieStorage.setCookie(ACCESS_TOKEN, token, 60 * 24)
           // 발급 받은 토큰으로 요청에 토큰 수정 (현재 실패한 요청의 헤더에 새로 발급받은 액세스 토큰을 설정)
           // why? 👉 리프레시된 토큰으로 다시 시도 가능
           originalRequest.headers.common["Authorization"] = `Bearer ${token}`
 
-          console.log("Updated Authorization Header:", originalRequest.headers.common["Authorization"])
           // axiosInstace의 common에도 토큰 수정 (Axios 인스턴스의 기본 헤더에도 새로운 액세스 토큰을 설정)
           // why? 👉 앞으로 전송되는 모든 요청에 대해 헤더에 포함된 토큰이 갱신됨
           axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
-          console.log("Headers before retry:", originalRequest.headers.common)
-
           // 현재 실패한 요청을 다시 시도
           return axiosInstance(originalRequest)
             .then(res => {
-              console.log("Retry Response:", res)
               return res
             })
             .catch(err => {
-              console.error("Retry Error:", err)
               return Promise.reject(err)
             })
         } catch (refreshErr) {
           // 리프레시 요청이 실패 :  로그아웃
-          // window.location.href = "/"
-          // await AuthApi.SignOut()
+          window.location.href = "/"
+          await AuthApi.SignOut()
           alert(refreshErr)
         } finally {
           // 리프레시 요청을 true 상태로 바꾸어 한번만 실행되도록 함
@@ -104,9 +87,8 @@ axiosInstance.interceptors.response.use(
     }
     // 403이라면 강제 로그아웃
     if (err.response.status === 403) {
-      // window.location.href = "/"
-      // await AuthApi.SignOut()
-      console.log(err.response)
+      window.location.href = "/"
+      await AuthApi.SignOut()
     }
     return Promise.reject(err)
   },
