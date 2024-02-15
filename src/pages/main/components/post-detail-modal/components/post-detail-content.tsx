@@ -1,18 +1,29 @@
 import MMZdialog from "@/components/mmz-dialog"
+import { usePostActions } from "@/hooks/use-post-actions"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
+import { Post } from "@/type/type"
 import { MoreHorizontal } from "lucide-react"
 import { FC, useState } from "react"
 import styled from "styled-components"
 
 type Props = {
+  postId: string
   profileImage: string
   nickName: string
   content: string
   weekday: string
 }
 
-const PostDetailContent: FC<Props> = ({ profileImage, nickName, content, weekday }) => {
+const PostDetailContent: FC<Props> = ({ postId, profileImage, nickName, content, weekday }) => {
   const [onShowOptions, setOnShowOptions] = useState(false)
+
+  const { handleDeletePost, handleEditPost } = usePostActions()
+
+  const onEditPost = () => {
+    // 게시글 수정 로직
+    const editedPost: Post = []
+    handleEditPost(editedPost)
+  }
 
   return (
     <S.ContentContainer>
@@ -25,7 +36,12 @@ const PostDetailContent: FC<Props> = ({ profileImage, nickName, content, weekday
       </S.OptionBtn>
       {onShowOptions && (
         <S.Dialog>
-          <MMZdialog label1="edit post" label2="delete post" />
+          <MMZdialog
+            label1="edit post"
+            label2="delete post"
+            onClick1={() => onEditPost}
+            onClick2={() => handleDeletePost(postId)}
+          />
         </S.Dialog>
       )}
       <S.Content>{content}</S.Content>

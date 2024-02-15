@@ -5,7 +5,7 @@ type ButtonProps = {
   usage: "SignForm" | "PostForm"
   type: "button" | "submit"
   label: string
-  disabled: boolean
+  disabled?: boolean
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
 const MMZbutton = ({ usage, type, label, disabled, ...props }: ButtonProps) => {
