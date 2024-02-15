@@ -1,10 +1,11 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
 import { Post } from "@/type/type"
+import { useGetCommentQuery } from "@/hooks/use-comment-query"
 
 type Props = {
   selectedPost: Post
@@ -12,6 +13,30 @@ type Props = {
 }
 
 const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
+  /**
+   * @todo post comment 후 진행해야함!
+   */
+  const { commentList, fetchNextPage, isSuccess } = useGetCommentQuery()
+
+  console.log("commeentList", commentList)
+
+  const DetailCommentList = commentList?.pages.map
+
+  // 스크롤 최하단 시 fetchNextPage실행
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight
+    const scrollTop = document.documentElement.scrollTop
+    const clientHeight = document.documentElement.clientHeight
+    if (scrollTop + clientHeight >= scrollHeight) return fetchNextPage()
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
+
   return (
     <S.Wrapper>
       <S.OnePost>

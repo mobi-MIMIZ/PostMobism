@@ -1,4 +1,5 @@
 import { QUERY_KEY } from "@/consts/query-key"
+import { CommentApi } from "@/features/comment/comment.api"
 import { useInfiniteQuery } from "react-query"
 
 export function useGetCommentQuery() {
@@ -9,20 +10,15 @@ export function useGetCommentQuery() {
     isFetching,
     isSuccess,
   } = useInfiniteQuery({
-    queryKey: [QUERY_KEY.COMMENT_LIST],
-    queryFn: ({ pageParam = { startIdx: 1, endIdx: 12 } }) => RecipeApi.getRecipe(pageParam),
-    getNextPageParam: (lastPage, totalPages) => {
-      const startIdx = totalPages.length * 12 + 1
-      let endIdx = (totalPages.length + 1) * 12
-
-      if (lastPage.COOKRCP01.total_count < endIdx) {
-        endIdx = lastPage.COOKRCP01.total_count
-      }
-      if (startIdx > lastPage.COOKRCP01.total_count) {
-        return null
-      }
-      return { startIdx, endIdx }
+    queryKey: [QUERY_KEY.COMMENT_LIST, postId],
+    queryFn: async ({ pageParam }) => {
+      return await CommentApi.getComment({ pageParam, parentId: postId })
+    },
+    getNextPageParam: lastPage => {
+      const page = lastPage.pageNation.current
+      if (lastPage.pageNation.total === page) return
+      return page + 1
     },
   })
-  return { recipeData, fetchNextPage, hasNextPage, isFetching, isSuccess }
+  return { commentList, fetchNextPage, hasNextPage, isFetching, isSuccess }
 }
