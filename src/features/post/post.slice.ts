@@ -1,6 +1,7 @@
 import { Post } from "@/type/type"
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
+import { axiosInstance } from "../core.api"
 
 type PostState = {
   data: Post[]
@@ -14,6 +15,8 @@ const initialState: PostState = {
   error: "",
 }
 
+const POST_PATH = "/data/post"
+
 // getPost : read
 export const getPosts = createAsyncThunk<Post[]>("post/getPosts", async () => {
   try {
@@ -25,10 +28,11 @@ export const getPosts = createAsyncThunk<Post[]>("post/getPosts", async () => {
 })
 
 // postPost : create
-export const postPost = createAsyncThunk<Post, Post>("post/postPost", async (post: Post) => {
+export const postPost = createAsyncThunk<Post, Post>("post/postPost", async ({ title, content }: Post) => {
   try {
-    const newPost = await PostApi.postPost(post)
-    return newPost
+    const postData = { title, content }
+    const res = await axiosInstance.post(POST_PATH, postData)
+    return res.data
   } catch (error) {
     throw new Error("게시글을 등록하는 데 실패했습니다!")
   }
