@@ -1,11 +1,20 @@
 export type Post = {
   id: string
-  title: string
-  content: string
-  User: User
-  Post_img?: string[]
+  data: {
+    title: string
+    content: string
+  }
+  dataUser: User
+  dataImage?: string[]
   Comments?: Comment[]
   createdAt: string
+}
+
+export type listInfo = {
+  id: string
+  data: {
+    title: string
+  }
 }
 
 export type Comment = {
@@ -20,6 +29,3 @@ export type User = {
   nickName: string
   profileImg: string
 }
-/**
- * 해당 컴포넌트만이 아닌 여러 컴포넌트에서 import되는 type들을 분리하였습니다.
- */

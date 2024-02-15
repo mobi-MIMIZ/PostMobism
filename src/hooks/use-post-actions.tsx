@@ -4,12 +4,21 @@ import { AnyAction } from "redux"
 import { FormEvent } from "react"
 import { RootState } from "@/features/store"
 import { Post } from "@/type/type"
-import { deletePost, editPost, postPost } from "@/features/post/post.slice"
+import { deletePost, editPost, getPosts, postPost } from "@/features/post/post.slice"
 import { useAppSelector } from "./use-redux-toolkit"
 
 export const usePostActions = () => {
   const dispatch: ThunkDispatch<RootState, object, AnyAction> = useDispatch()
   const posts = useAppSelector(state => state.post.data) as Post[]
+
+  // read post
+  const fetchPosts = async () => {
+    try {
+      await dispatch(getPosts())
+    } catch (error) {
+      console.error("Error fetching posts:", error)
+    }
+  }
 
   // create post
   const handleCreatePost = async (
@@ -24,14 +33,16 @@ export const usePostActions = () => {
 
     const newPostData: Post = {
       id: Math.floor(Math.random() * 100000).toString(), // random id number
-      title,
-      content,
-      User: currentUser,
+      data: {
+        title,
+        content,
+      },
+      dataUser: currentUser,
       createdAt: new Date().toISOString(),
     }
 
     if (hasImage) {
-      newPostData.Post_img = showImages
+      newPostData.dataImage = showImages
     }
 
     try {
@@ -50,7 +61,13 @@ export const usePostActions = () => {
   // update post
   const handleEditPost = async (editedPost: Post) => {
     try {
-      const resultAction = await dispatch(editPost({ post: editedPost, postId: editedPost.id }))
+      const resultAction = await dispatch(
+        editPost({ post: editedPost, postId: editedPost.id } as unknown as {
+          title: string
+          content: string
+          postId: string
+        }),
+      )
       const updatedPost = editPost.fulfilled.match(resultAction) ? resultAction.payload : null
 
       if (updatedPost) {
@@ -76,6 +93,7 @@ export const usePostActions = () => {
   }
 
   return {
+    fetchPosts,
     handleCreatePost,
     handleEditPost,
     handleDeletePost,

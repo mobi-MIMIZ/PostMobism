@@ -1,5 +1,6 @@
 import { axiosInstance } from "../core.api"
-import { TGetPostRequest, Post } from "@/type/dto/post.dto"
+import { Post } from "@/type/dto/post.dto"
+import { listInfo } from "@/type/type"
 
 const POST_PATH = "/data/post"
 
@@ -10,8 +11,8 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPost({ id, title }: TGetPostRequest) {
-    const res = await axiosInstance.get<{ title: string; content: string }[]>(POST_PATH, {
+  async getPost({ id, data: { title } }: listInfo) {
+    const res = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH, {
       params: {
         id,
         title,

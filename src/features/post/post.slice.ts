@@ -1,4 +1,4 @@
-import { Post } from "@/type/type"
+import { Post, listInfo } from "@/type/type"
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
 import { axiosInstance } from "../core.api"
@@ -18,20 +18,26 @@ const initialState: PostState = {
 const POST_PATH = "/data/post"
 
 // getPost : read
-export const getPosts = createAsyncThunk<Post[]>("post/getPosts", async () => {
+export const getPosts = createAsyncThunk<listInfo[]>("post/getPosts", async () => {
   try {
-    const posts = await PostApi.getPost({ id: "", title: "" })
-    return posts as Post[]
+    const posts = await PostApi.getPost({ id: "", data: { title: "" } })
+    const formattedPosts: listInfo[] = posts.map(post => ({
+      id: post.id,
+      data: {
+        title: post.title,
+      },
+    }))
+    return formattedPosts
   } catch (error) {
     throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")
   }
 })
 
 // postPost : create
-export const postPost = createAsyncThunk<Post, Post>("post/postPost", async ({ title, content }: Post) => {
+export const postPost = createAsyncThunk<Post, Post>("post/postPost", async (postData: Post) => {
   try {
-    const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData)
+    const { title, content } = postData.data
+    const res = await axiosInstance.post(POST_PATH, { title, content })
     return res.data
   } catch (error) {
     throw new Error("게시글을 등록하는 데 실패했습니다!")
@@ -48,11 +54,11 @@ export const deletePost = createAsyncThunk<void, string>("post/deletePost", asyn
 })
 
 // editPost : update
-export const editPost = createAsyncThunk<Post, { post: Post; postId: string }>(
+export const editPost = createAsyncThunk<Post, { title: string; content: string; postId: string }>(
   "post/editPost",
-  async ({ post, postId }) => {
+  async ({ title, content, postId }) => {
     try {
-      const updatedPost = await PostApi.editPost(post, postId)
+      const updatedPost = await PostApi.editPost({ title, content }, postId)
       return updatedPost
     } catch (error) {
       throw new Error("게시글을 수정하는 데 실패했습니다!")
@@ -90,12 +96,15 @@ export const postSlice = createSlice({
       .addCase(getPosts.fulfilled, (state, action) => {
         state.loading = false
         state.error = null
-        state.data = action.payload
+        state.data = action.payload as Post[]
+        console.log("action payload", action.payload)
+        console.log("state data", state.data)
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
         state.data = []
+        console.error("Error during getPosts:", action.error)
       })
       // postPost : create
       .addCase(postPost.pending, state => {

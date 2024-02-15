@@ -2,18 +2,26 @@ import { OutletSize, PositionXCenter, flexCenter } from "@/styles/common.style"
 import styled from "styled-components"
 import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { Post } from "@/type/type"
-import { MockPostsData } from "@/__mock__/faker-data/faker-data"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
+import { getPosts } from "@/features/post/post.slice"
 
 const MainPage = () => {
-  const [postList] = useState(MockPostsData(70))
+  // const [postList] = useState(MockPostsData(70))
+  const dispatch = useAppDispatch()
+  const post = useAppSelector(state => state.post.data) as Post[]
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const listLength = postList.length
+  const listLength = post.length
 
   const perPage = 6
   const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    // Dispatch the getPosts action when the component mounts
+    dispatch(getPosts())
+  }, [dispatch])
 
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
@@ -24,31 +32,28 @@ const MainPage = () => {
   }
 
   const renderPostsForPage = () => {
+    console.log(post)
     const startIndex = (currentPage - 1) * perPage
     const endIndex = startIndex + perPage
 
-    return postList
+    return post
       .slice(startIndex, endIndex)
       .map((post, idx) => (
         <OneList
           number={idx + 1}
-          title={post.title}
-          nickname={post.User.nickName}
-          image={post.User.profileImg}
+          title={post.data.title}
+          nickname={post.dataUser.nickName}
+          image={post.dataUser.profileImg}
           key={post.id}
           onOpenDetailModal={() => onOpenDetailModal(post)}
         />
       ))
   }
 
-  // const dispatch = useAppDispatch()
-  // const post = useAppSelector(state => state.post.data)
-
-  // useEffect(() => {
-  //   dispatch(getPosts())
-  // }, [])
-
-  // console.log(post)
+  useEffect(() => {
+    // Dispatch the getPosts action when the component mounts
+    dispatch(getPosts())
+  }, [dispatch])
 
   return (
     <S.Wrapper>
