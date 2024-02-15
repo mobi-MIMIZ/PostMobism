@@ -31,6 +31,6 @@ export const AuthApi = {
   },
   async RefreshToken() {
     const res = await axiosInstance.get(PATH + "/refresh")
-    return res
+    return res.data.token
   },
 }
