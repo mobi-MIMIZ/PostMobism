@@ -39,12 +39,8 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH, {
-      params: {
-        dataId,
-      },
-    })
-    return res.data
+    const res = await axiosInstance.delete(POST_PATH + `${dataId}`)
+    return res
   },
   /**
    * @function editPost

@@ -42,7 +42,6 @@ const SignIn = () => {
       localStorage.setItem("userInfo", JSON.stringify(userInfo))
       setUserInfo(userInfo)
       signIn(res.data.token)
-      console.log(localStorage.getItem("access_token"))
       toMain()
     } catch {
       alert("아이디와 비밀번호를 확인해주세요")

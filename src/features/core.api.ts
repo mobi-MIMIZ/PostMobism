@@ -3,7 +3,7 @@ import { AuthApi } from "./user/auth.api"
 import cookieStorage from "@/utils/cookie-storage"
 import { ACCESS_TOKEN } from "@/consts/keys"
 
-const token = String(localStorage.getItem(ACCESS_TOKEN))
+const token = localStorage.getItem(ACCESS_TOKEN)
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
