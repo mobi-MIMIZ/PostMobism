@@ -18,19 +18,10 @@ const initialState: PostState = {
 const POST_PATH = "/data/post"
 
 // getPost : read
-export const getPosts = createAsyncThunk<listInfo[]>("post/getPosts", async () => {
+export const getPosts = createAsyncThunk<{ id: string; title: string }[]>("post/getPosts", async () => {
   try {
-    // const posts = await PostApi.getPost({ id: "", data: { title: "" } })
-    const res = await PostApi.getPost({ id: "", data: { title: "" } })
-    const postsArray = Array.isArray(res) ? res : [res]
-
-    const formattedPosts: listInfo[] = postsArray.map(post => ({
-      id: post.id,
-      data: {
-        title: post.title,
-      },
-    }))
-    return formattedPosts
+    const res = await PostApi.getPost()
+    return res
   } catch (error) {
     console.error("getPosts 액션에서 오류 발생:", error)
     throw error
@@ -100,21 +91,7 @@ export const postSlice = createSlice({
       .addCase(getPosts.fulfilled, (state, action: PayloadAction<listInfo[]>) => {
         state.loading = false
         state.error = null
-        state.data = action.payload.map(listInfoItem => ({
-          id: listInfoItem.id,
-          data: {
-            title: listInfoItem.data.title,
-            content: "",
-          },
-          dataUser: {
-            id: "defaultUserId",
-            nickName: "defaultNickName",
-            profileImg: "defaultProfileImg",
-          },
-          dataImage: [],
-          Comments: [],
-          createdAt: "defaultCreatedAt",
-        }))
+        state.data = action.payload
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false

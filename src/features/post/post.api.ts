@@ -1,6 +1,5 @@
 import { axiosInstance } from "../core.api"
 import { Post } from "@/type/dto/post.dto"
-import { listInfo } from "@/type/type"
 
 const POST_PATH = "/data/post"
 
@@ -11,14 +10,9 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPost({ id, data: { title } }: listInfo) {
+  async getPost(): Promise<{ id: string; title: string }[]> {
     try {
-      const response = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH, {
-        params: {
-          id,
-          title,
-        },
-      })
+      const response = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH)
       // response.data가 정의되어 있는지 확인
       if (response.data) {
         console.log("API 응답:", response.data)
