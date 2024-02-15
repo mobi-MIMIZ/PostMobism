@@ -14,7 +14,7 @@ const OneList = ({ number, title, nickname, image, onOpenDetailModal }: ListProp
   return (
     <S.Wrapper onClick={() => onOpenDetailModal()}>
       <S.Number>{number}</S.Number>
-      <S.Title>{skipTitleView(title)}</S.Title>
+      <S.Title>{title ? skipTitleView(title) : ""}</S.Title>
       <S.Writer>{nickname}</S.Writer>
       <S.Image src={image} />
     </S.Wrapper>

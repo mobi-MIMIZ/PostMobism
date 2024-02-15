@@ -12,13 +12,25 @@ export const PostApi = {
    * @queries parentId: string, page: number, limit: boolean
    */
   async getPost({ id, data: { title } }: listInfo) {
-    const res = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH, {
-      params: {
-        id,
-        title,
-      },
-    })
-    return res.data
+    try {
+      const response = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH, {
+        params: {
+          id,
+          title,
+        },
+      })
+      // response.data가 정의되어 있는지 확인
+      if (response.data) {
+        console.log("API 응답:", response.data)
+        return response.data
+      } else {
+        console.error("API 응답에서 데이터가 정의되어 있지 않습니다.")
+        throw new Error("API 응답에서 데이터가 정의되어 있지 않습니다.")
+      }
+    } catch (error) {
+      console.error("getPost 메서드에서 오류 발생:", error)
+      throw error
+    }
   },
   /**
    * @function postPost

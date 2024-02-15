@@ -18,11 +18,6 @@ const MainPage = () => {
   const perPage = 6
   const [currentPage, setCurrentPage] = useState(1)
 
-  useEffect(() => {
-    // Dispatch the getPosts action when the component mounts
-    dispatch(getPosts())
-  }, [dispatch])
-
   const onOpenDetailModal = (post: Post) => {
     setSelectedPost(post)
   }
@@ -42,8 +37,8 @@ const MainPage = () => {
         <OneList
           number={idx + 1}
           title={post.data.title}
-          nickname={post.dataUser.nickName}
-          image={post.dataUser.profileImg}
+          nickname={post.dataUser?.nickName || "Unknown"}
+          image={post.dataUser?.profileImg || ""}
           key={post.id}
           onOpenDetailModal={() => onOpenDetailModal(post)}
         />
@@ -51,9 +46,13 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    // Dispatch the getPosts action when the component mounts
+    // 컴포넌트가 마운트될 때 getPosts 액션을 디스패치합니다.
     dispatch(getPosts())
   }, [dispatch])
+
+  useEffect(() => {
+    console.log("Post updated:", post)
+  }, [post])
 
   return (
     <S.Wrapper>
