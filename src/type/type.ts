@@ -1,18 +1,33 @@
 export type Post = {
   id: string
-  title: string
-  content: string
-  User: User
-  Post_img?: string[]
-  Comments?: Comment[]
+  data: { title: string; content: string }
+  dataUser: { data: { nickName: string }; profile_url: string; userId: string }
   createdAt: string
 }
 
 export type Comment = {
   id: string
-  content: string
-  User: User
+  data: { content: string }
+  dataUser: { data: { nickName: string }; profile_url: string; userId: string }
   createdAt: string
+}
+
+export type Pagination = {
+  start: number
+  end: number
+  total: number
+  set: number
+  current: number
+}
+
+export type TPostsResponse = {
+  data: Post[]
+  pagination?: Pagination
+}
+
+export type TCommentsResponse = {
+  data: Comment[]
+  pagination?: Pagination
 }
 
 export type User = {

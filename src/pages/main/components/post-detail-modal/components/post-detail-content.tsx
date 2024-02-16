@@ -1,7 +1,6 @@
 import MMZdialog from "@/components/mmz-dialog"
 import { usePostActions } from "@/hooks/use-post-actions"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { Post } from "@/type/type"
 import { MoreHorizontal } from "lucide-react"
 import { FC, useState } from "react"
 import styled from "styled-components"
@@ -21,7 +20,11 @@ const PostDetailContent: FC<Props> = ({ postId, profileImage, nickName, content,
 
   const onEditPost = () => {
     // 게시글 수정 로직
-    const editedPost: Post = []
+    const editedPost = {
+      id: postId,
+      title: "",
+      content: "",
+    }
     handleEditPost(editedPost)
   }
 

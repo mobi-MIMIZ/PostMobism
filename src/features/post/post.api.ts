@@ -1,5 +1,5 @@
+import { Post, TPostsResponse } from "@/type/type"
 import { axiosInstance } from "../core.api"
-import { TGetPostRequest, Post } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
 
@@ -10,11 +10,18 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPost({ id, title }: TGetPostRequest) {
-    const res = await axiosInstance.get<{ title: string; content: string }[]>(POST_PATH, {
+  async getPosts() {
+    const res = await axiosInstance.get<TPostsResponse>(POST_PATH)
+    return res.data
+  },
+
+  async getOnePost(postId: string) {
+    const res = await axiosInstance.get<{
+      data: Post
+      children: Comment
+    }>("/data/detail/post", {
       params: {
-        id,
-        title,
+        dataId: postId,
       },
     })
     return res.data
@@ -27,9 +34,12 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ title, content }: Post) {
+  async postPost({ title, content }: { title: string; content: string }) {
     const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData)
+    const res = await axiosInstance.post(POST_PATH, postData, {
+      //auth:true.. (dataUser:null => console창 문제)
+      params: { auth: "true" },
+    })
     return res.data
   },
   /**
@@ -50,7 +60,7 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async editPost({ title, content }: Post, dataId: string) {
+  async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
     const res = await axiosInstance.patch(POST_PATH, {
       params: {

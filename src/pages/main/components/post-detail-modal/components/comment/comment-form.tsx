@@ -1,65 +1,46 @@
-import { QUERY_KEY } from "@/consts/query-key"
 import { CommentApi } from "@/features/comment/comment.api"
-import { getPosts } from "@/features/post/post.slice"
-import useInput from "@/hooks/use-input"
+import { getOnePost } from "@/features/post/post.slice"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useQueryClient } from "react-query"
 import styled from "styled-components"
 
 export type CommentDataType = {
-  nickName: string
-  profileUrl: string
-  userId: string
   content: string
   parentId: string
 }
 
-const CommentForm = () => {
+export type FormElementType = {
+  target: {
+    content: {
+      value: string
+    }
+  }
+} & React.KeyboardEvent<HTMLFormElement>
+
+const CommentForm: React.FC = () => {
   const dispatch = useAppDispatch()
-  const post = useAppSelector(state => state.post.data)
+  const postDetail = useAppSelector(state => state.post.postDetail)
 
-  useEffect(() => {
-    dispatch(getPosts())
-  }, [])
-
-  // console.log("post", post[0])
-
-  const queryClient = useQueryClient()
-  const [content, setContent] = useState("")
-
-  //댓글을 작성하는 함수
-  const [values, onChange] = useInput({
-    content: "",
-  })
-
-  const onSubmitComment = async (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault()
-      const userInfoString = localStorage.getItem("userInfo")!
-      const userInfo = JSON.parse(userInfoString)
-      const CommentData: CommentDataType = {
-        nickName: userInfo.nickName,
-        profileUrl: userInfo.profileUrl,
-        userId: userInfo.userId,
-        content: values.content,
-        parentId: post[0].id,
-      }
-      try {
-        await CommentApi.postComment(CommentData)
-        setContent("")
-        queryClient.invalidateQueries(QUERY_KEY.COMMENT_LIST)
-      } catch {
-        alert("댓글 작성에 실패하였습니다")
-      }
+  const onSubmitComment = async (e: FormElementType) => {
+    e.preventDefault()
+    if (!postDetail?.data.id) return
+    const CommentData: CommentDataType = {
+      content: e.target.content.value,
+      parentId: postDetail.data.id,
+    }
+    try {
+      await CommentApi.postComment(CommentData)
+      await dispatch(getOnePost(postDetail.data.id))
+      e.target.content.value = ""
+    } catch {
+      alert("댓글 작성에 실패하였습니다")
     }
   }
 
   return (
-    <S.Form onKeyDown={onSubmitComment}>
+    <S.Form onSubmit={onSubmitComment}>
       <S.MyProfileImg />
-      <S.TextArea placeholder="write your comments...." onChange={onChange} />
+      <S.TextArea placeholder="write your comments...." name="content" />
       <S.SendBtn type="submit">
         <Send color="#ECB996" size={22} strokeWidth={3} />
       </S.SendBtn>

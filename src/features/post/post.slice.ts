@@ -1,44 +1,55 @@
-import { Post } from "@/type/type"
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { Comment, Post, TPostsResponse } from "@/type/type"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
-import { axiosInstance } from "../core.api"
 
 type PostState = {
-  data: Post[]
+  postList: TPostsResponse | null
+  postDetail: {
+    data: Post
+    children: Comment
+  } | null
   loading: boolean
   error: string | null
-  postList: Post[] | null // postList 추가
 }
 
 const initialState: PostState = {
-  data: [],
+  postList: {
+    data: [],
+    pagination: undefined,
+  },
+  postDetail: null,
   loading: false,
   error: "",
-  postList: null, // 초기값 null로 설정
 }
 
-const POST_PATH = "/data/post"
+export const getOnePost = createAsyncThunk("post/getPost", async (postId: string) => {
+  const post = await PostApi.getOnePost(postId)
+  return post
+})
 
 // getPost : read
-export const getPosts = createAsyncThunk<Post[]>("post/getPosts", async () => {
+export const getPosts = createAsyncThunk("post/getPosts", async () => {
   try {
-    const posts = await PostApi.getPost({ id: "", title: "" })
-    return posts as Post[]
+    const posts = await PostApi.getPosts()
+    return posts
   } catch (error) {
     throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")
   }
 })
 
 // postPost : create
-export const postPost = createAsyncThunk<Post, Post>("post/postPost", async ({ title, content }: Post) => {
-  try {
-    const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData)
-    return res.data
-  } catch (error) {
-    throw new Error("게시글을 등록하는 데 실패했습니다!")
-  }
-})
+export const postPost = createAsyncThunk<Post, { title: string; content: string }>(
+  "post/postPost",
+  async ({ title, content }) => {
+    try {
+      const postData = { title, content }
+      const res = await PostApi.postPost(postData)
+      return res.data
+    } catch (error) {
+      throw new Error("게시글을 등록하는 데 실패했습니다!")
+    }
+  },
+)
 
 // deletePost : delete
 export const deletePost = createAsyncThunk<void, string>("post/deletePost", async (postId: string) => {
@@ -50,7 +61,7 @@ export const deletePost = createAsyncThunk<void, string>("post/deletePost", asyn
 })
 
 // editPost : update
-export const editPost = createAsyncThunk<Post, { post: Post; postId: string }>(
+export const editPost = createAsyncThunk<Post, { post: Partial<{ title: string; content: string }>; postId: string }>(
   "post/editPost",
   async ({ post, postId }) => {
     try {
@@ -66,49 +77,48 @@ export const editPost = createAsyncThunk<Post, { post: Post; postId: string }>(
 export const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {
-    postPostFulfilled: (state, action: PayloadAction<Post>) => {
-      // postPost 액션이 성공했을 때의 로직
-      state.data = [action.payload]
-    },
-    clearPostData: state => {
-      // data를 초기화하는 액션
-      state.data = []
-    },
-    setError: (state, action: PayloadAction<string>) => {
-      // 에러를 설정하는 액션
-      state.error = action.payload
-    },
-    clearError: state => {
-      // 에러를 초기화하는 액션
-      state.error = null
-    },
-  },
+  reducers: {},
   //extraReducers를 사용하여 비동기 액션(getPosts)의 성공, 실패 및 보류 상태에 따라 상태를 업데이트
   extraReducers(builder) {
     builder
+      // getOnePost : read
+      .addCase(getOnePost.pending, state => {
+        state.loading = true
+      })
+      .addCase(getOnePost.fulfilled, (state, action) => {
+        if (!isPostDetail(action.payload)) return
+        state.loading = false
+        state.error = null
+        state.postDetail = action.payload
+      })
+      .addCase(getOnePost.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
+        state.postDetail = null
+      })
       // getPost : read
       .addCase(getPosts.pending, state => {
         state.loading = true
       })
       .addCase(getPosts.fulfilled, (state, action) => {
+        if (!isPostArray(action.payload)) return
+        console.log(action.payload, "payload")
         state.loading = false
         state.error = null
-        state.data = action.payload
-        state.postList = action.payload // postList에 데이터 할당
+        state.postList = action.payload
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
-        state.data = []
+        state.postList = null
       })
       // postPost : create
       .addCase(postPost.pending, state => {
         state.loading = true
       })
       .addCase(postPost.fulfilled, (state, action) => {
+        if (!isPostArray(action.payload)) return
         state.loading = false
-        state.data = state.data ? [...state.data, action.payload] : [action.payload]
       })
       .addCase(postPost.rejected, (state, action) => {
         state.loading = false
@@ -118,9 +128,8 @@ export const postSlice = createSlice({
       .addCase(deletePost.pending, state => {
         state.loading = true
       })
-      .addCase(deletePost.fulfilled, (state, action) => {
+      .addCase(deletePost.fulfilled, state => {
         state.loading = false
-        state.data = state.data ? state.data.filter(post => post.id !== action.meta.arg) : []
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.loading = false
@@ -131,10 +140,10 @@ export const postSlice = createSlice({
         state.loading = true
       })
       .addCase(editPost.fulfilled, (state, action) => {
-        if (state.data === null) {
-          state.data = [] // null이면 빈 배열로 초기화
+        if (state.postList === null) {
+          state.postList = null // null이면 빈 배열로 초기화
         }
-        state.data.unshift(action.payload)
+        state.postList?.data.unshift(action.payload)
       })
       .addCase(editPost.rejected, (state, action) => {
         state.loading = false
@@ -143,6 +152,14 @@ export const postSlice = createSlice({
   },
 })
 
-export const { setPostList } = postSlice.actions
+// export const { setPostList } = postSlice.actions
 
 export default postSlice.reducer
+
+function isPostArray(args: unknown): args is TPostsResponse {
+  return true
+}
+
+function isPostDetail(args: unknown): args is { data: Post; children: Comment } {
+  return true
+}
