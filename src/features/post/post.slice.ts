@@ -28,9 +28,9 @@ export const getOnePost = createAsyncThunk("post/getPost", async (postId: string
 })
 
 // getPost : read
-export const getPosts = createAsyncThunk("post/getPosts", async () => {
+export const getPosts = createAsyncThunk("post/getPosts", async (pageParam: number) => {
   try {
-    const posts = await PostApi.getPosts()
+    const posts = await PostApi.getPosts(pageParam)
     return posts
   } catch (error) {
     throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")

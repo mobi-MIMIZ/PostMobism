@@ -24,14 +24,14 @@ export default OneList
 
 const Wrapper = styled.div`
   width: 1200px;
-  height: 72px;
+  height: 56px;
   color: ${({ theme }) => theme.COLORS.beige[800]};
   background-color: ${({ theme }) => theme.COLORS.white};
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   ${flexAlignCenter}
   justify-content: space-between;
   padding: 0 20px;
-  margin: 12px 0;
+  margin: 8px 0;
 `
 const Number = styled.p``
 const Title = styled.p`
@@ -43,8 +43,8 @@ const Writer = styled.p`
   text-align: right;
 `
 const Image = styled.img`
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.COLORS.beige[500]};
 `

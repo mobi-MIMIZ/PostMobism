@@ -6,15 +6,17 @@ import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getOnePost, getPosts } from "@/features/post/post.slice"
+import { useSearchParams } from "react-router-dom"
 
 const MainPage = () => {
   // const [postList] = useState(MockPostsData(70))
   const [isOpenDetailPost, setIsOpenDetailPost] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const postList = useAppSelector(state => state.post.postList)
-
+  const postList = useAppSelector(state => state.post.postList) // perPage
+  const [searchParams, setSearchParams] = useSearchParams()
   const perPage = 6
-  const [currentPage, setCurrentPage] = useState(1)
+  const page = parseInt(searchParams.get("page") || "1")
+  const [currentPage, setCurrentPage] = useState(page)
 
   const onOpenDetailModal = async (postId: string) => {
     await dispatch(getOnePost(postId))
@@ -26,8 +28,9 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    dispatch(getPosts())
-  }, [])
+    console.log("postList", postList)
+    dispatch(getPosts(currentPage))
+  }, [currentPage])
 
   return (
     <S.Wrapper>
@@ -45,8 +48,9 @@ const MainPage = () => {
       ))}
       <Pagination
         listLength={postList?.data.length ?? 0}
-        currentPage={currentPage}
         perPage={perPage}
+        currentPage={currentPage}
+        setSearchParams={setSearchParams}
         onPageChange={onPageChange}
       />
     </S.Wrapper>

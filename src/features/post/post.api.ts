@@ -11,8 +11,9 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPosts() {
-    const res = await axiosInstance.get<TPostsResponse>(POST_PATH)
+  async getPosts(pageParam: number) {
+    const res = await axiosInstance.get<TPostsResponse>(POST_PATH + `?page=${pageParam}`)
+    console.log("getPosts", res.data)
     return res.data
   },
 
@@ -27,6 +28,7 @@ export const PostApi = {
     })
     return res.data
   },
+
   /**
    * @function postPost
    * @method POST

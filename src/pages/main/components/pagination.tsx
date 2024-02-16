@@ -1,20 +1,17 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { SetStateAction } from "jotai"
+import { Dispatch, useEffect, useState } from "react"
 import styled from "styled-components"
 
 export type PaginationProps = {
   listLength: number
   currentPage: number
   perPage: number
+  setSearchParams: Dispatch<SetStateAction<URLSearchParams>>
   onPageChange: (pageNumber: number) => void
 }
 
-const Pagination = ({ listLength, currentPage, perPage, onPageChange }: PaginationProps) => {
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  // constants about pages:
-  const page = parseInt(searchParams.get("page") || "1", 10)
+const Pagination = ({ listLength, currentPage, perPage, setSearchParams, onPageChange }: PaginationProps) => {
   const totalPage = Math.ceil(listLength / perPage)
   const pagesPerGroup = 10
   const [, setCurrentGroup] = useState(1)
@@ -38,7 +35,11 @@ const Pagination = ({ listLength, currentPage, perPage, onPageChange }: Paginati
   useEffect(() => {
     const newCurrentGroup = Math.ceil(currentPage / pagesPerGroup)
     setCurrentGroup(newCurrentGroup)
-    setSearchParams({ page: currentPage.toString() })
+    setSearchParams(prev => {
+      const newSearchParams = new URLSearchParams(prev)
+      newSearchParams.set("page", currentPage.toString())
+      return newSearchParams
+    })
   }, [currentPage, setSearchParams])
 
   return (
