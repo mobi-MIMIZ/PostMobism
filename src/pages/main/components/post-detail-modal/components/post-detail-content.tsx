@@ -12,6 +12,7 @@ type Props = {
   nickName: string
   title: string
   content: string
+  postImages: string[]
   weekday: string
   isEditMode: boolean
   setIsEditMode: Dispatch<SetStateAction<boolean>>
@@ -23,6 +24,7 @@ const PostDetailContent: FC<Props> = ({
   nickName,
   title,
   content,
+  postImages,
   weekday,
   isEditMode,
   setIsEditMode,
@@ -39,25 +41,31 @@ const PostDetailContent: FC<Props> = ({
     setOnShowOptions(false)
   }
 
-  const onSaveEditedValues = () => {
-    try {
-      const editedPost = {
-        id: postId,
-        title: editedTitle,
-        content: editedContent,
+  const onSaveEditedValues = (postId: string) => {
+    if (isMyPost) {
+      try {
+        const editedPost = {
+          id: postId,
+          title: editedTitle,
+          content: editedContent,
+        }
+        handleEditPost(editedPost)
+        setIsEditMode(false)
+      } catch (error) {
+        alert("변경된 내용을 저장하지 못했습니다!")
       }
-      handleEditPost(editedPost)
-      setIsEditMode(false)
-    } catch (error) {
-      alert("변경된 내용을 저장하지 못했습니다!")
-    }
+    } else alert("다른 사람의 게시글은 수정할 수 없어요!")
   }
 
   const onDeletePost = (postId: string) => {
     if (isMyPost) {
-      handleDeletePost(postId)
-      setOnShowOptions(false)
-    } else alert("회원 님의 게시글이 아닙니다!")
+      try {
+        handleDeletePost(postId)
+        setOnShowOptions(false)
+      } catch (error) {
+        alert("게시글을 삭제하지 못했습니다!")
+      }
+    } else alert("회원 님의 게시글이 아니에요!")
   }
 
   return (
@@ -84,11 +92,23 @@ const PostDetailContent: FC<Props> = ({
           <>
             <S.TitleInput type="text" value={editedTitle} onChange={e => setEditedTitle(e.target.value)} />
             <S.ContentTextarea value={editedContent} onChange={e => setEditedContent(e.target.value)} />
-            <MMZbutton usage={"PostForm"} type={"submit"} label={"Save Changes"} onClick={onSaveEditedValues} />
+            <MMZbutton
+              usage={"PostForm"}
+              type={"submit"}
+              label={"Save Changes"}
+              onClick={() => onSaveEditedValues(postId)}
+            />
           </>
         ) : (
           <>
             <S.Title>{title}</S.Title>
+            {postImages && (
+              <S.PostImages>
+                {postImages.map((image, idx) => (
+                  <OneImage key={idx + 1} src={image} />
+                ))}
+              </S.PostImages>
+            )}
             <S.Content>{content}</S.Content>
             <S.WeekDay>{weekday}</S.WeekDay>
           </>
@@ -100,7 +120,9 @@ const PostDetailContent: FC<Props> = ({
 export default PostDetailContent
 
 const ContentContainer = styled.div`
-  height: 290px;
+  min-height: 290px;
+  height: fit-content;
+  border-bottom: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
 `
 const UserBox = styled.div`
   ${flexAlignCenter}
@@ -145,6 +167,19 @@ const Title = styled.div`
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
   color: ${({ theme }) => theme.COLORS.beige[800]};
 `
+const PostImages = styled.div`
+  width: 90%;
+  height: 120px;
+  margin-left: 5%;
+  ${flexCenter}
+`
+const OneImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: aliceblue;
+  overflow: hidden;
+`
 const Content = styled.div`
   padding: 10px 30px;
   height: 140px;
@@ -153,8 +188,9 @@ const Content = styled.div`
   color: ${({ theme }) => theme.COLORS.beige[800]};
 `
 const WeekDay = styled.div`
-  position: absolute;
-  right: 30px;
+  position: relative;
+  right: -76%;
+  margin-bottom: 4px;
   font-size: ${({ theme }) => theme.FONT_SIZE.small};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   color: ${({ theme }) => theme.COLORS.beige[500]};
@@ -202,4 +238,6 @@ const S = {
   TitleInput,
   ContentTextarea,
   EditContainer,
+  PostImages,
+  OneImage,
 }

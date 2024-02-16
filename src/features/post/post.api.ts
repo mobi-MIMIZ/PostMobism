@@ -35,10 +35,8 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ title, content }: { title: string; content: string }) {
-    const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData, {
-      //auth:true.. (dataUser:null => console창 문제)
+  async postPost({ formData }: { formData: FormData }) {
+    const res = await axiosInstance.post(POST_PATH, formData, {
       params: { auth: "true" },
     })
     return res.data
@@ -50,11 +48,7 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH, {
-      params: {
-        dataId,
-      },
-    })
+    const res = await axiosInstance.delete(POST_PATH + `/${dataId}`)
     return res
   },
   /**
@@ -67,12 +61,7 @@ export const PostApi = {
    */
   async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
-    const res = await axiosInstance.patch(POST_PATH, {
-      params: {
-        dataId,
-      },
-      req,
-    })
+    const res = await axiosInstance.patch(POST_PATH + `/${dataId}`, req)
     return res.data
   },
   /**

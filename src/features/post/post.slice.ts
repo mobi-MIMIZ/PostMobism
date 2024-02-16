@@ -38,18 +38,14 @@ export const getPosts = createAsyncThunk("post/getPosts", async () => {
 })
 
 // postPost : create
-export const postPost = createAsyncThunk<Post, { title: string; content: string }>(
-  "post/postPost",
-  async ({ title, content }) => {
-    try {
-      const postData = { title, content }
-      const res = await PostApi.postPost(postData)
-      return res.data
-    } catch (error) {
-      throw new Error("게시글을 등록하는 데 실패했습니다!")
-    }
-  },
-)
+export const postPost = createAsyncThunk<Post, { formData: FormData }>("post/postPost", async ({ formData }) => {
+  try {
+    const res = await PostApi.postPost({ formData })
+    return res.data
+  } catch (error) {
+    throw new Error("게시글을 등록하는 데 실패했습니다!")
+  }
+})
 
 // deletePost : delete
 export const deletePost = createAsyncThunk<void, string>("post/deletePost", async (postId: string) => {

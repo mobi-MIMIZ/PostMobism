@@ -18,7 +18,6 @@ const PostContent: FC = () => {
       const currentImageUrl = URL.createObjectURL(imageLists[i])
       imageUrlLists.unshift(currentImageUrl)
     }
-
     if (imageUrlLists.length > 5) {
       imageUrlLists = imageUrlLists.slice(0, 5)
       alert("한 번에 이미지를 5개 이상 추가하실 수 없습니다.")
@@ -40,11 +39,15 @@ const PostContent: FC = () => {
 
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const title = formData.get("title") as string
-    const content = formData.get("content") as string
+
+    const formData = new FormData()
+    formData.append("title", (e.currentTarget.elements.namedItem("title") as HTMLInputElement)?.value || "")
+    formData.append("content", (e.currentTarget.elements.namedItem("content") as HTMLInputElement)?.value || "")
+    for (let i = 0; i < showImages.length; i++) {
+      formData.append("images[]", showImages[i])
+    }
     try {
-      await handleCreatePost(e, title, content)
+      await handleCreatePost(formData)
     } catch (error) {
       alert("게시글을 등록하지 못했습니다! 잠시 후 다시 시도해주세요.")
       console.error("게시글 등록 중 에러 발생:", error)
@@ -69,7 +72,7 @@ const PostContent: FC = () => {
         <div>add image</div>
         <ImagePlus color="#ecb996" size={28} />
       </S.Label>
-      <S.AddImage type="file" name="file" id="file" multiple accept="image/*" onChange={onUploadImage} />
+      <S.AddImage type="file" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
       <MMZbutton usage={"PostForm"} type={"submit"} label={"POST"} />
     </S.Container>
   )

@@ -64,6 +64,8 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
   //   setEditedContent(content)
   // }
 
+  useEffect(() => console.log("postDetail", postDetail))
+
   if (!postDetail) return
   return (
     <S.Wrapper>
@@ -74,20 +76,14 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
           postId={postDetail.data.id}
           title={postDetail.data.data.title}
           content={postDetail.data.data.content}
+          postImages={postDetail.data.data.images}
           nickName={postDetail.data.dataUser.data.nickName}
           profileImage={postDetail.data.dataUser.profile_url}
           weekday={postDetail.data.createdAt}
           isEditMode={isEditMode}
           setIsEditMode={setIsEditMode}
         />
-        {isEditMode ? (
-          ""
-        ) : (
-          <>
-            <S.Line />
-            <Comments comments={undefined} />
-          </>
-        )}
+        {isEditMode ? "" : <Comments comments={undefined} />}
       </S.OnePost>
     </S.Wrapper>
   )

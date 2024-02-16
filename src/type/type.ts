@@ -1,6 +1,6 @@
 export type Post = {
   id: string
-  data: { title: string; content: string }
+  data: { title: string; content: string; images: string[] }
   dataUser: { data: { nickName: string }; profile_url: string; userId: string }
   createdAt: string
 }
