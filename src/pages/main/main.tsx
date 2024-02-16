@@ -4,63 +4,56 @@ import Pagination from "./components/pagination"
 import OneList from "./components/one-list"
 import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
-import { Post } from "@/type/type"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
-import { getPosts } from "@/features/post/post.slice"
+import { getOnePost, getPosts } from "@/features/post/post.slice"
 
 const MainPage = () => {
   // const [postList] = useState(MockPostsData(70))
+  const [isOpenDetailPost, setIsOpenDetailPost] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const post = useAppSelector(state => state.post.data) as Post[]
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const listLength = post.length
+  const postList = useAppSelector(state => state.post.postList)
 
   const perPage = 6
   const [currentPage, setCurrentPage] = useState(1)
 
-  const onOpenDetailModal = (post: Post) => {
-    setSelectedPost(post)
+  const onOpenDetailModal = async (postId: string) => {
+    await dispatch(getOnePost(postId))
+    setIsOpenDetailPost(true)
   }
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
 
-  const renderPostsForPage = () => {
-    console.log(post)
-    const startIndex = (currentPage - 1) * perPage
-    const endIndex = startIndex + perPage
-
-    return post
-      .slice(startIndex, endIndex)
-      .map((post, idx) => (
-        <OneList
-          number={idx + 1}
-          title={post.data.title}
-          nickname={post.dataUser?.nickName || "Unknown"}
-          image={post.dataUser?.profileImg || ""}
-          key={post.id}
-          onOpenDetailModal={() => onOpenDetailModal(post)}
-        />
-      ))
-  }
-
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 getPosts 액션을 디스패치합니다.
     dispatch(getPosts())
-  }, [dispatch])
+  }, [])
 
-  useEffect(() => {
-    console.log("Post updated:", post)
-  }, [post])
+
 
   return (
     <S.Wrapper>
-      {selectedPost && <PostDetailModal selectedPost={selectedPost} onClose={() => setSelectedPost(null)} />}
+      {isOpenDetailPost && <PostDetailModal onClose={() => setIsOpenDetailPost(false)} />}
       <S.Title>Post Your Code</S.Title>
-      {renderPostsForPage()}
-      <Pagination listLength={listLength} currentPage={currentPage} perPage={perPage} onPageChange={onPageChange} />
+      {postList?.data.map((post, idx) => (
+        <OneList
+          number={idx + 1}
+          title={post.data.title}
+          nickname={post.dataUser.data.nickName}
+          image={post.dataUser.profile_url}
+          key={post.id}
+          onOpenDetailModal={() => onOpenDetailModal(post.id)}
+        />
+        ))}
+      <Pagination
+        listLength={postList?.data.length ?? 0}
+        currentPage={currentPage}
+        perPage={perPage}
+        onPageChange={onPageChange}
+      />
     </S.Wrapper>
+  )
+}
   )
 }
 export default MainPage

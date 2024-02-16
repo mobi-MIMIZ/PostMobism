@@ -1,3 +1,4 @@
+import { TPostsResponse } from "@/type/type"
 import { axiosInstance } from "../core.api"
 import { Post } from "@/type/dto/post.dto"
 
@@ -10,21 +11,21 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPost(): Promise<{ id: string; title: string }[]> {
-    try {
-      const response = await axiosInstance.get<{ id: string; title: string }[]>(POST_PATH)
-      // response.data가 정의되어 있는지 확인
-      if (response.data) {
-        console.log("API 응답:", response.data)
-        return response.data
-      } else {
-        console.error("API 응답에서 데이터가 정의되어 있지 않습니다.")
-        throw new Error("API 응답에서 데이터가 정의되어 있지 않습니다.")
-      }
-    } catch (error) {
-      console.error("getPost 메서드에서 오류 발생:", error)
-      throw error
-    }
+  async getPosts() {
+    const res = await axiosInstance.get<TPostsResponse>(POST_PATH)
+    return res.data
+  },
+
+  async getOnePost(postId: string) {
+    const res = await axiosInstance.get<{
+      data: Post
+      children: Comment
+    }>("/data/detail/post", {
+      params: {
+        dataId: postId,
+      },
+    })
+    return res.data
   },
   /**
    * @function postPost
@@ -34,9 +35,12 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ title, content }: Post) {
+  async postPost({ title, content }: { title: string; content: string }) {
     const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData)
+    const res = await axiosInstance.post(POST_PATH, postData, {
+      //auth:true.. (dataUser:null => console창 문제)
+      params: { auth: "true" },
+    })
     return res.data
   },
   /**
@@ -57,7 +61,7 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async editPost({ title, content }: Post, dataId: string) {
+  async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
     const res = await axiosInstance.patch(POST_PATH, {
       params: {

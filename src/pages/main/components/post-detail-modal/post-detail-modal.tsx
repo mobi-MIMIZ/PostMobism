@@ -1,35 +1,79 @@
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
-import { Post } from "@/type/type"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
+import { getComments } from "@/features/comment/comment.slice"
 
 type Props = {
-  selectedPost: Post
   onClose: () => void
 }
 
-const PostDetailModal: FC<Props> = ({ selectedPost, onClose }) => {
+export type CommentListType = {
+  createdAt: string
+  data: {
+    content: string
+    nickName: string
+    parentId: string
+    profileUrl: string | undefined
+    userId: string
+  }
+  dataImage: any[]
+  dataUser: any
+  id: string
+}
+
+const PostDetailModal: FC<Props> = ({ onClose }) => {
+  const dispatch = useAppDispatch()
+  const postDetail = useAppSelector(state => state.post.postDetail)
+
+  const [page, setPage] = useState<number>(1)
+
+  useEffect(() => {
+    if (!postDetail?.data.id) return
+    console.log("page", page)
+    dispatch(
+      getComments({
+        page,
+        postId: postDetail?.data.id,
+      }),
+    )
+  }, [page])
+
+  // 스크롤 최하단 시 fetchNextPage실행
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight
+    const scrollTop = document.documentElement.scrollTop
+    const clientHeight = document.documentElement.clientHeight
+    if (scrollTop + clientHeight >= scrollHeight) return setPage(prev => prev + 1)
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
+
+  if (!postDetail) return
   return (
     <S.Wrapper>
       <S.OnePost>
-        {selectedPost && (
-          <>
-            <PostDetailHeader title={selectedPost.title} onClose={onClose} />
-            <S.Line />
-            <PostDetailContent
-              postId={selectedPost.id}
-              content={selectedPost.content}
-              nickName={selectedPost.User.nickName}
-              profileImage={selectedPost.User.profileImg}
-              weekday={selectedPost.createdAt}
-            />
-            <S.Line />
-            <Comments comments={selectedPost.Comments} />
-          </>
-        )}
+        <>
+          <PostDetailHeader title={postDetail.data.data.title} onClose={onClose} />
+          <S.Line />
+          <PostDetailContent
+            postId={postDetail.data.id}
+            content={postDetail.data.data.content}
+            nickName={postDetail.data.dataUser.data.nickName}
+            profileImage={postDetail.data.dataUser.profile_url}
+            weekday={postDetail.data.createdAt}
+          />
+          <S.Line />
+          <Comments />
+        </>
       </S.OnePost>
     </S.Wrapper>
   )
