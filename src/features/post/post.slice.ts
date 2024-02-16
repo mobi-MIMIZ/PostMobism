@@ -102,7 +102,6 @@ export const postSlice = createSlice({
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         if (!isPostArray(action.payload)) return
-        console.log(action.payload, "payload")
         state.loading = false
         state.error = null
         state.postList = action.payload

@@ -4,9 +4,6 @@ import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
-import { Post } from "@/type/type"
-import { useGetCommentQuery } from "@/hooks/use-comment-query"
-import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getComments } from "@/features/comment/comment.slice"
 
@@ -36,6 +33,23 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     if (!postDetail?.data.id) return
+
+    const handleScroll = () => {
+      const isAtEndOfPage =
+        window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+      if (isAtEndOfPage) {
+        setPage(prev => prev + 1)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [postDetail])
+
+  useEffect(() => {
+    if (!postDetail?.data.id) return
     console.log("page", page)
     dispatch(
       getComments({
@@ -45,22 +59,8 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
     )
   }, [page])
 
-  // 스크롤 최하단 시 fetchNextPage실행
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight
-    const scrollTop = document.documentElement.scrollTop
-    const clientHeight = document.documentElement.clientHeight
-    if (scrollTop + clientHeight >= scrollHeight) return setPage(prev => prev + 1)
-  }
+  if (!postDetail) return null
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  })
-
-  if (!postDetail) return
   return (
     <S.Wrapper>
       <S.OnePost>

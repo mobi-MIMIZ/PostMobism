@@ -1,5 +1,4 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { Comment, TCommentsResponse } from "@/type/type"
 import { FC } from "react"
 import styled from "styled-components"
 import CommentForm from "./comment-form"
