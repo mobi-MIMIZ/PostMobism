@@ -29,8 +29,6 @@ const MainPage = () => {
     dispatch(getPosts())
   }, [])
 
-
-
   return (
     <S.Wrapper>
       {isOpenDetailPost && <PostDetailModal onClose={() => setIsOpenDetailPost(false)} />}
@@ -44,7 +42,7 @@ const MainPage = () => {
           key={post.id}
           onOpenDetailModal={() => onOpenDetailModal(post.id)}
         />
-        ))}
+      ))}
       <Pagination
         listLength={postList?.data.length ?? 0}
         currentPage={currentPage}
@@ -54,8 +52,7 @@ const MainPage = () => {
     </S.Wrapper>
   )
 }
-  )
-}
+
 export default MainPage
 
 const Wrapper = styled.div`

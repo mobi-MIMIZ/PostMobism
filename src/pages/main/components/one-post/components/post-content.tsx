@@ -4,7 +4,6 @@ import { Dispatch, FC, FormEvent, SetStateAction, useState } from "react"
 import { ImagePlus, X } from "lucide-react"
 import styled from "styled-components"
 import { usePostActions } from "@/hooks/use-post-actions"
-import { useAppSelector } from "@/hooks/use-redux-toolkit"
 
 const PostContent: FC = () => {
   // preview uploaded images
@@ -38,18 +37,16 @@ const PostContent: FC = () => {
   }
 
   const { handleCreatePost } = usePostActions()
-  const currentUser = useAppSelector(state => state.user[0])
 
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     const formData = new FormData(e.currentTarget)
     const title = formData.get("title") as string
     const content = formData.get("content") as string
-
     try {
-      await handleCreatePost(e, title, content, hasImage, showImages, currentUser)
+      await handleCreatePost(e, title, content)
     } catch (error) {
+      alert("게시글을 등록하지 못했습니다! 잠시 후 다시 시도해주세요.")
       console.error("게시글 등록 중 에러 발생:", error)
     }
   }
