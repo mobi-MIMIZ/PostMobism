@@ -1,6 +1,5 @@
 import { CommentApi } from "@/features/comment/comment.api"
-import { getOnePost } from "@/features/post/post.slice"
-import { commentApi, useGetCommentListQuery } from "@/hooks/use-get-comment-list-query"
+import { commentApi } from "@/hooks/use-get-comment-list-query"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
 import { useState } from "react"

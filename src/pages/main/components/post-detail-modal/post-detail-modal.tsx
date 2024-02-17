@@ -29,7 +29,7 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
 
   if (!postDetail) return
   return (
-    <S.Wrapper>
+    <S.Wrapper >
       <S.OnePost>
         <>
           <PostDetailHeader title={postDetail.data.data.title} onClose={onClose} />

@@ -40,6 +40,7 @@ const SignIn = () => {
         profileUrl: res.data.info.profileUrl,
       }
       localStorage.setItem("userInfo", JSON.stringify(userInfo))
+      localStorage.setItem("userName", res.data.info.nickName)
       setUserInfo(userInfo)
       signIn(res.data.token)
       toMain()
