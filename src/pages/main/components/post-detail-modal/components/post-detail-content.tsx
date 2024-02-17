@@ -118,6 +118,7 @@ const PostDetailContent: FC<Props> = ({
         ) : (
           <>
             <S.Title>{title}</S.Title>
+            <S.Content>{content}</S.Content>
             {postImages && (
               <S.PostImages>
                 {postImages.map((image, idx) => (
@@ -125,7 +126,6 @@ const PostDetailContent: FC<Props> = ({
                 ))}
               </S.PostImages>
             )}
-            <S.Content>{content}</S.Content>
             <S.WeekDay>{weekday}</S.WeekDay>
           </>
         )}
@@ -141,7 +141,7 @@ const ContentContainer = styled.div`
 `
 const UserBox = styled.div`
   ${flexAlignCenter}
-  margin-top: 30px;
+  margin-top: 20px;
 `
 const ProfileImg = styled.img`
   width: 60px;
@@ -158,7 +158,7 @@ const NickName = styled.div`
 const OptionBtn = styled.button`
   cursor: pointer;
   position: absolute;
-  top: 120px;
+  top: 90px;
   right: 22px;
   background: none;
   width: 34px;
@@ -177,14 +177,22 @@ const Dialog = styled.div`
   top: 160px;
 `
 const Title = styled.div`
-  margin: 20px 30px 10px;
-  font-size: ${({ theme }) => theme.FONT_SIZE.large};
+  margin: 30px 40px 8px;
+  font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
+  color: ${({ theme }) => theme.COLORS.beige[800]};
+`
+const Content = styled.div`
+  margin: 20px 40px 8px;
+  max-height: 120px;
+  height: fit-content;
+  font-size: ${({ theme }) => theme.FONT_SIZE.medium};
+  font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   color: ${({ theme }) => theme.COLORS.beige[800]};
 `
 const PostImages = styled.div`
   width: 90%;
-  height: 120px;
+  height: 110px;
   margin-left: 5%;
   ${flexCenter}
 `
@@ -192,22 +200,14 @@ const OneImage = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 4px;
-  background-color: aliceblue;
+  background-color: ${({ theme }) => theme.COLORS.beige[200]};
   overflow: hidden;
-`
-const Content = styled.div`
-  padding: 10px 30px;
-  height: 140px;
-  font-size: ${({ theme }) => theme.FONT_SIZE.medium};
-  font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
-  color: ${({ theme }) => theme.COLORS.beige[800]};
 `
 const WeekDay = styled.div`
   position: relative;
   right: -76%;
   margin-bottom: 4px;
-  font-size: ${({ theme }) => theme.FONT_SIZE.small};
-  font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
+  font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
   color: ${({ theme }) => theme.COLORS.beige[500]};
 `
 /* edit-mode */

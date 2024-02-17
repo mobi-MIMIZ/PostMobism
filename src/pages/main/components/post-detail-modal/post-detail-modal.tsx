@@ -97,8 +97,8 @@ const Wrapper = styled.div`
 
 const OnePost = styled.div`
   ${PositionCenter}
-  width: 720px;
-  height: 950px;
+  width: 600px;
+  height: 800px;
   background-color: ${({ theme }) => theme.COLORS.white};
   box-shadow: 0px 10px 10px 10px rgba(236, 185, 150, 0.2);
   border-radius: 16px;

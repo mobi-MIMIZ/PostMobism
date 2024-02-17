@@ -31,8 +31,6 @@ const MainPage = () => {
     dispatch(getPosts(currentPage))
   }, [currentPage, dispatch])
 
-  console.log(postList?.pageNation)
-
   return (
     <S.Wrapper>
       {isOpenDetailPost && <PostDetailModal onClose={() => setIsOpenDetailPost(false)} />}

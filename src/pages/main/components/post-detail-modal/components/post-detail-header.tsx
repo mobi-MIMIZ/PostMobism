@@ -22,8 +22,8 @@ const PostDetailHeader: FC<Props> = ({ nickName, onClose }) => {
 export default PostDetailHeader
 
 const HeaderContainer = styled.div`
-  padding: 16px;
-  width: 720px;
+  padding: 10px 0;
+  width: 100%;
   ${flexAlignCenter}
 `
 
