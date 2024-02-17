@@ -13,8 +13,8 @@ const MainPage = () => {
   const [isOpenDetailPost, setIsOpenDetailPost] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const postList = useAppSelector(state => state.post.postList) // perPage
-  const [searchParams, setSearchParams] = useSearchParams()
-  const perPage = 6
+  const [searchParams] = useSearchParams()
+
   const page = parseInt(searchParams.get("page") || "1")
   const [currentPage, setCurrentPage] = useState(page)
 
@@ -28,9 +28,10 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    console.log("postList", postList)
     dispatch(getPosts(currentPage))
-  }, [currentPage])
+  }, [currentPage, dispatch])
+
+  console.log(postList?.pageNation)
 
   return (
     <S.Wrapper>
@@ -47,10 +48,10 @@ const MainPage = () => {
         />
       ))}
       <Pagination
-        listLength={postList?.data.length ?? 0}
-        perPage={perPage}
-        currentPage={currentPage}
-        setSearchParams={setSearchParams}
+        startPage={postList.pageNation?.start}
+        endPage={postList.pageNation?.end}
+        currentPage={postList.pageNation?.current}
+        totalPage={postList.pageNation?.total}
         onPageChange={onPageChange}
       />
     </S.Wrapper>

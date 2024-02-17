@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
 
 type PostState = {
-  postList: TPostsResponse | null
+  postList: TPostsResponse
   postDetail: {
     data: Post
     children: Comment
@@ -15,7 +15,7 @@ type PostState = {
 const initialState: PostState = {
   postList: {
     data: [],
-    pagination: undefined,
+    pageNation: undefined,
   },
   postDetail: null,
   loading: false,
@@ -104,7 +104,10 @@ export const postSlice = createSlice({
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
-        state.postList = null
+        state.postList = {
+          data: [],
+          pageNation: {},
+        }
       })
       // postPost : create
       .addCase(postPost.pending, state => {

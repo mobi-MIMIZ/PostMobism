@@ -22,13 +22,13 @@ export type Pagination = {
 }
 
 export type TPostsResponse = {
-  data: Post[]
-  pagination?: Pagination
+  data: Post[] | []
+  pageNation?: Pagination
 }
 
 export type TCommentsResponse = {
   data: Comment[]
-  pagination?: Pagination
+  pageNation?: Pagination
 }
 
 export type User = {

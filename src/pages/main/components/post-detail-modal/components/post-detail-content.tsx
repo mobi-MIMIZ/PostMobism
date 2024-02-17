@@ -13,7 +13,7 @@ type Props = {
   nickName: string
   title: string
   content: string
-  postImages?: string[]
+  postImages?: { url: string }[]
   weekday: string
   isEditMode: boolean
   setIsEditMode: Dispatch<SetStateAction<boolean>>
@@ -121,7 +121,7 @@ const PostDetailContent: FC<Props> = ({
             {postImages && (
               <S.PostImages>
                 {postImages.map((image, idx) => (
-                  <OneImage key={idx + 1} src={image} />
+                  <OneImage key={idx + 1} src={image.url} />
                 ))}
               </S.PostImages>
             )}

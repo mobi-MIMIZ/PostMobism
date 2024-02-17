@@ -1,6 +1,6 @@
 import MMZbutton from "@/components/mmz-button"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { Dispatch, FC, FormEvent, SetStateAction, useState } from "react"
+import { FC, FormEvent, useState } from "react"
 import { ImagePlus, X } from "lucide-react"
 import styled from "styled-components"
 import { usePostActions } from "@/hooks/use-post-actions"
@@ -9,7 +9,7 @@ import { useSearchParams } from "react-router-dom"
 const PostContent: FC = () => {
   // preview uploaded images
   const [hasImage, setHasImage] = useState(false)
-  const [showImages, setShowImages]: [string[], Dispatch<SetStateAction<string[]>>] = useState<string[]>([])
+  const [showImages, setShowImages] = useState<string[]>([])
   const [searchParam] = useSearchParams()
 
   const page = searchParam.get("page") ?? "1"
@@ -46,12 +46,8 @@ const PostContent: FC = () => {
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const formData = new FormData()
-    formData.append("title", (e.currentTarget.elements.namedItem("title") as HTMLInputElement)?.value || "")
-    formData.append("content", (e.currentTarget.elements.namedItem("content") as HTMLInputElement)?.value || "")
-    for (let i = 0; i < showImages.length; i++) {
-      formData.append("images", showImages[i])
-    }
+    const formData = new FormData(e.currentTarget)
+
     try {
       await handleCreatePost(formData)
     } catch (error) {
@@ -78,7 +74,7 @@ const PostContent: FC = () => {
         <div>add image</div>
         <ImagePlus color="#ecb996" size={28} />
       </S.Label>
-      <S.AddImage type="file" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
+      <S.AddImage type="files" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
       <MMZbutton usage={"PostForm"} type={"submit"} label={"POST"} />
     </S.Container>
   )

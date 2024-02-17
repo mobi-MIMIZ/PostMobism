@@ -1,34 +1,36 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { SetStateAction } from "jotai"
-import { Dispatch, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 
 export type PaginationProps = {
-  listLength: number
+  startPage: number
+  endPage: number
   currentPage: number
-  perPage: number
-  setSearchParams: Dispatch<SetStateAction<URLSearchParams>>
-  onPageChange: (pageNumber: number) => void
+  totalPage: number
+  onPageChange: (page: number) => void
 }
 
-const Pagination = ({ listLength, currentPage, perPage, setSearchParams, onPageChange }: PaginationProps) => {
-  const totalPage = Math.ceil(listLength / perPage)
+const Pagination = ({
+  currentPage = 1,
+  totalPage = 1,
+  endPage = 1,
+  startPage = 1,
+  onPageChange,
+}: Partial<PaginationProps>) => {
   const pagesPerGroup = 10
   const [, setCurrentGroup] = useState(1)
+  const [, setSearchParams] = useSearchParams()
 
-  const startPage = Math.max(1, Math.ceil(currentPage / pagesPerGroup) * pagesPerGroup - pagesPerGroup + 1)
-
-  const NumberButtons: number[] = Array.from(
-    { length: Math.min(pagesPerGroup, totalPage) },
-    (_, index) => startPage + index,
-  ).filter(pageNumber => pageNumber <= totalPage)
+  const NumberButtons: number[] = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index)
+  // start -> page
 
   // functions : handle pages
-  const jumpFirst = () => onPageChange(1)
-  const jumpLast = () => onPageChange(totalPage)
-  const handleNext = () => onPageChange(Math.min(currentPage + 1, totalPage))
-  const handlePrev = () => onPageChange(Math.max(currentPage - 1, 1))
-  const handleTarget = (pageNumber: number) => onPageChange(pageNumber)
+  const jumpFirst = () => onPageChange?.(1)
+  const jumpLast = () => onPageChange?.(totalPage)
+  const handleNext = () => onPageChange?.(Math.min(currentPage + 1, totalPage))
+  const handlePrev = () => onPageChange?.(Math.max(currentPage - 1, 1))
+  const handleTarget = (pageNumber: number) => onPageChange?.(pageNumber)
 
   // 페이지 그룹을 바꿔주는 함수 => 현재 페이지가 바뀔 때마다 실행
   // Update URL when currentPage changes
