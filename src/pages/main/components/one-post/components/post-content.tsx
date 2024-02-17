@@ -82,15 +82,17 @@ const PostContent: FC = () => {
 export default PostContent
 
 const Container = styled.form`
-  height: 90%;
-  ${flexCenter}
+  height: 80%;
+  margin-top: 6%;
+  ${flexAlignCenter}
+  justify-content: space-around;
   flex-direction: column;
 `
 const Title = styled.input`
-  width: 670px;
-  height: 80px;
-  margin: 20px 0;
+  width: 540px;
+  height: 60px;
   padding-left: 30px;
+  margin-bottom: 10px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 6px;
   &::placeholder {
@@ -100,8 +102,8 @@ const Title = styled.input`
 `
 const Content = styled.textarea`
   padding: 10px 30px;
-  width: 670px;
-  height: 440px;
+  width: 540px;
+  height: 360px;
   ${flexCenter}
   font-size: ${({ theme }) => theme.FONT_SIZE.large};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
@@ -117,7 +119,7 @@ const AddImage = styled.input`
   display: none;
 `
 const Label = styled.label`
-  width: 670px;
+  width: 540px;
   height: 90px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 6px;

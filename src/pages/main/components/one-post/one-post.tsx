@@ -31,8 +31,8 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   ${PositionCenter}
-  width: 720px;
-  height: 950px;
+  width: 600px;
+  height: 800px;
   margin-top: -50px;
   background-color: ${({ theme }) => theme.COLORS.white};
   box-shadow: 0px 10px 10px 10px rgba(236, 185, 150, 0.2);

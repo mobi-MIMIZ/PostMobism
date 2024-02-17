@@ -45,12 +45,10 @@ const PostDetailContent: FC<Props> = ({
   }
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("Title Changed:", e.target.value)
     setEditedTitle(e.target.value)
   }
 
   const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log("Content Changed:", e.target.value)
     setEditedContent(e.target.value)
   }
 
@@ -213,15 +211,15 @@ const WeekDay = styled.div`
 /* edit-mode */
 const EditContainer = styled.div`
   &.expand {
-    height: 700px;
+    height: 600px;
+    margin-top: 40px;
     ${flexAlignCenter}
     justify-content: space-around;
     flex-direction: column;
-    margin-top: 40px;
   }
 `
 const TitleInput = styled.input`
-  width: 80%;
+  width: 540px;
   height: 50px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
@@ -230,7 +228,7 @@ const TitleInput = styled.input`
   color: ${({ theme }) => theme.COLORS.beige[800]};
 `
 const ContentTextarea = styled.textarea`
-  width: 80%;
+  width: 540px;
   height: 440px;
   font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
