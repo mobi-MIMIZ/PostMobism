@@ -1,15 +1,10 @@
-import { FC, useEffect, useState } from "react"
+import { FC } from "react"
 import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
-import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
-import { getComments } from "@/features/comment/comment.slice"
-import { useInfiniteQuery } from "react-query"
-import { commentApi } from "@/hooks/use-get-comment-list-query"
-import { QUERY_KEY } from "@/consts/query-key"
-import { useInfiniteCommentsQuery } from "@/hooks/use-infinite-comments-query"
+import { useAppSelector } from "@/hooks/use-redux-toolkit"
 
 type Props = {
   onClose: () => void
@@ -30,37 +25,9 @@ export type CommentListType = {
 }
 
 const PostDetailModal: FC<Props> = ({ onClose }) => {
-  const dispatch = useAppDispatch()
   const postDetail = useAppSelector(state => state.post.postDetail)
 
-  const [page, setPage] = useState<number>(1)
-
-  const { data: commentList, fetchNextPage, hasNextPage, isFetching } = useInfiniteCommentsQuery(postDetail?.data.id)
-
-  console.log("data", commentList)
-
-  useEffect(() => {
-    if (!postDetail?.data.id || isFetching) return
-    dispatch(getComments({ page, postId: postDetail.data.id }))
-  }, [page, postDetail?.data.id, isFetching])
-
-  const handleScroll = () => {
-    //페이지의 맨 아래에 도달하면 다음 페이지 호출
-    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-      if (hasNextPage) {
-        fetchNextPage()
-      }
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    //컴포넌트가 언마운트 시 제거
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  if (!postDetail) return null
-
+  if (!postDetail) return
   return (
     <S.Wrapper>
       <S.OnePost>

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getOnePost, getPosts } from "@/features/post/post.slice"
+import { commentApi } from "@/hooks/use-get-comment-list-query"
 
 const MainPage = () => {
   // const [postList] = useState(MockPostsData(70))
@@ -18,6 +19,7 @@ const MainPage = () => {
 
   const onOpenDetailModal = async (postId: string) => {
     await dispatch(getOnePost(postId))
+    dispatch(commentApi.util.resetApiState())
     setIsOpenDetailPost(true)
   }
 

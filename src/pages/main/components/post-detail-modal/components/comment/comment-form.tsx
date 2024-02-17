@@ -1,5 +1,6 @@
 import { CommentApi } from "@/features/comment/comment.api"
 import { getOnePost } from "@/features/post/post.slice"
+import { commentApi, useGetCommentListQuery } from "@/hooks/use-get-comment-list-query"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
 import { useState } from "react"
@@ -18,7 +19,7 @@ export type FormElementType = {
   }
 } & React.KeyboardEvent<HTMLFormElement>
 
-const CommentForm: React.FC = () => {
+const CommentForm: React.FC<{ page: number }> = ({ page }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const postDetail = useAppSelector(state => state.post.postDetail)
@@ -32,12 +33,19 @@ const CommentForm: React.FC = () => {
     }
     try {
       setIsSubmitting(true) // 제출 시작시 버튼 비활성화
-      await CommentApi.postComment(CommentData)
-      await dispatch(getOnePost(postDetail.data.id))
+      const res = await CommentApi.postComment(CommentData)
       e.target.content.value = ""
       setTimeout(() => {
         setIsSubmitting(false) // 제출 완료
       }, 1500)
+      dispatch(
+        commentApi.util.updateQueryData("getCommentList", { postId: postDetail.data.id, pageParam: page }, old => {
+          return {
+            ...old,
+            data: [res.data, ...old.data],
+          }
+        }),
+      )
     } catch {
       alert("댓글 작성에 실패하였습니다")
     }

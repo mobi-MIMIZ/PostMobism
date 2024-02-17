@@ -1,11 +1,27 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { FC } from "react"
 import styled from "styled-components"
 import CommentForm from "./comment-form"
+import { useGetCommentListQuery } from "@/hooks/use-get-comment-list-query"
 import { useAppSelector } from "@/hooks/use-redux-toolkit"
+import { useEffect, useState } from "react"
+import { useInView } from "react-intersection-observer"
 
-const Comments: FC = () => {
-  const commentList = useAppSelector(state => state.comment.commentList)
+const Comments = () => {
+  const [page, setPage] = useState<number>(1)
+  const postDetail = useAppSelector(state => state.post.postDetail)
+
+  const { ref, inView } = useInView()
+
+  useEffect(() => {
+    if (inView) {
+      setPage(page + 1)
+    }
+  }, [inView])
+
+  const { data: commentList } = useGetCommentListQuery({
+    postId: postDetail?.data.id!,
+    pageParam: page,
+  })
 
   return (
     <S.CommentsContainer>
@@ -17,7 +33,8 @@ const Comments: FC = () => {
           <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
         </S.CommentBox>
       ))}
-      <CommentForm />
+      <div ref={ref} />
+      <CommentForm page={page} />
     </S.CommentsContainer>
   )
 }
