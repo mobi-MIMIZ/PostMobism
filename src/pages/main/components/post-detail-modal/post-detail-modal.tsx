@@ -6,6 +6,10 @@ import PostDetailContent from "./components/post-detail-content"
 import Comments from "./components/comment/comments"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getComments } from "@/features/comment/comment.slice"
+import { useInfiniteQuery } from "react-query"
+import { commentApi } from "@/hooks/use-get-comment-list-query"
+import { QUERY_KEY } from "@/consts/query-key"
+import { useInfiniteCommentsQuery } from "@/hooks/use-infinite-comments-query"
 
 type Props = {
   onClose: () => void
@@ -31,33 +35,29 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
 
   const [page, setPage] = useState<number>(1)
 
-  useEffect(() => {
-    if (!postDetail?.data.id) return
+  const { data: commentList, fetchNextPage, hasNextPage, isFetching } = useInfiniteCommentsQuery(postDetail?.data.id)
 
-    const handleScroll = () => {
-      const isAtEndOfPage =
-        window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
-      if (isAtEndOfPage) {
-        setPage(prev => prev + 1)
+  console.log("data", commentList)
+
+  useEffect(() => {
+    if (!postDetail?.data.id || isFetching) return
+    dispatch(getComments({ page, postId: postDetail.data.id }))
+  }, [page, postDetail?.data.id, isFetching])
+
+  const handleScroll = () => {
+    //페이지의 맨 아래에 도달하면 다음 페이지 호출
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+      if (hasNextPage) {
+        fetchNextPage()
       }
     }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [postDetail])
+  }
 
   useEffect(() => {
-    if (!postDetail?.data.id) return
-    console.log("page", page)
-    dispatch(
-      getComments({
-        page,
-        postId: postDetail?.data.id,
-      }),
-    )
-  }, [page])
+    window.addEventListener("scroll", handleScroll)
+    //컴포넌트가 언마운트 시 제거
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   if (!postDetail) return null
 

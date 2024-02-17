@@ -2,6 +2,7 @@ import { CommentApi } from "@/features/comment/comment.api"
 import { getOnePost } from "@/features/post/post.slice"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
+import { useState } from "react"
 import styled from "styled-components"
 
 export type CommentDataType = {
@@ -18,6 +19,7 @@ export type FormElementType = {
 } & React.KeyboardEvent<HTMLFormElement>
 
 const CommentForm: React.FC = () => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const postDetail = useAppSelector(state => state.post.postDetail)
 
@@ -29,9 +31,13 @@ const CommentForm: React.FC = () => {
       parentId: postDetail.data.id,
     }
     try {
+      setIsSubmitting(true) // 제출 시작시 버튼 비활성화
       await CommentApi.postComment(CommentData)
       await dispatch(getOnePost(postDetail.data.id))
       e.target.content.value = ""
+      setTimeout(() => {
+        setIsSubmitting(false) // 제출 완료
+      }, 1500)
     } catch {
       alert("댓글 작성에 실패하였습니다")
     }
@@ -41,7 +47,7 @@ const CommentForm: React.FC = () => {
     <S.Form onSubmit={onSubmitComment}>
       <S.MyProfileImg />
       <S.TextArea placeholder="write your comments...." name="content" />
-      <S.SendBtn type="submit">
+      <S.SendBtn type="submit" disabled={isSubmitting}>
         <Send color="#ECB996" size={22} strokeWidth={3} />
       </S.SendBtn>
     </S.Form>
