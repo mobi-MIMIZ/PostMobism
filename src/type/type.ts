@@ -1,7 +1,8 @@
 export type Post = {
   id: string
-  data: { title: string; content: string; images: string[] }
+  data: { title: string; content: string }
   dataUser: { data: { nickName: string }; profile_url: string; userId: string }
+  dataImage?: []
   createdAt: string
 }
 

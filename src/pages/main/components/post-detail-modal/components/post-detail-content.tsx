@@ -3,7 +3,8 @@ import MMZdialog from "@/components/mmz-dialog"
 import { usePostActions } from "@/hooks/use-post-actions"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
 import { MoreHorizontal } from "lucide-react"
-import { Dispatch, FC, SetStateAction, useState } from "react"
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
   nickName: string
   title: string
   content: string
-  postImages: string[]
+  postImages?: string[]
   weekday: string
   isEditMode: boolean
   setIsEditMode: Dispatch<SetStateAction<boolean>>
@@ -33,15 +34,27 @@ const PostDetailContent: FC<Props> = ({
   const isMyPost: boolean = nickName === localStorage.getItem("userName")
   const [editedTitle, setEditedTitle] = useState<string>(title)
   const [editedContent, setEditedContent] = useState<string>(content)
+  const [searchParams] = useSearchParams()
+  const page = searchParams.get("page") ?? "1"
 
-  const { handleDeletePost, handleEditPost } = usePostActions()
+  const { handleDeletePost, handleEditPost } = usePostActions({ pageParams: parseInt(page) })
 
   const onEditPost = () => {
     setIsEditMode(true)
     setOnShowOptions(false)
   }
 
-  const onSaveEditedValues = (postId: string) => {
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log("Title Changed:", e.target.value)
+    setEditedTitle(e.target.value)
+  }
+
+  const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log("Content Changed:", e.target.value)
+    setEditedContent(e.target.value)
+  }
+
+  const onSaveEditedValues = async (postId: string) => {
     if (isMyPost) {
       try {
         const editedPost = {
@@ -49,7 +62,7 @@ const PostDetailContent: FC<Props> = ({
           title: editedTitle,
           content: editedContent,
         }
-        handleEditPost(editedPost)
+        await handleEditPost(editedPost)
         setIsEditMode(false)
       } catch (error) {
         alert("변경된 내용을 저장하지 못했습니다!")
@@ -90,13 +103,16 @@ const PostDetailContent: FC<Props> = ({
       <S.EditContainer className={isEditMode ? "expand" : ""}>
         {isEditMode ? (
           <>
-            <S.TitleInput type="text" value={editedTitle} onChange={e => setEditedTitle(e.target.value)} />
-            <S.ContentTextarea value={editedContent} onChange={e => setEditedContent(e.target.value)} />
+            <S.TitleInput type="text" value={editedTitle} onChange={onTitleChange} />
+            <S.ContentTextarea value={editedContent} onChange={onContentChange} />
             <MMZbutton
               usage={"PostForm"}
               type={"submit"}
               label={"Save Changes"}
-              onClick={() => onSaveEditedValues(postId)}
+              onClick={() => {
+                console.log("Save Changes Button Clicked")
+                onSaveEditedValues(postId)
+              }}
             />
           </>
         ) : (
@@ -122,7 +138,6 @@ export default PostDetailContent
 const ContentContainer = styled.div`
   min-height: 290px;
   height: fit-content;
-  border-bottom: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
 `
 const UserBox = styled.div`
   ${flexAlignCenter}

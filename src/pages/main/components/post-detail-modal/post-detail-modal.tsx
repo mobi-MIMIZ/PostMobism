@@ -57,15 +57,6 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
     }
   })
 
-  // const onCancelEdit = () => {
-  //   setIsEditMode(false)
-  //   // Reset edited title and content to their original values
-  //   setEditedTitle(title)
-  //   setEditedContent(content)
-  // }
-
-  useEffect(() => console.log("postDetail", postDetail))
-
   if (!postDetail) return
   return (
     <S.Wrapper>
@@ -76,14 +67,21 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
           postId={postDetail.data.id}
           title={postDetail.data.data.title}
           content={postDetail.data.data.content}
-          postImages={postDetail.data.data.images}
+          postImages={postDetail.data.dataImage}
           nickName={postDetail.data.dataUser.data.nickName}
           profileImage={postDetail.data.dataUser.profile_url}
           weekday={postDetail.data.createdAt}
           isEditMode={isEditMode}
           setIsEditMode={setIsEditMode}
         />
-        {isEditMode ? "" : <Comments comments={undefined} />}
+        {isEditMode ? (
+          ""
+        ) : (
+          <>
+            <S.Line />
+            <Comments comments={undefined} />
+          </>
+        )}
       </S.OnePost>
     </S.Wrapper>
   )

@@ -63,7 +63,9 @@ export const PostApi = {
    */
   async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
-    const res = await axiosInstance.patch(POST_PATH + `/${dataId}`, req)
+    const res = await axiosInstance.patch(POST_PATH + `/${dataId}`, {
+      data: req,
+    })
     return res.data
   },
   /**

@@ -421,9 +421,9 @@ style을 적용할 때 통일을 위해 적용할 컨벤션
 
 <h4>main page</h4>
 
-<p>
-    <img src="" />
-</p>
+
+main page에서 보여지는 post들은 pagination으로 보여지도록 했습니다.
+https://github.com/mobi-MIMIZ/PostMobism/assets/134191817/0f7119ef-29e2-4608-9c46-62417bf76191
 <p>
     <img src="" />
 </p>

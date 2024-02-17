@@ -4,11 +4,15 @@ import { Dispatch, FC, FormEvent, SetStateAction, useState } from "react"
 import { ImagePlus, X } from "lucide-react"
 import styled from "styled-components"
 import { usePostActions } from "@/hooks/use-post-actions"
+import { useSearchParams } from "react-router-dom"
 
 const PostContent: FC = () => {
   // preview uploaded images
   const [hasImage, setHasImage] = useState(false)
   const [showImages, setShowImages]: [string[], Dispatch<SetStateAction<string[]>>] = useState<string[]>([])
+  const [searchParam] = useSearchParams()
+
+  const page = searchParam.get("page") ?? "1"
 
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageLists = e.target.files as FileList
@@ -35,7 +39,9 @@ const PostContent: FC = () => {
     }
   }
 
-  const { handleCreatePost } = usePostActions()
+  const { handleCreatePost } = usePostActions({
+    pageParams: parseInt(page),
+  })
 
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -44,7 +50,7 @@ const PostContent: FC = () => {
     formData.append("title", (e.currentTarget.elements.namedItem("title") as HTMLInputElement)?.value || "")
     formData.append("content", (e.currentTarget.elements.namedItem("content") as HTMLInputElement)?.value || "")
     for (let i = 0; i < showImages.length; i++) {
-      formData.append("images[]", showImages[i])
+      formData.append("images", showImages[i])
     }
     try {
       await handleCreatePost(formData)

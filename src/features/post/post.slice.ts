@@ -133,11 +133,8 @@ export const postSlice = createSlice({
       .addCase(editPost.pending, state => {
         state.loading = true
       })
-      .addCase(editPost.fulfilled, (state, action) => {
-        if (state.postList === null) {
-          state.postList = null // null이면 빈 배열로 초기화
-        }
-        state.postList?.data.unshift(action.payload)
+      .addCase(editPost.fulfilled, state => {
+        state.loading = false
       })
       .addCase(editPost.rejected, (state, action) => {
         state.loading = false
