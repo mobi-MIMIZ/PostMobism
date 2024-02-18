@@ -4,14 +4,14 @@ import { FC } from "react"
 import styled from "styled-components"
 
 type Props = {
-  title: string
+  nickName: string
   onClose: () => void
 }
 
-const PostDetailHeader: FC<Props> = ({ title, onClose }) => {
+const PostDetailHeader: FC<Props> = ({ nickName, onClose }) => {
   return (
     <S.HeaderContainer>
-      <S.Title>{title}</S.Title>
+      <S.Title>{nickName}'s Post</S.Title>
       <S.CloseBtn onClick={onClose}>
         <X color="#ECB996" size={24} strokeWidth={4} />
       </S.CloseBtn>
@@ -22,8 +22,8 @@ const PostDetailHeader: FC<Props> = ({ title, onClose }) => {
 export default PostDetailHeader
 
 const HeaderContainer = styled.div`
-  padding: 16px;
-  width: 720px;
+  width: 100%;
+  padding: 10px 0;
   ${flexAlignCenter}
 `
 

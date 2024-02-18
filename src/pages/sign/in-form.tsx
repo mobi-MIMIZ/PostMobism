@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInType } from "@/consts/form-schema"
 import { AuthApi } from "@/features/user/auth.api"
 import { useAuth } from "@/context/auth.ctx"
-import { useState } from "react"
 
 const SignIn = () => {
   const {
@@ -26,21 +25,13 @@ const SignIn = () => {
     },
   })
 
-  const initialUserInfo = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")!) : null
-  const [, setUserInfo] = useState(initialUserInfo)
   const { toMain, toSignUp } = UseNavigation()
   const { signIn } = useAuth()
 
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
-      const userInfo = {
-        userId: res.data.userId,
-        nickName: res.data.info.nickname,
-        profileUrl: res.data.info.profileUrl,
-      }
-      localStorage.setItem("userInfo", JSON.stringify(userInfo))
-      setUserInfo(userInfo)
+      localStorage.setItem("userName", res.data.info.nickName)
       signIn(res.data.token)
       toMain()
     } catch {

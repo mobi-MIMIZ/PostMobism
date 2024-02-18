@@ -19,7 +19,7 @@ export const AuthApi = {
     const res = await axiosInstance.post(PATH + "/sign-in", data)
     const userInfo = {
       userId: res.data.userId,
-      nickName: res.data.info?.nickName,
+      nickName: res.data.info.nickName,
       profileUrl: res.data.info?.profileUrl,
     }
     localStorage.setItem("userInfo", JSON.stringify(userInfo))

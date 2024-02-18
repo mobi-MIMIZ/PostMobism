@@ -1,15 +1,18 @@
 import MMZbutton from "@/components/mmz-button"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { Dispatch, FC, FormEvent, SetStateAction, useState } from "react"
+import { FC, FormEvent, useState } from "react"
 import { ImagePlus, X } from "lucide-react"
 import styled from "styled-components"
 import { usePostActions } from "@/hooks/use-post-actions"
-import { useAppSelector } from "@/hooks/use-redux-toolkit"
+import { useSearchParams } from "react-router-dom"
 
 const PostContent: FC = () => {
   // preview uploaded images
   const [hasImage, setHasImage] = useState(false)
-  const [showImages, setShowImages]: [string[], Dispatch<SetStateAction<string[]>>] = useState<string[]>([])
+  const [showImages, setShowImages] = useState<string[]>([])
+  const [searchParam] = useSearchParams()
+
+  const page = searchParam.get("page") ?? "1"
 
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageLists = e.target.files as FileList
@@ -19,7 +22,6 @@ const PostContent: FC = () => {
       const currentImageUrl = URL.createObjectURL(imageLists[i])
       imageUrlLists.unshift(currentImageUrl)
     }
-
     if (imageUrlLists.length > 5) {
       imageUrlLists = imageUrlLists.slice(0, 5)
       alert("한 번에 이미지를 5개 이상 추가하실 수 없습니다.")
@@ -37,19 +39,19 @@ const PostContent: FC = () => {
     }
   }
 
-  const { handleCreatePost } = usePostActions()
-  const currentUser = useAppSelector(state => state.user[0])
+  const { handleCreatePost } = usePostActions({
+    pageParams: parseInt(page),
+  })
 
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const title = formData.get("title") as string
-    const content = formData.get("content") as string
 
     try {
-      await handleCreatePost(e, title, content, hasImage, showImages, currentUser)
+      await handleCreatePost(formData)
     } catch (error) {
+      alert("게시글을 등록하지 못했습니다! 잠시 후 다시 시도해주세요.")
       console.error("게시글 등록 중 에러 발생:", error)
     }
   }
@@ -72,7 +74,7 @@ const PostContent: FC = () => {
         <div>add image</div>
         <ImagePlus color="#ecb996" size={28} />
       </S.Label>
-      <S.AddImage type="file" name="file" id="file" multiple accept="image/*" onChange={onUploadImage} />
+      <S.AddImage type="files" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
       <MMZbutton usage={"PostForm"} type={"submit"} label={"POST"} />
     </S.Container>
   )
@@ -80,15 +82,17 @@ const PostContent: FC = () => {
 export default PostContent
 
 const Container = styled.form`
-  height: 90%;
-  ${flexCenter}
+  height: 80%;
+  margin-top: 6%;
+  ${flexAlignCenter}
+  justify-content: space-around;
   flex-direction: column;
 `
 const Title = styled.input`
-  width: 670px;
-  height: 80px;
-  margin: 20px 0;
+  width: 540px;
+  height: 60px;
   padding-left: 30px;
+  margin-bottom: 10px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 6px;
   &::placeholder {
@@ -98,8 +102,8 @@ const Title = styled.input`
 `
 const Content = styled.textarea`
   padding: 10px 30px;
-  width: 670px;
-  height: 440px;
+  width: 540px;
+  height: 360px;
   ${flexCenter}
   font-size: ${({ theme }) => theme.FONT_SIZE.large};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
@@ -115,7 +119,7 @@ const AddImage = styled.input`
   display: none;
 `
 const Label = styled.label`
-  width: 670px;
+  width: 540px;
   height: 90px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 6px;

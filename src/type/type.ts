@@ -1,18 +1,34 @@
 export type Post = {
   id: string
-  title: string
-  content: string
-  User: User
-  Post_img?: string[]
-  Comments?: Comment[]
+  data: { title: string; content: string }
+  dataUser: { data: { nickName: string }; profile_url: string; userId: string }
+  dataImage?: []
   createdAt: string
 }
 
 export type Comment = {
   id: string
-  content: string
-  User: User
+  data: { content: string }
+  dataUser: { data: { nickName: string }; profile_url: string; userId: string }
   createdAt: string
+}
+
+export type Pagination = {
+  start: number
+  end: number
+  total: number
+  set: number
+  current: number
+}
+
+export type TPostsResponse = {
+  data: Post[] | []
+  pageNation?: Pagination
+}
+
+export type TCommentsResponse = {
+  data: Comment[]
+  pageNation?: Pagination
 }
 
 export type User = {
@@ -20,6 +36,3 @@ export type User = {
   nickName: string
   profileImg: string
 }
-/**
- * 해당 컴포넌트만이 아닌 여러 컴포넌트에서 import되는 type들을 분리하였습니다.
- */

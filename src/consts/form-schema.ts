@@ -22,4 +22,5 @@ export type _SignInType = z.infer<typeof SignInSchema>
 
 export type SignInType = _SignInType & {
   token?: string
+  nickName?: string
 }

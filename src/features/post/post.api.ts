@@ -1,5 +1,6 @@
+import { TPostsResponse } from "@/type/type"
 import { axiosInstance } from "../core.api"
-import { TGetPostRequest, Post } from "@/type/dto/post.dto"
+import { Post } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
 
@@ -10,15 +11,27 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPost({ id, title }: TGetPostRequest) {
-    const res = await axiosInstance.get<{ title: string; content: string }[]>(POST_PATH, {
+  async getPosts(pageParam: number) {
+    const res = await axiosInstance.get<TPostsResponse>(POST_PATH, {
       params: {
-        id,
-        title,
+        page: pageParam,
       },
     })
     return res.data
   },
+
+  async getOnePost(postId: string) {
+    const res = await axiosInstance.get<{
+      data: Post
+      children: Comment
+    }>("/data/detail/post", {
+      params: {
+        dataId: postId,
+      },
+    })
+    return res.data
+  },
+
   /**
    * @function postPost
    * @method POST
@@ -27,9 +40,11 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ title, content }: Post) {
+  async postPost({ title, content }: { title: string; content: string }) {
     const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData)
+    const res = await axiosInstance.post(POST_PATH, postData, {
+      params: { auth: "true" },
+    })
     return res.data
   },
   /**
@@ -39,7 +54,11 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH + `${dataId}`)
+    const res = await axiosInstance.delete(POST_PATH, {
+      params: {
+        dataId,
+      },
+    })
     return res
   },
   /**
@@ -50,13 +69,13 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async editPost({ title, content }: Post, dataId: string) {
+  async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
     const res = await axiosInstance.patch(POST_PATH, {
       params: {
         dataId,
       },
-      req,
+      data: req,
     })
     return res.data
   },

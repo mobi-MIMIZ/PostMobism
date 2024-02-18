@@ -30,8 +30,8 @@ const usageCSS = {
   PostForm: css`
     color: ${({ theme }) => theme.COLORS.beige[500]};
     background-color: ${({ theme }) => theme.COLORS.beige[100]};
-    width: 670px;
-    height: 69px;
+    width: 540px;
+    height: 64px;
     font-size: ${({ theme }) => theme.FONT_SIZE.XXLarge};
     border-radius: 8px;
   `,

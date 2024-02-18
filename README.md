@@ -167,7 +167,7 @@ vercel 👉 <a href="#">
     <td>2024-02-09</td>
     <td>ETA 05</td>
     <td>developing sign page</td>
-    <td>-</td>
+    <td>holiday(before)</td>
   </tr>
   <tr>
     <td>day 08</td>
@@ -181,13 +181,13 @@ vercel 👉 <a href="#">
     <td>2024-02-11</td>
     <td>ETA 06</td>
     <td>developing main & detail page</td>
-    <td>-</td>
+    <td>holiday(after)</td>
   </tr>
   <tr>
     <td>day 09</td>
     <td>2024-02-12</td>
     <td>ETA 07</td>
-    <td>check</td>
+    <td>developing main & detail page</td>
     <td>-</td>
   </tr>
   <tr>
@@ -208,7 +208,14 @@ vercel 👉 <a href="#">
     <td>day 12</td>
     <td>2024-02-15</td>
     <td>ETA 10</td>
-    <td>(delay)</td>
+    <td>refactor</td>
+    <td>clear over-engineering</td>
+  </tr>
+    <tr>
+    <td>day 13</td>
+    <td>2024-02-16</td>
+    <td>ETA 11</td>
+    <td>re-develop</td>
     <td>-</td>
   </tr>
 </table>
@@ -403,48 +410,29 @@ style을 적용할 때 통일을 위해 적용할 컨벤션
 
 <h4>main page</h4>
 
-<p>
-    <img src="" />
-</p>
-<p>
-    <img src="" />
-</p>
+
 
 <br />
 
 <h4>main page</h4>
 
-<p>
-    <img src="" />
-</p>
-<p>
-    <img src="" />
-</p>
-<p>
-    <img src="" />
-</p>
+
+main page에서 보여지는 post들은 pagination으로 보여지도록 했습니다.
+
+https://github.com/mobi-MIMIZ/PostMobism/assets/134191817/0f7119ef-29e2-4608-9c46-62417bf76191
+
 
 <br />
 
 <h4>detail page</h4>
 
-<p>
-    <img src="" />
-</p>
-<p>
-    <img src="" />
-</p>
-<p>
-    <img src="" />
-</p>
+
 
 <br />
 
 <h4>my dialog</h4>
 
-<p>
-    <img src="" />
-</p>
+
 
 <br />
 

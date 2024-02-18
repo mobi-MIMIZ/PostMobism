@@ -7,6 +7,10 @@ export const store = configureStore({
     user: userReducer,
     post: postReducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false, // 불필요한 경고를 피하기 위해 추가
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>
