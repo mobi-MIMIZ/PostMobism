@@ -38,14 +38,18 @@ export const getPosts = createAsyncThunk("post/getPosts", async (pageParam: numb
 })
 
 // postPost : create
-export const postPost = createAsyncThunk<Post, { formData: FormData }>("post/postPost", async ({ formData }) => {
-  try {
-    const res = await PostApi.postPost({ formData })
-    return res.data
-  } catch (error) {
-    throw new Error("게시글을 등록하는 데 실패했습니다!")
-  }
-})
+export const postPost = createAsyncThunk<Post, { title: string; content: string }>(
+  "post/postPost",
+  async ({ title, content }) => {
+    try {
+      const postData = { title, content }
+      const res = await PostApi.postPost(postData)
+      return res.data
+    } catch (error) {
+      throw new Error("게시글을 등록하는 데 실패했습니다!")
+    }
+  },
+)
 
 // deletePost : delete
 export const deletePost = createAsyncThunk<void, string>("post/deletePost", async (postId: string) => {
@@ -106,7 +110,7 @@ export const postSlice = createSlice({
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
         state.postList = {
           data: [],
-          pageNation: {},
+          pageNation: undefined,
         }
       })
       // postPost : create

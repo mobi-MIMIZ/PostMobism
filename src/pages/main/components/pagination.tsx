@@ -32,7 +32,6 @@ const Pagination = ({
   const handlePrev = () => onPageChange?.(Math.max(currentPage - 1, 1))
   const handleTarget = (pageNumber: number) => onPageChange?.(pageNumber)
 
-  // 페이지 그룹을 바꿔주는 함수 => 현재 페이지가 바뀔 때마다 실행
   // Update URL when currentPage changes
   useEffect(() => {
     const newCurrentGroup = Math.ceil(currentPage / pagesPerGroup)

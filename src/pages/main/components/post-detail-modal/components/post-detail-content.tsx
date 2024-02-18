@@ -47,7 +47,6 @@ const PostDetailContent: FC<Props> = ({
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedTitle(e.target.value)
   }
-
   const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEditedContent(e.target.value)
   }

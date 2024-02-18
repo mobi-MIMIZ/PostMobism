@@ -17,7 +17,6 @@ export const PostApi = {
         page: pageParam,
       },
     })
-    console.log("getPosts", res.data)
     return res.data
   },
 
@@ -41,8 +40,9 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ formData }: { formData: FormData }) {
-    const res = await axiosInstance.post(POST_PATH, formData, {
+  async postPost({ title, content }: { title: string; content: string }) {
+    const postData = { title, content }
+    const res = await axiosInstance.post(POST_PATH, postData, {
       params: { auth: "true" },
     })
     return res.data
@@ -54,7 +54,11 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH + `/${dataId}`)
+    const res = await axiosInstance.delete(POST_PATH, {
+      params: {
+        dataId,
+      },
+    })
     return res
   },
   /**
@@ -67,7 +71,10 @@ export const PostApi = {
    */
   async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
-    const res = await axiosInstance.patch(POST_PATH + `/${dataId}`, {
+    const res = await axiosInstance.patch(POST_PATH, {
+      params: {
+        dataId,
+      },
       data: req,
     })
     return res.data
