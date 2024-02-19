@@ -11,7 +11,10 @@ export const store = configureStore({
     comment: commentReducer,
     [commentApi.reducerPath]: commentApi.reducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(commentApi.middleware),
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false, // 불필요한 경고를 피하기 위해 추가
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

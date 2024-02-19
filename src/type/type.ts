@@ -2,6 +2,7 @@ export type Post = {
   id: string
   data: { title: string; content: string }
   dataUser: { data: { nickName: string }; profile_url: string; userId: string }
+  dataImage?: []
   createdAt: string
 }
 
@@ -21,13 +22,13 @@ export type Pagination = {
 }
 
 export type TPostsResponse = {
-  data: Post[]
-  pagination?: Pagination
+  data: Post[] | []
+  pageNation?: Pagination
 }
 
 export type TCommentsResponse = {
   data: Comment[]
-  pagination?: Pagination
+  pageNation?: Pagination
 }
 
 export type User = {
@@ -35,6 +36,3 @@ export type User = {
   nickName: string
   profileImg: string
 }
-/**
- * 해당 컴포넌트만이 아닌 여러 컴포넌트에서 import되는 type들을 분리하였습니다.
- */

@@ -6,20 +6,20 @@ import { useEffect, useState } from "react"
 import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getOnePost, getPosts } from "@/features/post/post.slice"
-import { commentApi } from "@/hooks/use-get-comment-list-query"
+import { useSearchParams } from "react-router-dom"
 
 const MainPage = () => {
   // const [postList] = useState(MockPostsData(70))
   const [isOpenDetailPost, setIsOpenDetailPost] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const postList = useAppSelector(state => state.post.postList)
+  const postList = useAppSelector(state => state.post.postList) // perPage
+  const [searchParams] = useSearchParams()
 
-  const perPage = 6
-  const [currentPage, setCurrentPage] = useState(1)
+  const page = parseInt(searchParams.get("page") || "1")
+  const [currentPage, setCurrentPage] = useState(page)
 
   const onOpenDetailModal = async (postId: string) => {
     await dispatch(getOnePost(postId))
-    dispatch(commentApi.util.resetApiState())
     setIsOpenDetailPost(true)
   }
 
@@ -28,8 +28,8 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    dispatch(getPosts())
-  }, [])
+    dispatch(getPosts(currentPage))
+  }, [currentPage, dispatch])
 
   return (
     <S.Wrapper>
@@ -46,14 +46,16 @@ const MainPage = () => {
         />
       ))}
       <Pagination
-        listLength={postList?.data.length ?? 0}
-        currentPage={currentPage}
-        perPage={perPage}
+        startPage={postList.pageNation?.start}
+        endPage={postList.pageNation?.end}
+        currentPage={postList.pageNation?.current}
+        totalPage={postList.pageNation?.total}
         onPageChange={onPageChange}
       />
     </S.Wrapper>
   )
 }
+
 export default MainPage
 
 const Wrapper = styled.div`

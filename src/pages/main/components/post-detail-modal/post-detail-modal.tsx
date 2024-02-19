@@ -1,10 +1,11 @@
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostDetailHeader from "./components/post-detail-header"
 import PostDetailContent from "./components/post-detail-content"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
+import { getComments } from "@/features/comment/comment.slice"
 import Comments from "./components/comment/comments"
-import { useAppSelector } from "@/hooks/use-redux-toolkit"
 
 type Props = {
   onClose: () => void
@@ -19,31 +20,68 @@ export type CommentListType = {
     profileUrl: string | undefined
     userId: string
   }
-  dataImage: any[]
-  dataUser: any
+  dataImage: string[]
+  dataUser: string
   id: string
 }
 
 const PostDetailModal: FC<Props> = ({ onClose }) => {
+  const dispatch = useAppDispatch()
   const postDetail = useAppSelector(state => state.post.postDetail)
+
+  const [page, setPage] = useState<number>(1)
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!postDetail?.data.id) return
+    dispatch(
+      getComments({
+        page,
+        postId: postDetail?.data.id,
+      }),
+    )
+  }, [page])
+
+  // 스크롤 최하단 시 fetchNextPage실행
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight
+    const scrollTop = document.documentElement.scrollTop
+    const clientHeight = document.documentElement.clientHeight
+    if (scrollTop + clientHeight >= scrollHeight) return setPage(prev => prev + 1)
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
 
   if (!postDetail) return
   return (
-    <S.Wrapper >
+    <S.Wrapper>
       <S.OnePost>
-        <>
-          <PostDetailHeader title={postDetail.data.data.title} onClose={onClose} />
-          <S.Line />
-          <PostDetailContent
-            postId={postDetail.data.id}
-            content={postDetail.data.data.content}
-            nickName={postDetail.data.dataUser.data.nickName}
-            profileImage={postDetail.data.dataUser.profile_url}
-            weekday={postDetail.data.createdAt}
-          />
-          <S.Line />
-          <Comments />
-        </>
+        <PostDetailHeader nickName={postDetail.data.dataUser.data.nickName} onClose={onClose} />
+        <S.Line />
+        <PostDetailContent
+          postId={postDetail.data.id}
+          title={postDetail.data.data.title}
+          content={postDetail.data.data.content}
+          postImages={postDetail.data.dataImage}
+          nickName={postDetail.data.dataUser.data.nickName}
+          profileImage={postDetail.data.dataUser.profile_url}
+          weekday={postDetail.data.createdAt}
+          isEditMode={isEditMode}
+          setIsEditMode={setIsEditMode}
+        />
+        {isEditMode ? (
+          ""
+        ) : (
+          <>
+            <S.Line />
+            <Comments />
+          </>
+        )}
       </S.OnePost>
     </S.Wrapper>
   )
@@ -59,8 +97,8 @@ const Wrapper = styled.div`
 
 const OnePost = styled.div`
   ${PositionCenter}
-  width: 720px;
-  height: 950px;
+  width: 600px;
+  height: 800px;
   background-color: ${({ theme }) => theme.COLORS.white};
   box-shadow: 0px 10px 10px 10px rgba(236, 185, 150, 0.2);
   border-radius: 16px;

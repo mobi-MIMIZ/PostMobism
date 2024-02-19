@@ -4,7 +4,7 @@ import { FC, MouseEventHandler } from "react"
 import styled from "styled-components"
 
 type Props = {
-    onClose : MouseEventHandler<HTMLButtonElement>;
+  onClose: MouseEventHandler<HTMLButtonElement>
 }
 
 const PostHeader: FC<Props> = ({ onClose }) => {
@@ -22,9 +22,9 @@ export default PostHeader
 
 const Container = styled.div`
   padding: 16px;
-  width: 720px;
+  width: 100%;
   ${flexAlignCenter}
-  border-bottom: 1px solid ${({theme}) => theme.COLORS.beige[500]};
+  border-bottom: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
 `
 
 const Title = styled.p`
@@ -33,8 +33,8 @@ const Title = styled.p`
   margin-left: 10px;
   padding: 0 20px;
   word-break: keep-all;
-  flex-grow: 1; 
-  color: ${({theme}) => theme.COLORS.beige[500]};
+  flex-grow: 1;
+  color: ${({ theme }) => theme.COLORS.beige[500]};
 `
 
 const CloseBtn = styled.button`

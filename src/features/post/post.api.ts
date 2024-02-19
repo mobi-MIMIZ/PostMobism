@@ -1,5 +1,6 @@
-import { Post, TPostsResponse } from "@/type/type"
+import { TPostsResponse } from "@/type/type"
 import { axiosInstance } from "../core.api"
+import { Post } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
 
@@ -10,8 +11,12 @@ export const PostApi = {
    * @params dataName: string
    * @queries parentId: string, page: number, limit: boolean
    */
-  async getPosts() {
-    const res = await axiosInstance.get<TPostsResponse>(POST_PATH)
+  async getPosts(pageParam: number) {
+    const res = await axiosInstance.get<TPostsResponse>(POST_PATH, {
+      params: {
+        page: pageParam,
+      },
+    })
     return res.data
   },
 
@@ -26,6 +31,7 @@ export const PostApi = {
     })
     return res.data
   },
+
   /**
    * @function postPost
    * @method POST
@@ -37,7 +43,6 @@ export const PostApi = {
   async postPost({ title, content }: { title: string; content: string }) {
     const postData = { title, content }
     const res = await axiosInstance.post(POST_PATH, postData, {
-      //auth:true.. (dataUser:null => console창 문제)
       params: { auth: "true" },
     })
     return res.data
@@ -49,7 +54,11 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH + `${dataId}`)
+    const res = await axiosInstance.delete(POST_PATH, {
+      params: {
+        dataId,
+      },
+    })
     return res
   },
   /**
@@ -66,7 +75,7 @@ export const PostApi = {
       params: {
         dataId,
       },
-      req,
+      data: req,
     })
     return res.data
   },

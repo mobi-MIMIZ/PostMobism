@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PostApi } from "./post.api"
 
 type PostState = {
-  postList: TPostsResponse | null
+  postList: TPostsResponse
   postDetail: {
     data: Post
     children: Comment
@@ -15,7 +15,7 @@ type PostState = {
 const initialState: PostState = {
   postList: {
     data: [],
-    pagination: undefined,
+    pageNation: undefined,
   },
   postDetail: null,
   loading: false,
@@ -28,9 +28,9 @@ export const getOnePost = createAsyncThunk("post/getPost", async (postId: string
 })
 
 // getPost : read
-export const getPosts = createAsyncThunk("post/getPosts", async () => {
+export const getPosts = createAsyncThunk("post/getPosts", async (pageParam: number) => {
   try {
-    const posts = await PostApi.getPosts()
+    const posts = await PostApi.getPosts(pageParam)
     return posts
   } catch (error) {
     throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")
@@ -73,12 +73,10 @@ export const editPost = createAsyncThunk<Post, { post: Partial<{ title: string; 
   },
 )
 
-//Reducer와 action 정의
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {},
-  //extraReducers를 사용하여 비동기 액션(getPosts)의 성공, 실패 및 보류 상태에 따라 상태를 업데이트
   extraReducers(builder) {
     builder
       // getOnePost : read
@@ -106,10 +104,14 @@ export const postSlice = createSlice({
         state.error = null
         state.postList = action.payload
       })
+      // postPost : create
       .addCase(getPosts.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
-        state.postList = null
+        state.postList = {
+          data: [],
+          pageNation: undefined,
+        }
       })
       // postPost : create
       .addCase(postPost.pending, state => {
@@ -138,11 +140,8 @@ export const postSlice = createSlice({
       .addCase(editPost.pending, state => {
         state.loading = true
       })
-      .addCase(editPost.fulfilled, (state, action) => {
-        if (state.postList === null) {
-          state.postList = null // null이면 빈 배열로 초기화
-        }
-        state.postList?.data.unshift(action.payload)
+      .addCase(editPost.fulfilled, state => {
+        state.loading = false
       })
       .addCase(editPost.rejected, (state, action) => {
         state.loading = false
@@ -150,8 +149,6 @@ export const postSlice = createSlice({
       })
   },
 })
-
-// export const { setPostList } = postSlice.actions
 
 export default postSlice.reducer
 
