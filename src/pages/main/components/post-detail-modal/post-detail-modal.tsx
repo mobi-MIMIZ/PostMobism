@@ -79,7 +79,7 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
         ) : (
           <>
             <S.Line />
-            <Comments comments={undefined} />
+            <Comments />
           </>
         )}
       </S.OnePost>

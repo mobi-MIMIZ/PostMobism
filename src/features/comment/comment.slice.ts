@@ -1,6 +1,7 @@
 import { TCommentsResponse } from "@/type/type"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { CommentApi } from "./comment.api"
+import { CommentDataType } from "@/pages/main/components/post-detail-modal/components/comment/comment-form"
 
 type CommentState = {
   commentList: TCommentsResponse | null
@@ -11,7 +12,7 @@ type CommentState = {
 const initialState: CommentState = {
   commentList: {
     data: [],
-    pageNation: undefined,
+    pagination: undefined,
   },
 
   loading: false,
@@ -34,6 +35,16 @@ export const getComments = createAsyncThunk<TCommentsResponse, { page: number; p
   },
 )
 
+export const postComment = createAsyncThunk("comment/postComment", async ({ parentId, content }: CommentDataType) => {
+  try {
+    const commentData = { parentId, content }
+    const res = await CommentApi.postComment(commentData)
+    return res.data
+  } catch (error) {
+    throw new Error("댓글 작성에 실패하였습니다")
+  }
+})
+
 //Reducer와 action 정의
 export const commentSlice = createSlice({
   name: "comment",
@@ -51,13 +62,24 @@ export const commentSlice = createSlice({
         state.error = null
         state.commentList = {
           data: state.commentList?.data.concat(action.payload.data)!,
-          pageNation: action.payload.pageNation,
+          pagination: action.payload.pagination,
         }
       })
       .addCase(getComments.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
         state.commentList = null
+      })
+      // postComment: create
+      .addCase(postComment.pending, state => {
+        state.loading = true
+      })
+      .addCase(postComment.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(postComment.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || "댓글 작성에 실패하였습니다"
       })
   },
 })

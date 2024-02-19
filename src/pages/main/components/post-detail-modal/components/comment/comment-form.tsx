@@ -1,12 +1,60 @@
+import { CommentApi } from "@/features/comment/comment.api"
+import { commentApi } from "@/hooks/use-get-comment-list-query"
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
+import { FC, useState } from "react"
 import styled from "styled-components"
 
-const CommentForm = () => {
+export type CommentDataType = {
+  content: string
+  parentId: string
+}
+
+export type FormElementType = {
+  target: {
+    content: {
+      value: string
+    }
+  }
+} & React.KeyboardEvent<HTMLFormElement>
+
+const CommentForm: FC<{ page: number }> = ({ page }) => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
+  const postDetail = useAppSelector(state => state.post.postDetail)
+
+  const onSubmitComment = async (e: FormElementType) => {
+    e.preventDefault()
+    if (!postDetail?.data.id) return
+    const CommentData: CommentDataType = {
+      content: e.target.content.value,
+      parentId: postDetail.data.id,
+    }
+    try {
+      setIsSubmitting(true) // 제출 시작시 버튼 비활성화
+      const res = await CommentApi.postComment(CommentData)
+      e.target.content.value = ""
+      setTimeout(() => {
+        setIsSubmitting(false) // 제출 완료
+      }, 1500)
+      dispatch(
+        commentApi.util.updateQueryData("getCommentList", { postId: postDetail.data.id, pageParam: page }, old => {
+          return {
+            ...old,
+            data: [res.data, ...old.data],
+          }
+        }),
+      )
+    } catch {
+      alert("댓글 작성에 실패하였습니다")
+    }
+  }
+
   return (
-    <S.Form>
+    <S.Form onSubmit={onSubmitComment}>
       <S.MyProfileImg />
-      <S.TextArea placeholder="write your comments...." />
-      <S.SendBtn type="submit">
+      <S.TextArea placeholder="write your comments...." name="content" />
+      <S.SendBtn type="submit" disabled={isSubmitting}>
         <Send color="#ECB996" size={22} strokeWidth={3} />
       </S.SendBtn>
     </S.Form>
