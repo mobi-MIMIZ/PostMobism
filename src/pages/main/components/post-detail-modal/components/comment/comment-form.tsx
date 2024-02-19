@@ -2,7 +2,7 @@ import { CommentApi } from "@/features/comment/comment.api"
 import { commentApi } from "@/hooks/use-get-comment-list-query"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { Send } from "lucide-react"
-import { useState } from "react"
+import { FC, useState } from "react"
 import styled from "styled-components"
 
 export type CommentDataType = {
@@ -18,7 +18,7 @@ export type FormElementType = {
   }
 } & React.KeyboardEvent<HTMLFormElement>
 
-const CommentForm: React.FC<{ page: number }> = ({ page }) => {
+const CommentForm: FC<{ page: number }> = ({ page }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const postDetail = useAppSelector(state => state.post.postDetail)

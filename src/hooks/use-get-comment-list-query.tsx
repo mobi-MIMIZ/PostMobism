@@ -1,8 +1,8 @@
-import { ACCESS_TOKEN } from "@/consts/keys"
+import { TokenRepository } from "@/repository/token-repository"
 import { TCommentsResponse } from "@/type/type"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-const token = localStorage.getItem(ACCESS_TOKEN)
+const token = TokenRepository.getToken()
 
 export const commentApi = createApi({
   reducerPath: "commentApi",
