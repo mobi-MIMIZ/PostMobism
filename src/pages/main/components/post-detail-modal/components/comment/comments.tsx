@@ -1,27 +1,51 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { Comment, Post } from "@/type/type"
-import { FC } from "react"
 import styled from "styled-components"
 import CommentForm from "./comment-form"
+import { useGetCommentListQuery } from "@/hooks/use-get-comment-list-query"
+import { useAppSelector } from "@/hooks/use-redux-toolkit"
+import { useEffect, useRef, useState } from "react"
+import { useInView } from "react-intersection-observer"
+import { Comment } from "@/type/type"
 
-type Props = {
-  // 객체의 타입을 추론해서 쓴다 ["comments"]
-  // (typeof MockOnePostData)["Comments"]
-  // Posts[number] 배열 하나의 요소의 타입만 가져올수있다
-  comments: Post["Comments"]
-}
+const Comments = () => {
+  const [page, setPage] = useState<number>(1)
+  const commentRef = useRef<HTMLDivElement>(null)
+  const postDetail = useAppSelector(state => state.post.postDetail)
 
-const Comments: FC<Props> = ({ comments }) => {
+  const { ref, inView } = useInView()
+
+  useEffect(() => {
+    if (inView) {
+      setPage(page + 1)
+    }
+  }, [inView])
+
+  const { data: commentList } = useGetCommentListQuery({
+    postId: postDetail?.data.id!,
+    pageParam: page,
+  })
+
+  // 채팅 창 스크롤을 항상 최하단에 위치 시키는 로직
+  useEffect(() => {
+    if (commentRef.current) {
+      commentRef.current.scrollTop = commentRef.current.scrollHeight
+    }
+  }, [commentList])
+
   return (
-    <S.CommentsContainer>
-      {comments?.map((comment: Comment) => (
-        <S.CommentBox key={comment.id}>
-          <S.ProfileImg src={comment.User.profileImg} />
-          <S.NickName>{comment.User.nickName}</S.NickName>
-          <S.Content>{comment.content}</S.Content>
-          <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
-        </S.CommentBox>
-      ))}
+    <S.CommentsContainer ref={commentRef}>
+      {commentList?.data
+        ?.slice()
+        .reverse()
+        .map((comment: Comment) => (
+          <S.CommentBox key={comment.id}>
+            <S.ProfileImg src={comment.dataUser.profile_url} />
+            <S.NickName>{comment.dataUser.data.nickName}</S.NickName>
+            <S.Content>{comment.data.content}</S.Content>
+            <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
+          </S.CommentBox>
+        ))}
+      <div ref={ref} />
       <CommentForm />
     </S.CommentsContainer>
   )
@@ -30,7 +54,7 @@ const Comments: FC<Props> = ({ comments }) => {
 export default Comments
 
 const CommentsContainer = styled.div`
-  height: 444px;
+  height: 280px;
   width: 100%;
   overflow-y: auto;
 `

@@ -44,10 +44,8 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
 
   // 스크롤 최하단 시 fetchNextPage실행
   const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight
-    const scrollTop = document.documentElement.scrollTop
-    const clientHeight = document.documentElement.clientHeight
-    if (scrollTop + clientHeight >= scrollHeight) return setPage(prev => prev + 1)
+    const { scrollHeight, scrollTop, clientHeight } = document.documentElement
+    scrollTop + clientHeight >= scrollHeight && setPage(prevPage => prevPage + 1)
   }
 
   useEffect(() => {
@@ -79,7 +77,7 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
         ) : (
           <>
             <S.Line />
-            <Comments comments={undefined} />
+            <Comments />
           </>
         )}
       </S.OnePost>

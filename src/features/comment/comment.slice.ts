@@ -23,13 +23,23 @@ export const getComments = createAsyncThunk<TCommentsResponse, { page: number; p
   "comment/getComments",
   async ({ page, postId }) => {
     try {
-      const posts = await CommentApi.getComment({
-        pageParam: page,
-        parentId: postId,
-      })
+      const posts = await CommentApi.getComment({ page, postId })
       return posts
     } catch (error) {
       throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")
+    }
+  },
+)
+
+export const postComment = createAsyncThunk(
+  "comment/postComment",
+  async ({ parentId, content }: { parentId: string; content: string }) => {
+    try {
+      const commentData = { parentId, content }
+      const res = await CommentApi.postComment(commentData)
+      return res.data
+    } catch (error) {
+      throw new Error("댓글 작성에 실패하였습니다")
     }
   },
 )
@@ -58,6 +68,17 @@ export const commentSlice = createSlice({
         state.loading = false
         state.error = action.error.message || "예기치 못한 에러로 게시글 데이터를 불러오지 못했습니다!"
         state.commentList = null
+      })
+      // postComment: create
+      .addCase(postComment.pending, state => {
+        state.loading = true
+      })
+      .addCase(postComment.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(postComment.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || "댓글 작성에 실패하였습니다"
       })
   },
 })

@@ -1,21 +1,25 @@
 import axios from "axios"
 import { AuthApi } from "./user/auth.api"
 import cookieStorage from "@/utils/cookie-storage"
-import { ACCESS_TOKEN } from "@/consts/keys"
+import { TOKEN_KEY, TokenRepository } from "@/repository/token-repository"
 
-const token = localStorage.getItem(ACCESS_TOKEN)
+const token = TokenRepository.getToken()
 
-export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
-  headers: {
-    authorization: token ? `Bearer ${token}` : null,
-  },
-  params: {
-    apiKey: import.meta.env.VITE_API_KEY,
-    pair: import.meta.env.VITE_PAIR,
-  },
-  withCredentials: true, // 요청 시에 쿠키를 포함하도록 설정
-})
+export const createAxiosInstance = (token: string | null) => {
+  return axios.create({
+    baseURL: import.meta.env.VITE_BACKEND_URL,
+    headers: {
+      authorization: token ? `Bearer ${token}` : null,
+    },
+    params: {
+      apiKey: import.meta.env.VITE_API_KEY,
+      pair: import.meta.env.VITE_PAIR,
+    },
+    withCredentials: true,
+  })
+}
+
+export const axiosInstance = createAxiosInstance(token)
 
 /**
  * 응답 인터셉터 (interceptors.response) : 응답을 보내기전 intercept하여 해당 로직을 실행
@@ -57,7 +61,7 @@ axiosInstance.interceptors.response.use(
           const response = await AuthApi.RefreshToken()
           const token = response.data?.token
 
-          cookieStorage.setCookie(ACCESS_TOKEN, token, 60 * 24)
+          cookieStorage.setCookie(TOKEN_KEY, token, 60 * 24)
           // 발급 받은 토큰으로 요청에 토큰 수정 (현재 실패한 요청의 헤더에 새로 발급받은 액세스 토큰을 설정)
           // why? 👉 리프레시된 토큰으로 다시 시도 가능
           originalRequest.headers.common["Authorization"] = `Bearer ${token}`
