@@ -1,6 +1,7 @@
 import { TCommentsResponse } from "@/type/type"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { CommentApi } from "./comment.api"
+import { CommentDataType } from "@/pages/main/components/post-detail-modal/components/comment/comment-form"
 
 type CommentState = {
   commentList: TCommentsResponse | null
@@ -31,18 +32,15 @@ export const getComments = createAsyncThunk<TCommentsResponse, { page: number; p
   },
 )
 
-export const postComment = createAsyncThunk(
-  "comment/postComment",
-  async ({ parentId, content }: { parentId: string; content: string }) => {
-    try {
-      const commentData = { parentId, content }
-      const res = await CommentApi.postComment(commentData)
-      return res.data
-    } catch (error) {
-      throw new Error("댓글 작성에 실패하였습니다")
-    }
-  },
-)
+export const postComment = createAsyncThunk("comment/postComment", async ({ parentId, content }: CommentDataType) => {
+  try {
+    const commentData = { parentId, content }
+    const res = await CommentApi.postComment(commentData)
+    return res.data
+  } catch (error) {
+    throw new Error("댓글 작성에 실패하였습니다")
+  }
+})
 
 //Reducer와 action 정의
 export const commentSlice = createSlice({

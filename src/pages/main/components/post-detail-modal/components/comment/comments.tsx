@@ -5,7 +5,6 @@ import { useGetCommentListQuery } from "@/hooks/use-get-comment-list-query"
 import { useAppSelector } from "@/hooks/use-redux-toolkit"
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
-import { Comment } from "@/type/type"
 
 const Comments = () => {
   const [page, setPage] = useState<number>(1)
@@ -25,6 +24,8 @@ const Comments = () => {
     pageParam: page,
   })
 
+  console.log(commentList)
+
   // 채팅 창 스크롤을 항상 최하단에 위치 시키는 로직
   useEffect(() => {
     if (commentRef.current) {
@@ -37,16 +38,16 @@ const Comments = () => {
       {commentList?.data
         ?.slice()
         .reverse()
-        .map((comment: Comment) => (
+        .map(comment => (
           <S.CommentBox key={comment.id}>
-            <S.ProfileImg src={comment.dataUser.profile_url} />
-            <S.NickName>{comment.dataUser.data.nickName}</S.NickName>
+            <S.ProfileImg src={comment.dataUser?.profile_url} />
+            <S.NickName>{comment.dataUser?.data.nickName}</S.NickName>
             <S.Content>{comment.data.content}</S.Content>
             <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
           </S.CommentBox>
         ))}
       <div ref={ref} />
-      <CommentForm />
+      <CommentForm page={page} />
     </S.CommentsContainer>
   )
 }
