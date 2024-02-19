@@ -1,8 +1,7 @@
 import axios from "axios"
 import { AuthApi } from "./user/auth.api"
 import cookieStorage from "@/utils/cookie-storage"
-import { ACCESS_TOKEN } from "@/consts/keys"
-import { TokenRepository } from "@/repository/token-repository"
+import { TOKEN_KEY, TokenRepository } from "@/repository/token-repository"
 
 const token = TokenRepository.getToken()
 
@@ -62,7 +61,7 @@ axiosInstance.interceptors.response.use(
           const response = await AuthApi.RefreshToken()
           const token = response.data?.token
 
-          cookieStorage.setCookie(ACCESS_TOKEN, token, 60 * 24)
+          cookieStorage.setCookie(TOKEN_KEY, token, 60 * 24)
           // 발급 받은 토큰으로 요청에 토큰 수정 (현재 실패한 요청의 헤더에 새로 발급받은 액세스 토큰을 설정)
           // why? 👉 리프레시된 토큰으로 다시 시도 가능
           originalRequest.headers.common["Authorization"] = `Bearer ${token}`
