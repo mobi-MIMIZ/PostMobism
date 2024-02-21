@@ -1,8 +1,9 @@
-//type alias
-export type TGetPostRequest = {
-  id: string
-  title: string
-}
+// //type alias
+// export type TGetPostRequest = {
+//   id: string
+//   title: string
+// }
+
 
 export type Post = {
   title: string,

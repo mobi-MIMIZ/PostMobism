@@ -14,7 +14,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  
+
   if (!context) {
     throw new Error("useAuth는 반드시 AuthProvider와 함께 사용되어야 합니다")
   }

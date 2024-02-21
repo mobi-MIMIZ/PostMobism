@@ -31,6 +31,12 @@ const SignIn = () => {
   const onSubmitSignIn = async (data: SignInType) => {
     try {
       const res = await AuthApi.SignIn(data)
+      const userInfo = {
+        userId: res.data.userId,
+        nickName: res.data.info.nickname,
+        profileUrl: res.data.info.profileUrl,
+      }
+      localStorage.setItem("userInfo", JSON.stringify(userInfo))
       localStorage.setItem("userName", res.data.info.nickName)
       signIn(res.data.token)
       toMain()

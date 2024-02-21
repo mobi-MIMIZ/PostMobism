@@ -12,7 +12,7 @@ type CommentState = {
 const initialState: CommentState = {
   commentList: {
     data: [],
-    pageNation: undefined,
+    pagination: undefined,
   },
 
   loading: false,
@@ -59,7 +59,7 @@ export const commentSlice = createSlice({
         state.error = null
         state.commentList = {
           data: state.commentList?.data.concat(action.payload.data)!,
-          pageNation: action.payload.pageNation,
+          pagination: action.payload.pagination,
         }
       })
       .addCase(getComments.rejected, (state, action) => {

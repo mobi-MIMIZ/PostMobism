@@ -24,7 +24,6 @@ const Comments = () => {
     pageParam: page,
   })
 
-  console.log(commentList)
 
   // 채팅 창 스크롤을 항상 최하단에 위치 시키는 로직
   useEffect(() => {
