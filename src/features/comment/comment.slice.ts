@@ -24,10 +24,7 @@ export const getComments = createAsyncThunk<TCommentsResponse, { page: number; p
   "comment/getComments",
   async ({ page, postId }) => {
     try {
-      const posts = await CommentApi.getComment({
-        pageParam: page,
-        parentId: postId,
-      })
+      const posts = await CommentApi.getComment({ page, postId })
       return posts
     } catch (error) {
       throw new Error("게시글 데이터를 불러오는 데 실패했습니다!")

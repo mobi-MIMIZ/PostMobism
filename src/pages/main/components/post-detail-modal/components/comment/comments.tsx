@@ -24,6 +24,7 @@ const Comments = () => {
     pageParam: page,
   })
 
+
   // 채팅 창 스크롤을 항상 최하단에 위치 시키는 로직
   useEffect(() => {
     if (commentRef.current) {
@@ -38,8 +39,8 @@ const Comments = () => {
         .reverse()
         .map(comment => (
           <S.CommentBox key={comment.id}>
-            <S.ProfileImg src={comment.dataUser.profile_url} />
-            <S.NickName>{comment.dataUser.data.nickName}</S.NickName>
+            <S.ProfileImg src={comment.dataUser?.profile_url} />
+            <S.NickName>{comment.dataUser?.data.nickName}</S.NickName>
             <S.Content>{comment.data.content}</S.Content>
             <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
           </S.CommentBox>
@@ -53,7 +54,7 @@ const Comments = () => {
 export default Comments
 
 const CommentsContainer = styled.div`
-  height: 444px;
+  height: 280px;
   width: 100%;
   overflow-y: auto;
 `

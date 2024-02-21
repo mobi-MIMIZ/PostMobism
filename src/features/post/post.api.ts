@@ -40,9 +40,8 @@ export const PostApi = {
    * @params dataName: string
    * @queries dataId: string
    */
-  async postPost({ title, content }: { title: string; content: string }) {
-    const postData = { title, content }
-    const res = await axiosInstance.post(POST_PATH, postData, {
+  async postPost({ formData }: { formData: FormData }) {
+    const res = await axiosInstance.post(POST_PATH, formData, {
       params: { auth: "true" },
     })
     return res.data

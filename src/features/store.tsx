@@ -14,7 +14,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false, // 불필요한 경고를 피하기 위해 추가
-    }),
+    }).concat(commentApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -1,8 +1,8 @@
-import { TokenRepository } from "@/repository/token-repository"
+import { ACCESS_TOKEN } from "@/consts/keys"
 import { TCommentsResponse } from "@/type/type"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-const token = TokenRepository.getToken()
+const token = localStorage.getItem(ACCESS_TOKEN)
 
 export const commentApi = createApi({
   reducerPath: "commentApi",
@@ -30,7 +30,6 @@ export const commentApi = createApi({
       },
       // @issue: 캐싱데이터가 지워지지않는 현상
       merge: (currentCacheData, responseData) => {
-        console.log(currentCacheData.pagination?.current)
         if (currentCacheData.data) {
           return {
             ...currentCacheData,

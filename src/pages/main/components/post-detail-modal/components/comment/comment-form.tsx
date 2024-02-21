@@ -31,11 +31,11 @@ const CommentForm: FC<{ page: number }> = ({ page }) => {
       parentId: postDetail.data.id,
     }
     try {
-      setIsSubmitting(true) // 제출 시작시 버튼 비활성화
+      setIsSubmitting(true)
       const res = await CommentApi.postComment(CommentData)
       e.target.content.value = ""
       setTimeout(() => {
-        setIsSubmitting(false) // 제출 완료
+        setIsSubmitting(false)
       }, 1500)
       dispatch(
         commentApi.util.updateQueryData("getCommentList", { postId: postDetail.data.id, pageParam: page }, old => {
