@@ -58,6 +58,7 @@ export const commentSlice = createSlice({
         state.loading = false
         state.error = null
         state.commentList = {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
           data: state.commentList?.data.concat(action.payload.data)!,
           pageNation: action.payload.pageNation,
         }
@@ -71,7 +72,7 @@ export const commentSlice = createSlice({
       .addCase(postComment.pending, state => {
         state.loading = true
       })
-      .addCase(postComment.fulfilled, (state, action) => {
+      .addCase(postComment.fulfilled, state => {
         state.loading = false
       })
       .addCase(postComment.rejected, (state, action) => {
@@ -80,7 +81,5 @@ export const commentSlice = createSlice({
       })
   },
 })
-
-// export const { setPostList } = postSlice.actions
 
 export default commentSlice.reducer

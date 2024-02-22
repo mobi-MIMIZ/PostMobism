@@ -149,9 +149,8 @@ export const postSlice = createSlice({
 export default postSlice.reducer
 
 function isPostArray(args: unknown): args is TPostsResponse {
-  return true
+  return !!args
 }
-
 function isPostDetail(args: unknown): args is { data: Post; children: Comment } {
-  return true
+  return !!args
 }

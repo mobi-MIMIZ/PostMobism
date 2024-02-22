@@ -20,7 +20,7 @@ const Comments = () => {
   }, [inView])
 
   const { data: commentList } = useGetCommentListQuery({
-    postId: postDetail?.data.id!,
+    postId: postDetail?.data.id ?? "",
     pageParam: page,
   })
 
