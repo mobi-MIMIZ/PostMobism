@@ -15,7 +15,7 @@ export type CommentListType = {
   createdAt: string
   data: {
     content: string
-    nickName: string
+    nickname: string
     parentId: string
     profileUrl: string | undefined
     userId: string
@@ -59,16 +59,9 @@ const PostDetailModal: FC<Props> = ({ onClose }) => {
   return (
     <S.Wrapper>
       <S.OnePost>
-        <PostDetailHeader nickName={postDetail.data.dataUser.data.nickName} onClose={onClose} />
+        <PostDetailHeader nickname={postDetail.data.dataUser.data.nickName} onClose={onClose} />
         <S.Line />
         <PostDetailContent
-          postId={postDetail.data.id}
-          title={postDetail.data.data.title}
-          content={postDetail.data.data.content}
-          postImages={postDetail.data.dataImage}
-          nickName={postDetail.data.dataUser.data.nickName}
-          profileImage={postDetail.data.dataUser.profile_url}
-          weekday={postDetail.data.createdAt}
           isEditMode={isEditMode}
           setIsEditMode={setIsEditMode}
         />

@@ -1,6 +1,7 @@
 import userReducer from "@/features/user/user.slice"
 import postReducer from "@/features/post/post.slice"
 import commentReducer from "@/features/comment/comment.slice"
+import modalReducer from "@/features/post/modal.slice"
 import { configureStore } from "@reduxjs/toolkit"
 import { commentApi } from "@/hooks/use-get-comment-list-query"
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     post: postReducer,
     comment: commentReducer,
     [commentApi.reducerPath]: commentApi.reducer,
+    modal: modalReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -4,14 +4,14 @@ import { FC } from "react"
 import styled from "styled-components"
 
 type Props = {
-  nickName: string
+  nickname: string
   onClose: () => void
 }
 
-const PostDetailHeader: FC<Props> = ({ nickName, onClose }) => {
+const PostDetailHeader: FC<Props> = ({ nickname, onClose }) => {
   return (
     <S.HeaderContainer>
-      <S.Title>{nickName}'s Post</S.Title>
+      <S.Title>{nickname}'s Post</S.Title>
       <S.CloseBtn onClick={onClose}>
         <X color="#ECB996" size={24} strokeWidth={4} />
       </S.CloseBtn>
