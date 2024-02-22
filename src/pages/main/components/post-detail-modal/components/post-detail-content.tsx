@@ -1,70 +1,33 @@
 import MMZbutton from "@/components/mmz-button"
 import MMZdialog from "@/components/mmz-dialog"
-import { usePostActions } from "@/hooks/use-post-actions"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
+import { usePostActions } from "@/hooks/use-post-actions"
 import { MoreHorizontal } from "lucide-react"
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
+import { useAppSelector } from "@/hooks/use-redux-toolkit"
 
 type Props = {
-  postId: string
-  profileImage: string
-  nickName: string
-  title: string
-  content: string
-  postImages?: { url: string }[]
-  weekday: string
   isEditMode: boolean
   setIsEditMode: Dispatch<SetStateAction<boolean>>
 }
 
-const PostDetailContent: FC<Props> = ({
-  postId,
-  profileImage,
-  nickName,
-  title,
-  content,
-  postImages,
-  weekday,
-  isEditMode,
-  setIsEditMode,
-}) => {
+const PostDetailContent: FC<Props> = ({ isEditMode, setIsEditMode }) => {
+  const postDetail = useAppSelector(state => state.post.postDetail)
   const [onShowOptions, setOnShowOptions] = useState<boolean>(false)
-  const isMyPost: boolean = nickName === localStorage.getItem("userName")
-  const [editedTitle, setEditedTitle] = useState<string>(title)
-  const [editedContent, setEditedContent] = useState<string>(content)
+  const isMyPost: boolean = postDetail?.data.dataUser.data.nickName === localStorage.getItem("userName")
+  const [editedTitle, setEditedTitle] = useState<string | undefined>(postDetail?.data.data.title)
+  const [editedContent, setEditedContent] = useState<string | undefined>(postDetail?.data.data.content)
   const [searchParams] = useSearchParams()
   const page = searchParams.get("page") ?? "1"
-
   const { handleDeletePost, handleEditPost } = usePostActions({ pageParams: parseInt(page) })
 
   const onEditPost = () => {
-    setIsEditMode(true)
-    setOnShowOptions(false)
-  }
-
-  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEditedTitle(e.target.value)
-  }
-  const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedContent(e.target.value)
-  }
-
-  const onSaveEditedValues = async (postId: string) => {
     if (isMyPost) {
-      try {
-        const editedPost = {
-          id: postId,
-          title: editedTitle,
-          content: editedContent,
-        }
-        await handleEditPost(editedPost)
-        setIsEditMode(false)
-      } catch (error) {
-        alert("변경된 내용을 저장하지 못했습니다!")
-      }
-    } else alert("다른 사람의 게시글은 수정할 수 없어요!")
+      setIsEditMode(true)
+      setOnShowOptions(false)
+    } else alert("내 게시글만 수정할 수 있어요😣")
   }
 
   const onDeletePost = (postId: string) => {
@@ -78,11 +41,33 @@ const PostDetailContent: FC<Props> = ({
     } else alert("회원 님의 게시글이 아니에요!")
   }
 
+  // edit mode
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(e.target.value)
+  }
+  const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedContent(e.target.value)
+  }
+
+  const onSaveEditedValues = async (postId: string) => {
+    try {
+      const editedPost = {
+        id: postId,
+        title: editedTitle,
+        content: editedContent,
+      }
+      await handleEditPost(editedPost)
+      setIsEditMode(false)
+    } catch (error) {
+      alert("변경된 내용을 저장하지 못했습니다!")
+    }
+  }
+  if (!postDetail) return
   return (
     <S.ContentContainer>
       <S.UserBox>
-        <S.ProfileImg src={profileImage} />
-        <S.NickName>{nickName}</S.NickName>
+        <S.ProfileImg src={postDetail.data.dataUser.profile_url} />
+        <S.NickName>{postDetail.data.dataUser.data.nickName}</S.NickName>
       </S.UserBox>
       <S.OptionBtn onClick={() => setOnShowOptions(prev => !prev)}>
         <MoreHorizontal color="#ECB996" size={22} strokeWidth={4} />
@@ -93,7 +78,7 @@ const PostDetailContent: FC<Props> = ({
             label1="edit post"
             label2="delete post"
             onClick1={() => onEditPost()}
-            onClick2={() => onDeletePost(postId)}
+            onClick2={() => onDeletePost(postDetail?.data.id)}
           />
         </S.Dialog>
       )}
@@ -106,24 +91,21 @@ const PostDetailContent: FC<Props> = ({
               usage={"PostForm"}
               type={"submit"}
               label={"Save Changes"}
-              onClick={() => {
-                console.log("Save Changes Button Clicked")
-                onSaveEditedValues(postId)
-              }}
+              onClick={() => onSaveEditedValues(postDetail.data.id)}
             />
           </>
         ) : (
           <>
-            <S.Title>{title}</S.Title>
-            <S.Content>{content}</S.Content>
-            {postImages && (
+            <S.Title>{postDetail.data.data.title}</S.Title>
+            <S.Content>{postDetail.data.data.content}</S.Content>
+            {postDetail.data.dataImage && (
               <S.PostImages>
-                {postImages.map((image, idx) => (
+                {postDetail.data.dataImage.map((image, idx) => (
                   <OneImage key={idx + 1} src={image.url} />
                 ))}
               </S.PostImages>
             )}
-            <S.WeekDay>{weekday}</S.WeekDay>
+            <S.WeekDay>{postDetail.data.createdAt}</S.WeekDay>
           </>
         )}
       </S.EditContainer>
@@ -133,8 +115,7 @@ const PostDetailContent: FC<Props> = ({
 export default PostDetailContent
 
 const ContentContainer = styled.div`
-  min-height: 290px;
-  height: fit-content;
+  height: 290px;
 `
 const UserBox = styled.div`
   ${flexAlignCenter}
@@ -181,29 +162,33 @@ const Title = styled.div`
 `
 const Content = styled.div`
   margin: 20px 40px 8px;
-  max-height: 120px;
+  height: 120px;
+  overflow-x: hidden;
+  overflow-y: scroll;
   height: fit-content;
   font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   color: ${({ theme }) => theme.COLORS.beige[800]};
+  white-space: pre-line;
 `
 const PostImages = styled.div`
   width: 90%;
-  height: 110px;
+  height: 100px;
   margin-left: 5%;
-  ${flexCenter}
+  ${flexAlignCenter}
+  justify-content: space-evenly;
 `
 const OneImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.COLORS.beige[200]};
   overflow: hidden;
 `
 const WeekDay = styled.div`
-  position: relative;
-  right: -76%;
-  margin-bottom: 4px;
+  position: absolute;
+  top: 44%;
+  right: 30px;
   font-size: ${({ theme }) => theme.FONT_SIZE.XSmall};
   color: ${({ theme }) => theme.COLORS.beige[500]};
 `
@@ -228,7 +213,7 @@ const TitleInput = styled.input`
 `
 const ContentTextarea = styled.textarea`
   width: 540px;
-  height: 440px;
+  height: 400px;
   font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   color: ${({ theme }) => theme.COLORS.beige[800]};

@@ -7,10 +7,13 @@ import PostDetailModal from "./components/post-detail-modal/post-detail-modal"
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit"
 import { getOnePost, getPosts } from "@/features/post/post.slice"
 import { useSearchParams } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { RootState } from "@/features/store"
+import { setIsOpenDetailPost } from "@/features/post/modal.slice"
 
 const MainPage = () => {
   // const [postList] = useState(MockPostsData(70))
-  const [isOpenDetailPost, setIsOpenDetailPost] = useState<boolean>(false)
+  const isOpenDetailPost = useSelector((state: RootState) => state.modal.isOpenDetailPost)
   const dispatch = useAppDispatch()
   const postList = useAppSelector(state => state.post.postList) // perPage
   const [searchParams] = useSearchParams()
@@ -20,7 +23,7 @@ const MainPage = () => {
 
   const onOpenDetailModal = async (postId: string) => {
     await dispatch(getOnePost(postId))
-    setIsOpenDetailPost(true)
+    dispatch(setIsOpenDetailPost(true))
   }
 
   const onPageChange = (pageNumber: number) => {
@@ -33,7 +36,7 @@ const MainPage = () => {
 
   return (
     <S.Wrapper>
-      {isOpenDetailPost && <PostDetailModal onClose={() => setIsOpenDetailPost(false)} />}
+      {isOpenDetailPost && <PostDetailModal onClose={() => dispatch(setIsOpenDetailPost(false))} />}
       <S.Title>Post Your Code</S.Title>
       {postList?.data.map((post, idx) => (
         <OneList

@@ -1,18 +1,18 @@
 import { PositionCenter, ViewPortSize } from "@/styles/common.style"
 import styled from "styled-components"
 import PostHeader from "./components/post-header"
-import { Dispatch, FC, SetStateAction } from "react"
+import { FC } from "react"
 import PostContent from "./components/post-content"
+import { useAppDispatch } from "@/hooks/use-redux-toolkit"
+import { setIsOpenPost } from "@/features/post/modal.slice"
 
-export type OnePostProps = {
-  setOpenModal: Dispatch<SetStateAction<boolean>>
-}
+const OnePost: FC = () => {
+  const dispatch = useAppDispatch()
 
-const OnePost: FC<OnePostProps> = ({ setOpenModal }) => {
   return (
     <S.Wrapper>
       <S.Container>
-        <PostHeader onClose={prev => setOpenModal(!prev)} />
+        <PostHeader onClose={() => dispatch(setIsOpenPost(false))} />
         <PostContent />
       </S.Container>
     </S.Wrapper>

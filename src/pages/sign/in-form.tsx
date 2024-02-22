@@ -33,7 +33,7 @@ const SignIn = () => {
       const res = await AuthApi.SignIn(data)
       const userInfo = {
         userId: res.data.userId,
-        nickName: res.data.info.nickname,
+        nickname: res.data.info.nickname,
         profileUrl: res.data.info.profileUrl,
       }
       localStorage.setItem("userInfo", JSON.stringify(userInfo))

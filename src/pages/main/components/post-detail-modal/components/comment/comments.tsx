@@ -15,7 +15,7 @@ const Comments = () => {
 
   useEffect(() => {
     if (inView) {
-      setPage(page + 1)
+      setPage(prevPage => prevPage + 1)
     }
   }, [inView])
 
@@ -23,7 +23,6 @@ const Comments = () => {
     postId: postDetail?.data.id!,
     pageParam: page,
   })
-
 
   // 채팅 창 스크롤을 항상 최하단에 위치 시키는 로직
   useEffect(() => {
@@ -39,8 +38,8 @@ const Comments = () => {
         .reverse()
         .map(comment => (
           <S.CommentBox key={comment.id}>
-            <S.ProfileImg src={comment.dataUser?.profile_url} />
-            <S.NickName>{comment.dataUser?.data.nickName}</S.NickName>
+            <S.ProfileImg src={comment.dataUser.profile_url} />
+            <S.NickName>{comment.dataUser.data.nickName}</S.NickName>
             <S.Content>{comment.data.content}</S.Content>
             <S.CreatedAt>{comment.createdAt.toString()}</S.CreatedAt>
           </S.CommentBox>
@@ -54,7 +53,8 @@ const Comments = () => {
 export default Comments
 
 const CommentsContainer = styled.div`
-  height: 280px;
+  margin-top: 2px;
+  height: 278px;
   width: 100%;
   overflow-y: auto;
 `
@@ -80,15 +80,16 @@ const NickName = styled.div`
 
 const Content = styled.div`
   width: fit-content;
-  height: 32px;
+  /* height: fit-content; */
   border-radius: 4px;
   background-color: ${({ theme }) => theme.COLORS.beige[100]};
   font-size: ${({ theme }) => theme.FONT_SIZE.medium};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.regular};
   ${flexAlignCenter};
-  padding: 26px 10px;
+  padding: 16px;
   margin-top: 22px;
   word-wrap: break-word;
+  white-space: pre-line;
 `
 const CreatedAt = styled.div`
   padding: 20px 0px 0px 10px;

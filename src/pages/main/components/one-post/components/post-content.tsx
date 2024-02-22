@@ -1,53 +1,34 @@
 import MMZbutton from "@/components/mmz-button"
 import { flexAlignCenter, flexCenter } from "@/styles/common.style"
-import { FC, FormEvent, useState } from "react"
+import { FC, FormEvent, ChangeEvent } from "react"
 import { ImagePlus, X } from "lucide-react"
 import styled from "styled-components"
 import { usePostActions } from "@/hooks/use-post-actions"
 import { useSearchParams } from "react-router-dom"
+import { useImageActions } from "@/hooks/use-upload-images"
 
 const PostContent: FC = () => {
-  // preview uploaded images
-  const [hasImage, setHasImage] = useState(false)
-  const [showImages, setShowImages] = useState<string[]>([])
+  const { hasImage, showImages, uploadImage, deleteImage } = useImageActions()
   const [searchParam] = useSearchParams()
 
   const page = searchParam.get("page") ?? "1"
-
-  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageLists = e.target.files as FileList
-    let imageUrlLists: string[] = [...showImages]
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i])
-      imageUrlLists.unshift(currentImageUrl)
-    }
-    if (imageUrlLists.length > 5) {
-      imageUrlLists = imageUrlLists.slice(0, 5)
-      alert("한 번에 이미지를 5개 이상 추가하실 수 없습니다.")
-    }
-    setHasImage(true)
-    setShowImages([...imageUrlLists])
-  }
-
-  const onDeleteImage = (index: number) => {
-    const deleteList = [...showImages]
-    deleteList.splice(index, 1)
-    setShowImages(deleteList)
-    if (deleteList.length === 0) {
-      setHasImage(false)
-    }
-  }
 
   const { handleCreatePost } = usePostActions({
     pageParams: parseInt(page),
   })
 
+  const onUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const imageLists = e.target.files as FileList
+    uploadImage(imageLists)
+  }
+
+  const onDeleteImage = (index: number) => {
+    deleteImage(index)
+  }
+
   const onSubmitCreatePost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     const formData = new FormData(e.currentTarget)
-
     try {
       await handleCreatePost(formData)
     } catch (error) {
@@ -74,7 +55,7 @@ const PostContent: FC = () => {
         <div>add image</div>
         <ImagePlus color="#ecb996" size={28} />
       </S.Label>
-      <S.AddImage type="files" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
+      <S.AddImage type="file" name="images" id="file" multiple accept="image/*" onChange={onUploadImage} />
       <MMZbutton usage={"PostForm"} type={"submit"} label={"POST"} />
     </S.Container>
   )
@@ -120,7 +101,7 @@ const AddImage = styled.input`
 `
 const Label = styled.label`
   width: 540px;
-  height: 90px;
+  height: 70px;
   border: 1px solid ${({ theme }) => theme.COLORS.beige[500]};
   border-radius: 6px;
   font-size: ${({ theme }) => theme.FONT_SIZE.large};
@@ -128,21 +109,22 @@ const Label = styled.label`
   ${flexAlignCenter}
   justify-content: space-between;
   padding: 0 30px;
-  margin: 40px 0 20px;
+  margin: 10px 0;
 `
 const PreviewImages = styled.div`
   ${flexCenter}
   width: 670px;
   height: 120px;
   overflow: hidden;
-  margin: 5% 0 0;
+  margin: 2% 0;
 
   & > div {
     width: 100px;
     height: 100px;
     border-radius: 6px;
     overflow: hidden;
-    margin: 0 1%;
+    margin: 0 10px;
+
     & > img {
       width: 100px;
       height: 100px;
