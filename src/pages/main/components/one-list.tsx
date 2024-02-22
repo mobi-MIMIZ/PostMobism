@@ -1,5 +1,5 @@
 import { flexAlignCenter } from "@/styles/common.style"
-import { skipTitleView } from "@/utils/overflow-text-helper"
+// import { skipTitleView } from "@/utils/overflow-text-helper"
 import styled from "styled-components"
 
 type ListProps = {
@@ -14,7 +14,7 @@ const OneList = ({ number, title, nickname, image, onOpenDetailModal }: ListProp
   return (
     <S.Wrapper onClick={() => onOpenDetailModal()}>
       <S.Number>{number}</S.Number>
-      <S.Title>{title ? skipTitleView(title) : ""}</S.Title>
+      <S.Title>{title ? title : ""}</S.Title>
       <S.Writer>{nickname}</S.Writer>
       <S.Image src={image} />
     </S.Wrapper>

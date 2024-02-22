@@ -4,6 +4,7 @@ import { Post } from "@/type/dto/post.dto"
 
 const POST_PATH = "/data/post"
 
+
 export const PostApi = {
   /**
    * @function getPost
@@ -53,11 +54,7 @@ export const PostApi = {
    * @queries dataId: string
    */
   async deletePost(dataId: string) {
-    const res = await axiosInstance.delete(POST_PATH, {
-      params: {
-        dataId,
-      },
-    })
+    const res = await axiosInstance.delete(POST_PATH + `/${dataId}`)
     return res
   },
   /**
@@ -70,11 +67,8 @@ export const PostApi = {
    */
   async editPost({ title, content }: Partial<{ title: string; content: string }>, dataId: string) {
     const req = { title, content }
-    const res = await axiosInstance.patch(POST_PATH, {
-      params: {
-        dataId,
-      },
-      data: req,
+    const res = await axiosInstance.patch(POST_PATH +`/${dataId}`, {
+      data: req
     })
     return res.data
   },
